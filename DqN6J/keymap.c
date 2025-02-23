@@ -9,12 +9,6 @@ enum custom_keycodes
     RGB_SLD = ML_SAFE_RANGE,
 };
 
-// QMK Achordion
-void housekeeping_task_user(void)
-{
-    achordion_task();
-}
-
 enum tap_dance_codes
 {
     DANCE_0,
@@ -56,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
         KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
         KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-        KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT),
+        KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_REPEAT_KEY),
 };
 
 const uint16_t PROGMEM combo0[] = {KC_H, ALL_T(KC_Z), KC_X, COMBO_END};
@@ -154,10 +148,6 @@ bool rgb_matrix_indicators_user(void)
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
-    if (!process_achordion(keycode, record))
-    {
-        return false;
-    } // QMK Achordion
     switch (keycode)
     {
 

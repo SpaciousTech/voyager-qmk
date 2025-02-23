@@ -15,3 +15,4 @@ DYNAMIC_TAPPING_TERM_ENABLE = yes
 
 # Custom QMK here
 KEY_OVERRIDE_ENABLE = yes
+SRC += features/achordion.c     # QMK Achordion

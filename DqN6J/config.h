@@ -9,7 +9,7 @@
 #define ONESHOT_TAP_TOGGLE 2
 
 #undef ONESHOT_TIMEOUT
-#define ONESHOT_TIMEOUT 1500
+#define ONESHOT_TIMEOUT 2000
 
 #undef RGB_MATRIX_HUE_STEP
 #define RGB_MATRIX_HUE_STEP 12
@@ -22,9 +22,10 @@
 
 #define USB_SUSPEND_WAKEUP_DELAY 0
 #define CAPS_LOCK_STATUS
-#define SERIAL_NUMBER "DqN6J/GGGpy3"
+#define SERIAL_NUMBER "DqN6J/wOO6AV"
 #define LAYER_STATE_8BIT
-#define COMBO_COUNT 6
+#define COMBO_COUNT 7
+#define HCS(report) host_consumer_send(record->event.pressed ? report : 0); return false
 
 #define TAPPING_TERM_PER_KEY
 #define RGB_MATRIX_STARTUP_SPD 60

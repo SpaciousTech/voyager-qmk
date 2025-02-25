@@ -19,7 +19,7 @@
 
 #define USB_SUSPEND_WAKEUP_DELAY 0
 #define CAPS_LOCK_STATUS
-#define SERIAL_NUMBER "DqN6J/QzzAnp"
+#define SERIAL_NUMBER "DqN6J/3vvZm7"
 #define LAYER_STATE_8BIT
 #define COMBO_COUNT 8
 #define HCS(report) host_consumer_send(record->event.pressed ? report : 0); return false

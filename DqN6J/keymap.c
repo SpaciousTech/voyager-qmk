@@ -32,7 +32,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [2] = LAYOUT_voyager(
     QK_LLCK,        KC_1,           KC_2,           KC_3,           KC_4,           KC_5,                                           KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_MINUS,       
-    KC_TRANSPARENT, KC_TRANSPARENT, LALT(LGUI(LCTL(LSFT(KC_W)))),LGUI(LCTL(KC_SPACE)),LALT(LGUI(LCTL(LSFT(KC_R)))),LALT(LGUI(LCTL(LSFT(KC_T)))),                                LALT(LGUI(LCTL(LSFT(KC_Y)))),LALT(LGUI(LCTL(LSFT(KC_U)))),LALT(LGUI(LCTL(LSFT(KC_I)))),RALT(RGUI(RCTL(RSFT(KC_W)))),KC_TRANSPARENT, KC_TRANSPARENT, 
+    KC_TRANSPARENT, KC_TRANSPARENT, LALT(LGUI(LCTL(LSFT(KC_W)))),LALT(LGUI(LCTL(LSFT(KC_E)))),LALT(LGUI(LCTL(LSFT(KC_R)))),LALT(LGUI(LCTL(LSFT(KC_T)))),                                LALT(LGUI(LCTL(LSFT(KC_Y)))),LALT(LGUI(LCTL(LSFT(KC_U)))),LALT(LGUI(LCTL(LSFT(KC_I)))),LALT(LGUI(LCTL(LSFT(KC_O)))),LALT(LGUI(LCTL(LSFT(KC_P)))),KC_TRANSPARENT, 
     KC_TRANSPARENT, KC_TRANSPARENT, RALT(RGUI(RCTL(RSFT(KC_S)))),RALT(RGUI(RCTL(RSFT(KC_D)))),LGUI(KC_SPACE), RALT(RGUI(RCTL(RSFT(KC_G)))),                                LALT(LGUI(LCTL(LSFT(KC_H)))),LALT(LGUI(LCTL(LSFT(KC_J)))),LALT(LGUI(LCTL(LSFT(KC_K)))),LALT(LGUI(LCTL(LSFT(KC_L)))),KC_TRANSPARENT, KC_TRANSPARENT, 
     TO(0),          KC_TRANSPARENT, KC_TRANSPARENT, RALT(RGUI(RCTL(RSFT(KC_C)))),RALT(RGUI(RCTL(RSFT(KC_Q)))),KC_TRANSPARENT,                                 RALT(RGUI(RCTL(RSFT(KC_N)))),LALT(LGUI(LCTL(LSFT(KC_M)))),KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
                                                     KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT
@@ -60,7 +60,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [6] = LAYOUT_voyager(
     QK_LLCK,        KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,                                          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          
-    KC_NO,          LALT(LCTL(LSFT(KC_Q))),LALT(LCTL(LSFT(KC_W))),KC_NO,          KC_NO,          LALT(LSFT(KC_T)),                                KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          LALT(LCTL(LSFT(KC_BSLS))),
+    KC_NO,          LALT(LCTL(LSFT(KC_Q))),LALT(LCTL(LSFT(KC_W))),LGUI(LCTL(KC_SPACE)),KC_NO,          LALT(LSFT(KC_T)),                                KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          LALT(LCTL(LSFT(KC_BSLS))),
     KC_TRANSPARENT, KC_NO,          KC_NO,          KC_NO,          LGUI(KC_SPACE), RALT(RCTL(RSFT(KC_G))),                                RALT(RCTL(RSFT(KC_H))),KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          
     KC_TRANSPARENT, KC_NO,          KC_NO,          LALT(LCTL(KC_C)),KC_NO,          KC_NO,                                          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          
                                                     KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT
@@ -114,7 +114,7 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
 
     [5] = {{0, 0, 0}, {0, 0, 0}, {203, 255, 255}, {0, 0, 0}, {203, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 218, 204}, {154, 255, 255}, {0, 218, 204}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {154, 255, 255}, {120, 254, 255}, {154, 255, 255}, {0, 0, 0}, {110, 255, 160}, {0, 0, 0}, {0, 218, 204}, {154, 255, 255}, {0, 218, 204}, {0, 0, 0}, {0, 218, 204}, {0, 255, 219}, {0, 0, 0}, {203, 255, 255}, {0, 0, 0}, {203, 255, 255}, {0, 0, 0}, {110, 255, 160}, {0, 0, 0}, {0, 218, 204}, {154, 255, 255}, {0, 218, 204}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {154, 255, 255}, {120, 254, 255}, {154, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 218, 204}, {154, 255, 255}, {0, 218, 204}, {0, 0, 0}, {0, 218, 204}, {89, 255, 255}, {89, 255, 255}},
 
-    [6] = { {0,255,219}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {126,246,210}, {126,246,210}, {0,0,0}, {0,0,0}, {60,254,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {108,255,255}, {20,255,255}, {110,255,160}, {0,0,0}, {0,0,0}, {60,254,255}, {0,0,0}, {0,0,0}, {110,250,255}, {0,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {60,254,255}, {20,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,255,255}, {110,250,255} },
+    [6] = { {0,255,219}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {126,246,210}, {126,246,210}, {81,255,177}, {0,0,0}, {60,254,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {108,255,255}, {20,255,255}, {110,255,160}, {0,0,0}, {0,0,0}, {60,254,255}, {0,0,0}, {0,0,0}, {110,250,255}, {0,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {60,254,255}, {20,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {0,255,255}, {110,250,255} },
 
 };
 

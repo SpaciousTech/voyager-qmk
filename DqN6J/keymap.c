@@ -1,4 +1,5 @@
 #include QMK_KEYBOARD_H
+#include "select_word.h"
 #include "version.h"
 #include "i18n.h"
 #define MOON_LED_LEVEL LED_LEVEL
@@ -7,7 +8,12 @@
 enum custom_keycodes
 {
     RGB_SLD = ML_SAFE_RANGE,
+    // Adding Keycodes for QMK Select Word 
+    SELWORD,
+    SELWBAK,
+    SELLINE,
 };
+
 
 typedef struct
 {
@@ -267,6 +273,9 @@ void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data)
 tap_dance_action_t tap_dance_actions[] = {
     [DANCE_0] = ACTION_TAP_DANCE_TAP_HOLD(LALT(KC_BSPC), KC_LEFT_GUI),
 };
+
+
+
 
 // QMK Config
 

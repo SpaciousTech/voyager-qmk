@@ -1,12 +1,12 @@
 {
 	"editor.wordWrap": "bounded",
 	"editor.wrappingStrategy": "advanced",
-	"editor.wrappingIndent": "same",
-	"workbench.editor.wrapTabs": true,
+	"editor.wrappingIndent": "deepIndent",
+	"workbench.editor.wrapTabs": false,
 	"notebook.output.wordWrap": false,
 	"chat.editor.wordWrap": "off",
 	"C_Cpp.vcFormat.wrap.preserveBlocks": "oneLiners",
 	"html.format.wrapAttributes": "auto",
 	"evenBetterToml.formatter.compactInlineTables": false,
-	"editor.wordWrapColumn": 400
+	"editor.wordWrapColumn": 120
 }

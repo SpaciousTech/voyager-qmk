@@ -8,5 +8,6 @@
 	"C_Cpp.vcFormat.wrap.preserveBlocks": "oneLiners",
 	"html.format.wrapAttributes": "auto",
 	"evenBetterToml.formatter.compactInlineTables": false,
-	"editor.wordWrapColumn": 120
+	"editor.wordWrapColumn": 120,
+	"debug.console.wordWrap": true
 }

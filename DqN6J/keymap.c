@@ -1,15 +1,31 @@
 #include QMK_KEYBOARD_H
 #include "features/select_word.h"
+#include "layout.h"
 #include "version.h"
 #include "i18n.h"
+
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
+
+enum layers
+{
+    BASE,
+    NAV,
+    APPS,
+    SYM,
+    FUN,
+    WIN,
+    MEHF,
+}
 
 enum custom_keycodes
 {
     RGB_SLD = ML_SAFE_RANGE,
     // Adding Keycodes for QMK Select Word
     SELWORD,
+    SELFWD,  // Select forward word
+    SELBWD,  // Select backward word
+    SELLINE, // Select line
     // Adding custom brace keycodes
     BRACES,   // General bracket key with modifier detection
     SBRACKET, // Square brackets []
@@ -20,6 +36,23 @@ enum custom_keycodes
 
 // Adding Keycodes for QMK Select Word
 uint16_t SELECT_WORD_KEYCODE = SELWORD;
+
+// Selection mode variables
+static bool selection_mode_active = false;
+static uint16_t selection_mode_timer = 0;
+#define SELECTION_MODE_TIMEOUT 5000 // 5 seconds timeout
+
+// Short aliases for Home row mods and other tap-hold keys
+#define HRM_A LGUI_T(KC_A)
+#define HRM_S LSFT_T(KC_S)
+#define HRM_D LOPT_T(KC_D)
+#define HRM_F LCTL_T(KC_F)
+#define HRM_J RCTL_T(KC_J)
+#define HRM_K ROPT_T(KC_K)
+#define HRM_L RSFT_T(KC_L)
+#define HRM_SCLN RGUI_T(KC_SCLN)
+#define LCG_EQUAL MT(MOD_LCTL | MOD_LGUI, KC_EQUAL)
+#define RCALT_BSLS MT(MOD_RCTL | MOD_RALT, KC_BSLS)
 
 typedef struct
 {
@@ -35,56 +68,104 @@ enum tap_dance_codes
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    [0] = LAYOUT_voyager(
-        MT(MOD_LCTL | MOD_LGUI, KC_EQUAL), KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
-        MT(MOD_LCTL | MOD_LALT, KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, MT(MOD_RCTL | MOD_RALT, KC_BSLS),
-        LT(2, KC_ESCAPE), MT(MOD_LGUI, KC_A), MT(MOD_LSFT, KC_S), MT(MOD_LALT, KC_D), MT(MOD_LCTL, KC_F), KC_G, KC_H, MT(MOD_RCTL, KC_J), MT(MOD_RALT, KC_K), MT(MOD_RSFT, KC_L), MT(MOD_RGUI, KC_SCLN), LT(6, KC_QUOTE),
-        TT(1), MEH_T(KC_Z), KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMMA, KC_DOT, ALL_T(KC_SLASH), MT(MOD_RCTL, KC_ENTER),
-        LT(3, KC_BSPC), TD(DANCE_0), MT(MOD_RSFT, KC_SPACE), LT(1, KC_TAB)),
-    [1] = LAYOUT_voyager(
-        KC_TRANSPARENT, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
-        KC_TRANSPARENT, TO(3), CW_TOGG, BRACES, PAREN, SELWORD, KC_NO, KC_NO, KC_UP, KC_NO, KC_NO, KC_TRANSPARENT,
-        KC_TRANSPARENT, KC_LEFT_GUI, KC_LEFT_SHIFT, KC_LEFT_ALT, KC_LEFT_CTRL, LGUI(KC_A), LALT(KC_LEFT), KC_LEFT, KC_DOWN, KC_RIGHT, LALT(KC_RIGHT), KC_TRANSPARENT,
-        KC_TRANSPARENT, LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), LGUI(LSFT(KC_Z)), KC_NO, KC_NO, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-        KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT),
-    [2] = LAYOUT_voyager(
-        QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
-        KC_TRANSPARENT, KC_TRANSPARENT, LALT(LGUI(LCTL(LSFT(KC_W)))), LALT(LGUI(LCTL(LSFT(KC_E)))), LALT(LGUI(LCTL(LSFT(KC_R)))), LALT(LGUI(LCTL(LSFT(KC_T)))), LALT(LGUI(LCTL(LSFT(KC_Y)))), LALT(LGUI(LCTL(LSFT(KC_U)))), LALT(LGUI(LCTL(LSFT(KC_I)))), LALT(LGUI(LCTL(LSFT(KC_O)))), LALT(LGUI(LCTL(LSFT(KC_P)))), KC_TRANSPARENT,
-        KC_TRANSPARENT, KC_TRANSPARENT, LALT(LGUI(LCTL(LSFT(KC_S)))), LALT(LGUI(LCTL(LSFT(KC_D)))), LGUI(KC_SPACE), LALT(LGUI(LCTL(LSFT(KC_G)))), LALT(LGUI(LCTL(LSFT(KC_H)))), LALT(LGUI(LCTL(LSFT(KC_J)))), LALT(LGUI(LCTL(LSFT(KC_K)))), LALT(LGUI(LCTL(LSFT(KC_L)))), KC_TRANSPARENT, KC_TRANSPARENT,
-        TO(0), KC_TRANSPARENT, KC_TRANSPARENT, LALT(LGUI(LCTL(LSFT(KC_C)))), LALT(LGUI(LCTL(LSFT(KC_V)))), KC_TRANSPARENT, LALT(LGUI(LCTL(LSFT(KC_N)))), LALT(LGUI(LCTL(LSFT(KC_M)))), KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-        KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT),
-    [3] = LAYOUT_voyager(
-        QK_LLCK, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS,
-        KC_TRANSPARENT, TO(1), CW_TOGG, KC_GRAVE, KC_LPRN, KC_RPRN, KC_EXLM, KC_UNDS, KC_MINUS, KC_EQUAL, KC_PLUS, KC_TRANSPARENT,
-        KC_TRANSPARENT, KC_CIRC, KC_TILD, KC_DQUO, KC_LBRC, KC_RBRC, KC_HASH, KC_DLR, LALT(LSFT(KC_2)), LALT(KC_3), KC_COLN, KC_TRANSPARENT,
-        TO(0), KC_NO, KC_PIPE, KC_AMPR, KC_LCBR, KC_RCBR, KC_PERC, KC_ASTR, KC_LABK, KC_RABK, KC_QUES, KC_TRANSPARENT,
-        KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT),
-    [4] = LAYOUT_voyager(
-        KC_NO, KC_NO, KC_NO, QK_DYNAMIC_TAPPING_TERM_DOWN, QK_DYNAMIC_TAPPING_TERM_UP, QK_DYNAMIC_TAPPING_TERM_PRINT, KC_AUDIO_VOL_UP, KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_NEXT_TRACK, KC_NO, TO(0),
-        RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI, KC_AUDIO_VOL_DOWN, KC_NO, KC_UP, KC_NO, KC_NO, KC_NO,
-        RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI, KC_AUDIO_MUTE, KC_LEFT, KC_DOWN, KC_RIGHT, KC_NO, KC_NO,
-        TO(0), KC_NO, KC_NO, KC_NO, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, KC_NO, KC_NO, LGUI(KC_COMMA), KC_NO, KC_NO, KC_NO,
-        KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT),
-    [5] = LAYOUT_voyager(
-        KC_NO, KC_NO, LALT(LCTL(KC_LBRC)), KC_NO, LALT(LCTL(KC_RBRC)), KC_NO, KC_NO, LALT(LCTL(KC_LBRC)), KC_NO, LALT(LCTL(KC_RBRC)), KC_NO, TO(0),
-        KC_NO, KC_NO, LALT(LCTL(KC_KP_7)), LALT(LCTL(KC_KP_8)), LALT(LCTL(KC_KP_9)), KC_NO, KC_NO, LALT(LCTL(KC_KP_7)), LALT(LCTL(KC_KP_8)), LALT(LCTL(KC_KP_9)), KC_NO, KC_NO,
-        KC_TRANSPARENT, KC_NO, LALT(LCTL(KC_4)), LALT(LCTL(KC_KP_5)), LALT(LCTL(KC_6)), KC_NO, KC_NO, LALT(LCTL(KC_4)), LALT(LCTL(KC_KP_5)), LALT(LCTL(KC_6)), KC_NO, KC_NO,
-        TO(0), KC_NO, LALT(LCTL(KC_KP_1)), LALT(LCTL(KC_KP_2)), LALT(LCTL(KC_KP_3)), KC_NO, KC_NO, LALT(LCTL(KC_KP_1)), LALT(LCTL(KC_KP_2)), LALT(LCTL(KC_KP_3)), KC_NO, LALT(LCTL(KC_ENTER)),
-        LALT(LCTL(KC_DOWN)), LALT(LCTL(US_UNDS)), LALT(LCTL(US_PLUS)), KC_TRANSPARENT),
-    [6] = LAYOUT_voyager(
-        QK_LLCK, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-        KC_NO, LALT(LCTL(LSFT(KC_Q))), LALT(LCTL(LSFT(KC_W))), LGUI(LCTL(KC_SPACE)), LALT(LCTL(LSFT(KC_R))), LALT(LSFT(KC_T)), LALT(LCTL(LSFT(KC_Y))), LALT(LCTL(LSFT(KC_U))), LALT(LCTL(LSFT(KC_I))), LALT(LCTL(LSFT(KC_O))), LALT(LCTL(LSFT(KC_P))), LALT(LCTL(LSFT(KC_BSLS))),
-        KC_TRANSPARENT, LALT(LCTL(LSFT(KC_A))), LALT(LCTL(LSFT(KC_S))), LALT(LCTL(LSFT(KC_D))), LGUI(KC_SPACE), LALT(LCTL(LSFT(KC_G))), LALT(LCTL(LSFT(KC_H))), LALT(LCTL(LSFT(KC_J))), LALT(LCTL(LSFT(KC_K))), LALT(LCTL(LSFT(KC_L))), LALT(LCTL(LSFT(KC_SCLN))), KC_TRANSPARENT,
-        KC_TRANSPARENT, KC_NO, KC_NO, LALT(LCTL(KC_C)), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-        KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT),
+    [BASE] = LAYOUT_LR(
+        LCG_EQUAL, KC_1, KC_2, KC_3, KC_4, KC_5,
+        LCA_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,
+        LT(2, KC_ESCAPE), HRM_A, HRM_S, HRM_D, HRM_F, KC_G,
+        TT(1), MEH_T(KC_Z), KC_X, KC_C, KC_V, KC_B,
+        LT(3, KC_BSPC), TD(DANCE_0),
+
+        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
+        KC_Y, KC_U, KC_I, KC_O, KC_P, RCALT_BSLS,
+        KC_H, HRM_J, HRM_K, HRM_L, HRM_SCLN, LT(6, KC_QUOTE),
+        KC_N, KC_M, KC_COMMA, KC_DOT, ALL_T(KC_SLASH), RCTL_T(KC_ENTER),
+        RSFT_T(KC_SPACE), LT(1, KC_TAB)),
+
+    [NAV] = LAYOUT_LR(
+        _______, KC_1, KC_2, KC_3, KC_4, KC_5,
+        _______, TO(3), CW_TOGG, BRACES, PAREN, SELWORD,
+        _______, MOD_LGUI, MOD_LSFT, MOD_LALT, MOD_LCTL, LGUI(KC_A),
+        _______, LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), LGUI(LSFT(KC_Z)),
+        _______, _______,
+
+        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
+        XXXXXXX, SELBWD, KC_UP, SELFWD, XXXXXXX, _______,
+        LALT(KC_LEFT), KC_LEFT, KC_DOWN, KC_RIGHT, LALT(KC_RIGHT), _______,
+        XXXXXXX, XXXXXXX, _______, _______, _______, _______,
+        _______, _______),
+
+    [APPS] = LAYOUT_LR(
+        QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,
+        _______, _______, ALL_T(KC_W), ALL_T(KC_E), ALL_T(KC_R), ALL_T(KC_T),
+        _______, _______, ALL_T(KC_S), ALL_T(KC_D), LGUI(KC_SPACE), ALL_T(KC_G),
+        TO(0), _______, _______, ALL_T(KC_C), ALL_T(KC_V), _______,
+        _______, _______,
+
+        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
+        ALL_T(KC_Y), ALL_T(KC_U), ALL_T(KC_I), ALL_T(KC_O), ALL_T(KC_P), _______,
+        ALL_T(KC_H), ALL_T(KC_J), ALL_T(KC_K), ALL_T(KC_L), _______, _______,
+        ALL_T(KC_N), ALL_T(KC_M), _______, _______, _______, _______,
+        _______, _______),
+
+    [SYM] = LAYOUT_LR(
+        QK_LLCK, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC,
+        _______, TO(1), CW_TOGG, KC_GRAVE, KC_LPRN, KC_RPRN,
+        _______, KC_CIRC, KC_TILD, KC_DQUO, KC_LBRC, KC_RBRC,
+        TO(0), XXXXXXX, KC_PIPE, KC_AMPR, KC_LCBR, KC_RCBR,
+        _______, _______,
+
+        KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS,
+        KC_EXLM, KC_UNDS, KC_MINUS, KC_EQUAL, KC_PLUS, _______,
+        KC_HASH, KC_DLR, LALT(LSFT(KC_2)), LALT(KC_3), KC_COLN, _______,
+        KC_PERC, KC_ASTR, KC_LABK, KC_RABK, KC_QUES, _______,
+        _______, _______),
+
+    [FUN] = LAYOUT_LR(
+        XXXXXXX, XXXXXXX, XXXXXXX, QK_DYNAMIC_TAPPING_TERM_DOWN, QK_DYNAMIC_TAPPING_TERM_UP, QK_DYNAMIC_TAPPING_TERM_PRINT,
+        RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI,
+        RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI,
+        TO(0), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP,
+        _______, _______,
+
+        KC_AUDIO_VOL_UP, KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_NEXT_TRACK, XXXXXXX, TO(0),
+        KC_AUDIO_VOL_DOWN, XXXXXXX, KC_UP, XXXXXXX, XXXXXXX, XXXXXXX,
+        KC_AUDIO_MUTE, KC_LEFT, KC_DOWN, KC_RIGHT, XXXXXXX, XXXXXXX,
+        XXXXXXX, XXXXXXX, LGUI(KC_COMMA), XXXXXXX, XXXXXXX, XXXXXXX,
+        _______, _______),
+
+    [WIN] = LAYOUT_LR(
+        XXXXXXX, XXXXXXX, LALT(LCTL(KC_LBRC)), XXXXXXX, LALT(LCTL(KC_RBRC)), XXXXXXX,
+        XXXXXXX, XXXXXXX, LALT(LCTL(KC_KP_7)), LALT(LCTL(KC_KP_8)), LALT(LCTL(KC_KP_9)), XXXXXXX,
+        _______, XXXXXXX, LALT(LCTL(KC_4)), LALT(LCTL(KC_KP_5)), LALT(LCTL(KC_6)), XXXXXXX,
+        TO(0), XXXXXXX, LALT(LCTL(KC_KP_1)), LALT(LCTL(KC_KP_2)), LALT(LCTL(KC_KP_3)), XXXXXXX,
+        LALT(LCTL(KC_DOWN)), LALT(LCTL(US_UNDS)),
+
+        XXXXXXX, LALT(LCTL(KC_LBRC)), XXXXXXX, LALT(LCTL(KC_RBRC)), XXXXXXX, TO(0),
+        XXXXXXX, LALT(LCTL(KC_KP_7)), LALT(LCTL(KC_KP_8)), LALT(LCTL(KC_KP_9)), XXXXXXX, XXXXXXX,
+        XXXXXXX, LALT(LCTL(KC_4)), LALT(LCTL(KC_KP_5)), LALT(LCTL(KC_6)), XXXXXXX, XXXXXXX,
+        XXXXXXX, LALT(LCTL(KC_KP_1)), LALT(LCTL(KC_KP_2)), LALT(LCTL(KC_KP_3)), XXXXXXX, LALT(LCTL(KC_ENTER)),
+        LALT(LCTL(US_PLUS)), _______),
+
+    [MEHF] = LAYOUT_LR(
+        QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        XXXXXXX, MEH_T(KC_Q), MEH_T(KC_W), LGUI(LCTL(KC_SPACE)), MEH_T(KC_R), LALT(LSFT(KC_T)),
+        _______, MEH_T(KC_A), MEH_T(KC_S), MEH_T(KC_D), LGUI(KC_SPACE), MEH_T(KC_G),
+        _______, XXXXXXX, XXXXXXX, LALT(LCTL(KC_C)), XXXXXXX, XXXXXXX,
+        _______, _______,
+
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        MEH_T(KC_Y), MEH_T(KC_U), MEH_T(KC_I), MEH_T(KC_O), MEH_T(KC_P), MEH_T(KC_BSLS),
+        MEH_T(KC_H), MEH_T(KC_J), MEH_T(KC_K), MEH_T(KC_L), MEH_T(KC_SCLN), _______,
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+        _______, _______),
 };
 
 const uint16_t PROGMEM combo0[] = {KC_MINUS, KC_0, COMBO_END};
 const uint16_t PROGMEM combo1[] = {KC_BSPC, KC_RIGHT, COMBO_END};
-const uint16_t PROGMEM combo2[] = {MT(MOD_LCTL | MOD_LGUI, KC_EQUAL), KC_2, COMBO_END};
-const uint16_t PROGMEM combo3[] = {MT(MOD_LCTL | MOD_LGUI, KC_EQUAL), KC_3, COMBO_END};
-const uint16_t PROGMEM combo4[] = {MT(MOD_LCTL | MOD_LGUI, KC_EQUAL), KC_4, COMBO_END};
-const uint16_t PROGMEM combo5[] = {MT(MOD_LCTL | MOD_LGUI, KC_EQUAL), KC_5, COMBO_END};
+const uint16_t PROGMEM combo2[] = {LCG_EQUAL, KC_2, COMBO_END};
+const uint16_t PROGMEM combo3[] = {LCG_EQUAL, KC_3, COMBO_END};
+const uint16_t PROGMEM combo4[] = {LCG_EQUAL, KC_4, COMBO_END};
+const uint16_t PROGMEM combo5[] = {LCG_EQUAL, KC_5, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
     COMBO(combo0, TO(0)),
@@ -99,9 +180,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
 {
     switch (keycode)
     {
-    case MT(MOD_LCTL | MOD_LGUI, KC_EQUAL):
+    case LCG_EQUAL:
         return g_tapping_term - 50;
-    case MT(MOD_LCTL | MOD_LALT, KC_TAB):
+    case LCA_T(KC_TAB):
         return g_tapping_term - 50;
     case LT(2, KC_ESCAPE):
         return g_tapping_term - 50;
@@ -109,15 +190,15 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
         return g_tapping_term - 25;
     case TD(DANCE_0):
         return g_tapping_term - 50;
-    case MT(MOD_RCTL | MOD_RALT, KC_BSLS):
+    case RCALT_BSLS:
         return g_tapping_term - 50;
     case LT(6, KC_QUOTE):
         return g_tapping_term - 50;
     case ALL_T(KC_SLASH):
         return g_tapping_term - 25;
-    case MT(MOD_RCTL, KC_ENTER):
+    case RCTL_T(KC_ENTER):
         return g_tapping_term - 50;
-    case MT(MOD_RSFT, KC_SPACE):
+    case RSFT_T(KC_SPACE):
         return g_tapping_term - 50;
     case LT(1, KC_TAB):
         return g_tapping_term - 50;
@@ -136,7 +217,7 @@ void keyboard_post_init_user(void)
 const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
     [0] = {{156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {87, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {118, 255, 255}, {0, 255, 219}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {87, 255, 255}, {34, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {87, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {0, 255, 219}, {87, 255, 255}, {0, 255, 219}, {118, 255, 255}},
 
-    [1] = {{161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {87, 255, 255}, {87, 255, 255}, {242, 255, 255}, {87, 255, 255}, {87, 255, 255}, {156, 255, 255}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {203, 255, 255}, {87, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {118, 255, 255}, {0, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {0, 0, 0}, {0, 0, 0}, {89, 255, 255}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {146, 255, 255}, {89, 255, 255}, {89, 255, 255}, {89, 255, 255}, {146, 255, 255}, {87, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {118, 255, 255}},
+    [1] = {{161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {87, 255, 255}, {87, 255, 255}, {242, 255, 255}, {132, 255, 252}, {132, 255, 252}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {203, 255, 255}, {87, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {118, 255, 255}, {0, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {0, 0, 0}, {0, 0, 0}, {89, 255, 255}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {146, 255, 255}, {89, 255, 255}, {89, 255, 255}, {89, 255, 255}, {146, 255, 255}, {87, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {118, 255, 255}},
 
     [2] = {{0, 255, 219}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {87, 255, 255}, {0, 0, 0}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {41, 245, 224}, {87, 255, 255}, {0, 0, 0}, {121, 211, 222}, {188, 186, 204}, {108, 255, 255}, {156, 217, 143}, {87, 255, 255}, {236, 255, 255}, {0, 0, 0}, {23, 171, 255}, {9, 255, 199}, {0, 0, 0}, {114, 255, 182}, {0, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {184, 255, 255}, {121, 211, 222}, {87, 255, 255}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {0, 0, 0}, {87, 255, 255}, {45, 255, 255}, {162, 227, 246}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {114, 255, 182}},
 
@@ -222,8 +303,86 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         return false;
     }
 
+    // Handle arrow keys for selection when in selection mode
+    if (selection_mode_active)
+    {
+        // Only override arrow keys when selection_dir != 0 (i.e., something is already selected)
+        // This is a variable from select_word.c that indicates if a selection is active
+        extern int8_t selection_dir;
+
+        if (record->event.pressed && selection_dir != 0)
+        {
+            switch (keycode)
+            {
+            case KC_LEFT:
+                select_word_register('B'); // Backward word selection
+                return false;
+            case KC_RIGHT:
+                select_word_register('W'); // Forward word selection
+                return false;
+            case KC_DOWN:
+                select_word_register('L'); // Line selection
+                return false;
+            }
+        }
+        else if ((keycode == KC_LEFT || keycode == KC_RIGHT || keycode == KC_DOWN) && selection_dir != 0)
+        {
+            select_word_unregister();
+            return false;
+        }
+        // If no selection active, let the arrow keys pass through normally
+    }
+
     switch (keycode)
     {
+    // Word selection keycodes
+    case SELWORD:
+        if (record->event.pressed)
+        {
+            select_word_register('W'); // Forward selection
+            // Start selection mode
+            selection_mode_active = true;
+            selection_mode_timer = timer_read();
+        }
+        else
+        {
+            select_word_unregister();
+        }
+        return false;
+
+    case SELFWD:
+        if (record->event.pressed)
+        {
+            select_word_register('W'); // Forward selection
+        }
+        else
+        {
+            select_word_unregister();
+        }
+        return false;
+
+    case SELBWD:
+        if (record->event.pressed)
+        {
+            select_word_register('B'); // Backward selection
+        }
+        else
+        {
+            select_word_unregister();
+        }
+        return false;
+
+    case SELLINE:
+        if (record->event.pressed)
+        {
+            select_word_register('L'); // Line selection
+        }
+        else
+        {
+            select_word_unregister();
+        }
+        return false;
+
     case BRACES: // Types [], {}, or <> and puts cursor between braces.
         if (record->event.pressed)
         {
@@ -367,7 +526,7 @@ tap_dance_action_t tap_dance_actions[] = {
 #ifdef CHORDAL_HOLD
 // Handedness for Chordal Hold.
 const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
-    LAYOUT_voyager(
+    LAYOUT_LR(
         '*', '*', '*', '*', '*', '*',
         '*', 'L', 'L', 'L', 'L', 'L',
         '*', 'L', 'L', 'L', 'L', 'L',
@@ -380,3 +539,16 @@ const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
         'R', 'R', 'R', 'R', 'R', '*',
         '*', '*');
 #endif // CHORDAL_HOLD
+
+// Add a housekeeping task to check for selection mode timeouts
+void housekeeping_task_user(void)
+{
+    // Call the select_word task for its own timeout handling
+    select_word_task();
+
+    // Handle our selection mode timeout
+    if (selection_mode_active && timer_elapsed(selection_mode_timer) > SELECTION_MODE_TIMEOUT)
+    {
+        selection_mode_active = false;
+    }
+}

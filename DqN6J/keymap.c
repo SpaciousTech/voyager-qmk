@@ -39,6 +39,7 @@ uint16_t SELECT_WORD_KEYCODE = SELWORD;
 
 // Selection mode variables
 static bool selection_mode_active = false;
+static bool selection_active = false;
 static uint16_t selection_mode_timer = 0;
 #define SELECTION_MODE_TIMEOUT 5000 // 5 seconds timeout
 
@@ -211,7 +212,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
 const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPC, KC_DEL);
 
 // This globally defines all key overrides to be used
-const key_override_t *key_overrides[] = {
+const key_override_t **key_overrides = (const key_override_t *[]){
     &delete_key_override,
     NULL // Null terminate the array
 };
@@ -321,19 +322,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             // Start selection mode
             selection_mode_active = true;
             selection_mode_timer = timer_read();
-            cover_selection_keypress(); // Mark selection as active
-        }
-        else
-        {
-            select_word_unregister();
-        }
-        return false;
-
-    case SELFWD:
-        if (record->event.pressed)
-        {
-            select_word_register('W');  // Forward selection
-            cover_selection_keypress(); // Mark selection as active
+            selection_active = true; // Mark selection as active
         }
         else
         {
@@ -344,8 +333,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     case SELBWD:
         if (record->event.pressed)
         {
-            select_word_register('B');  // Backward selection
-            cover_selection_keypress(); // Mark selection as active
+            select_word_register('B'); // Backward selection
+            selection_active = true;   // Mark selection as active
         }
         else
         {
@@ -356,8 +345,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     case SELLINE:
         if (record->event.pressed)
         {
-            select_word_register('L');  // Line selection
-            cover_selection_keypress(); // Mark selection as active
+            select_word_register('L'); // Line selection
+            selection_active = true;   // Mark selection as active
         }
         else
         {

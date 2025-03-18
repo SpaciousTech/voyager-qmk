@@ -12,20 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * @file select_word.c
- * @brief Select Word community module implementation
- *
- * For full documentation, see
- * <https://getreuer.info/posts/keyboards/select-word>
- */
-
 #include "select_word.h"
 
 // Default to a timeout of 5 seconds.
 #ifndef SELECT_WORD_TIMEOUT
 #  define SELECT_WORD_TIMEOUT  30000
 #endif  // SELECT_WORD_TIMEOUT
+
+
 
 static int8_t selection_dir = 0;
 static bool reset_before_next_event = false;

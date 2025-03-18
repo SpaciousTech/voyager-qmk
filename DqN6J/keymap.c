@@ -16,7 +16,7 @@ enum layers
     FUN,
     WIN,
     MEHF,
-}
+};
 
 enum custom_keycodes
 {

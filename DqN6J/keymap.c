@@ -46,16 +46,6 @@ static uint16_t selection_mode_timer = 0;
 // Track if we have an active selection (for bracket surrounding)
 static bool selection_active = false;
 
-// Helper to detect Mac OS
-bool is_mac_os(void)
-{
-#ifdef SELECT_WORD_OS_MAC
-    return true;
-#else
-    return false;
-#endif
-}
-
 // Short aliases for Home row mods and other tap-hold keys
 #define HRM_A LGUI_T(KC_A)
 #define HRM_S LSFT_T(KC_S)
@@ -306,41 +296,6 @@ bool rgb_matrix_indicators_user(void)
         break;
     }
     return true;
-}
-
-// Selection helpers
-void cover_selection_with(const char *opening, const char *closing)
-{
-    // Save modifiers
-    const uint8_t mods = get_mods();
-    clear_oneshot_mods();
-    unregister_mods(MOD_MASK_CSAG);
-
-    if (is_mac_os())
-    {
-        // On Mac: Move to start of selection
-        SEND_STRING(SS_LGUI(SS_LSFT(SS_TAP(X_LEFT))));
-        // Type opening bracket
-        send_string(opening);
-        // Move to end of selection
-        SEND_STRING(SS_LGUI(SS_LSFT(SS_TAP(X_RIGHT))));
-        // Type closing bracket
-        send_string(closing);
-    }
-    else
-    {
-        // On Windows/Linux: Move to start of selection
-        SEND_STRING(SS_TAP(X_HOME));
-        // Type opening bracket
-        send_string(opening);
-        // Move to end of selection
-        SEND_STRING(SS_LSFT(SS_TAP(X_END)));
-        // Type closing bracket
-        send_string(closing);
-    }
-
-    // Restore modifiers
-    register_mods(mods);
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record)

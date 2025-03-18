@@ -1,6 +1,5 @@
 #include QMK_KEYBOARD_H
 #include "features/select_word.h"
-#include "features/cover_selection.h"
 #include "layout.h"
 #include "version.h"
 #include "i18n.h"
@@ -42,9 +41,6 @@ uint16_t SELECT_WORD_KEYCODE = SELWORD;
 static bool selection_mode_active = false;
 static uint16_t selection_mode_timer = 0;
 #define SELECTION_MODE_TIMEOUT 5000 // 5 seconds timeout
-
-// Track if we have an active selection (for bracket surrounding)
-static bool selection_active = false;
 
 // Short aliases for Home row mods and other tap-hold keys
 #define HRM_A LGUI_T(KC_A)
@@ -368,37 +364,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         // Check if selection is active and handle accordingly
         if (record->event.pressed)
         {
-            // Try to handle as selection first
-            if ((mods | oneshot_mods) & MOD_MASK_SHIFT)
-            {
-                if (!process_cover_key(keycode, record, "{", "}"))
-                {
-                    return false;
-                }
-            }
-            else if ((mods | oneshot_mods) & MOD_MASK_CTRL)
-            {
-                if (!process_cover_key(keycode, record, "<", ">"))
-                {
-                    return false;
-                }
-            }
-            else if ((mods | oneshot_mods) & MOD_MASK_ALT)
-            {
-                if (!process_cover_key(keycode, record, "(", ")"))
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (!process_cover_key(keycode, record, "[", "]"))
-                {
-                    return false;
-                }
-            }
-
-            // If we get here, there's no active selection, insert empty brackets
             clear_oneshot_mods(); // Temporarily disable mods.
             unregister_mods(MOD_MASK_CSAG);
             if ((mods | oneshot_mods) & MOD_MASK_SHIFT)
@@ -424,10 +389,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         return false;
 
     case SBRACKET: // Square brackets []
-        if (!process_cover_key(keycode, record, "[", "]"))
-        {
-            return false;
-        }
         if (record->event.pressed)
         {
             const uint8_t mods = get_mods();
@@ -440,10 +401,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         return false;
 
     case CBRACE: // Curly braces {}
-        if (!process_cover_key(keycode, record, "{", "}"))
-        {
-            return false;
-        }
         if (record->event.pressed)
         {
             const uint8_t mods = get_mods();
@@ -456,10 +413,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         return false;
 
     case ABRACKET: // Angle brackets <>
-        if (!process_cover_key(keycode, record, "<", ">"))
-        {
-            return false;
-        }
         if (record->event.pressed)
         {
             const uint8_t mods = get_mods();
@@ -472,10 +425,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         return false;
 
     case PAREN: // Parentheses ()
-        if (!process_cover_key(keycode, record, "(", ")"))
-        {
-            return false;
-        }
         if (record->event.pressed)
         {
             const uint8_t mods = get_mods();

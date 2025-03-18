@@ -59,28 +59,26 @@ void cover_selection_with(const char *opening, const char *closing)
     clear_oneshot_mods();
     unregister_mods(MOD_MASK_CSAG);
 
+    // We'll try a different approach that doesn't rely on the clipboard
+    // This might work better in more editors
+
+    // Step 1: Type the closing bracket first (it will appear at the end of selection)
+    send_string(closing);
+
+    // Step 2: Move to beginning of selection
     if (is_mac_os())
     {
-        // On Mac: Move to start of selection
+        // On Mac: Left arrow while holding Shift+Command to move to start of selection
         SEND_STRING(SS_LGUI(SS_LSFT(SS_TAP(X_LEFT))));
-        // Type opening bracket
-        send_string(opening);
-        // Move to end of selection
-        SEND_STRING(SS_LGUI(SS_LSFT(SS_TAP(X_RIGHT))));
-        // Type closing bracket
-        send_string(closing);
     }
     else
     {
-        // On Windows/Linux: Move to start of selection
-        SEND_STRING(SS_TAP(X_HOME));
-        // Type opening bracket
-        send_string(opening);
-        // Move to end of selection
-        SEND_STRING(SS_LSFT(SS_TAP(X_END)));
-        // Type closing bracket
-        send_string(closing);
+        // On Windows/Linux: Left arrow while holding Shift+Control to move to start of selection
+        SEND_STRING(SS_LCTL(SS_LSFT(SS_TAP(X_LEFT))));
     }
+
+    // Step 3: Type the opening bracket
+    send_string(opening);
 
     // Restore modifiers
     register_mods(mods);

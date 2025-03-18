@@ -306,11 +306,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     // Handle arrow keys for selection when in selection mode
     if (selection_mode_active)
     {
-        // Only override arrow keys when selection_dir != 0 (i.e., something is already selected)
-        // This is a variable from select_word.c that indicates if a selection is active
-        extern int8_t selection_dir;
-
-        if (record->event.pressed && selection_dir != 0)
+        // Only handle arrow keys when in selection mode
+        if (record->event.pressed)
         {
             switch (keycode)
             {
@@ -325,7 +322,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
                 return false;
             }
         }
-        else if ((keycode == KC_LEFT || keycode == KC_RIGHT || keycode == KC_DOWN) && selection_dir != 0)
+        else if (keycode == KC_LEFT || keycode == KC_RIGHT || keycode == KC_DOWN)
         {
             select_word_unregister();
             return false;

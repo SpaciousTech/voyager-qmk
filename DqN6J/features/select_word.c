@@ -19,6 +19,11 @@
 #define SELECT_WORD_TIMEOUT 30000
 #endif // SELECT_WORD_TIMEOUT
 
+// Map keycode names to what's expected in select_word.c
+#define SELECT_WORD SELWORD
+#define SELECT_WORD_BACK SELWBAK
+#define SELECT_LINE SELLINE
+
 static int8_t selection_dir = 0;
 static bool reset_before_next_event = false;
 static uint8_t registered_hotkey = KC_NO;
@@ -287,7 +292,7 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t *record)
 
   switch (keycode)
   {
-  case SELWORD:
+  case SELECT_WORD:
     if (record->event.pressed)
     {
       select_word_register(shifted ? 'L' : 'W');
@@ -298,7 +303,7 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t *record)
     }
     return false;
 
-  case SELWBAK:
+  case SELECT_WORD_BACK:
     if (record->event.pressed)
     {
       select_word_register('B');
@@ -309,7 +314,7 @@ bool process_record_select_word(uint16_t keycode, keyrecord_t *record)
     }
     return false;
 
-  case SELLINE:
+  case SELECT_LINE:
     if (record->event.pressed)
     {
       select_word_register('L');

@@ -8,7 +8,7 @@
 enum custom_keycodes
 {
     RGB_SLD = ML_SAFE_RANGE,
-    // Adding Keycodes for QMK Select Word 
+    // Adding Keycodes for QMK Select Word
     SELWORD,
     SELWBAK,
     SELLINE,
@@ -18,7 +18,6 @@ enum custom_keycodes
 uint16_t SELECT_WORD_KEYCODE = SELWORD;
 uint16_t SELECT_WORD_BACK_KEYCODE = SELWBAK;
 uint16_t SELECT_WORD_LINE_KEYCODE = SELLINE;
-
 
 typedef struct
 {
@@ -216,7 +215,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
     // Adding Keycodes for QMK Select Word
 
-    if (!process_select_word(keycode, record)) { return false; }
+    if (!process_select_word(keycode, record))
+    {
+        return false;
+    }
 
     switch (keycode)
     {

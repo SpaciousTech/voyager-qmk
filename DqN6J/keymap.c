@@ -7,6 +7,9 @@
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
 
+// Function prototype for process_tap_dance_with_mods
+void process_tap_dance_with_mods(tap_dance_state_t *state, uint16_t keycode);
+
 enum layers
 {
     BASE,

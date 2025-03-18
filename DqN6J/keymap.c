@@ -1,5 +1,6 @@
 #include QMK_KEYBOARD_H
 #include "features/select_word.h"
+#include "features/cover_selection.h"
 #include "layout.h"
 #include "version.h"
 #include "i18n.h"
@@ -41,6 +42,19 @@ uint16_t SELECT_WORD_KEYCODE = SELWORD;
 static bool selection_mode_active = false;
 static uint16_t selection_mode_timer = 0;
 #define SELECTION_MODE_TIMEOUT 5000 // 5 seconds timeout
+
+// Track if we have an active selection (for bracket surrounding)
+static bool selection_active = false;
+
+// Helper to detect Mac OS
+bool is_mac_os(void)
+{
+#ifdef SELECT_WORD_OS_MAC
+    return true;
+#else
+    return false;
+#endif
+}
 
 // Short aliases for Home row mods and other tap-hold keys
 #define HRM_A LGUI_T(KC_A)
@@ -89,22 +103,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
-        XXXXXXX, SELBWD, KC_UP, SELFWD, XXXXXXX, _______,
+        SELLINE, SELBWD, KC_UP, SELFWD, XXXXXXX, _______,
         LALT(KC_LEFT), KC_LEFT, KC_DOWN, KC_RIGHT, LALT(KC_RIGHT), _______,
         XXXXXXX, XXXXXXX, _______, _______, _______, _______,
         _______, _______),
 
     [APPS] = LAYOUT_LR(
         QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,
-        _______, _______, ALL_T(KC_W), ALL_T(KC_E), ALL_T(KC_R), ALL_T(KC_T),
-        _______, _______, ALL_T(KC_S), ALL_T(KC_D), LGUI(KC_SPACE), ALL_T(KC_G),
-        TO(0), _______, _______, ALL_T(KC_C), ALL_T(KC_V), _______,
+        _______, _______, MOD_HYPR(KC_W), MOD_HYPR(KC_E), MOD_HYPR(KC_R), MOD_HYPR(KC_T),
+        _______, _______, MOD_HYPR(KC_S), MOD_HYPR(KC_D), LGUI(KC_SPACE), MOD_HYPR(KC_G),
+        TO(0), _______, _______, MOD_HYPR(KC_C), MOD_HYPR(KC_V), _______,
         _______, _______,
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
-        ALL_T(KC_Y), ALL_T(KC_U), ALL_T(KC_I), ALL_T(KC_O), ALL_T(KC_P), _______,
-        ALL_T(KC_H), ALL_T(KC_J), ALL_T(KC_K), ALL_T(KC_L), _______, _______,
-        ALL_T(KC_N), ALL_T(KC_M), _______, _______, _______, _______,
+        MOD_HYPR(KC_Y), MOD_HYPR(KC_U), MOD_HYPR(KC_I), MOD_HYPR(KC_O), MOD_HYPR(KC_P), _______,
+        MOD_HYPR(KC_H), MOD_HYPR(KC_J), MOD_HYPR(KC_K), MOD_HYPR(KC_L), _______, _______,
+        MOD_HYPR(KC_N), MOD_HYPR(KC_M), _______, _______, _______, _______,
         _______, _______),
 
     [SYM] = LAYOUT_LR(
@@ -148,14 +162,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [MEHF] = LAYOUT_LR(
         QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, MEH_T(KC_Q), MEH_T(KC_W), LGUI(LCTL(KC_SPACE)), MEH_T(KC_R), LALT(LSFT(KC_T)),
-        _______, MEH_T(KC_A), MEH_T(KC_S), MEH_T(KC_D), LGUI(KC_SPACE), MEH_T(KC_G),
+        XXXXXXX, MOD_MEH(KC_Q), MOD_MEH(KC_W), LGUI(LCTL(KC_SPACE)), MOD_MEH(KC_R), LALT(LSFT(KC_T)),
+        _______, MOD_MEH(KC_A), MOD_MEH(KC_S), MOD_MEH(KC_D), LGUI(KC_SPACE), MOD_MEH(KC_G),
         _______, XXXXXXX, XXXXXXX, LALT(LCTL(KC_C)), XXXXXXX, XXXXXXX,
         _______, _______,
 
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        MEH_T(KC_Y), MEH_T(KC_U), MEH_T(KC_I), MEH_T(KC_O), MEH_T(KC_P), MEH_T(KC_BSLS),
-        MEH_T(KC_H), MEH_T(KC_J), MEH_T(KC_K), MEH_T(KC_L), MEH_T(KC_SCLN), _______,
+        MOD_MEH(KC_Y), MOD_MEH(KC_U), MOD_MEH(KC_I), MOD_MEH(KC_O), MOD_MEH(KC_P), MOD_MEH(KC_BSLS),
+        MOD_MEH(KC_H), MOD_MEH(KC_J), MOD_MEH(KC_K), MOD_MEH(KC_L), MOD_MEH(KC_SCLN), _______,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         _______, _______),
 };
@@ -217,7 +231,7 @@ void keyboard_post_init_user(void)
 const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
     [0] = {{156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {87, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {118, 255, 255}, {0, 255, 219}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {87, 255, 255}, {34, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {87, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {0, 255, 219}, {87, 255, 255}, {0, 255, 219}, {118, 255, 255}},
 
-    [1] = {{161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {87, 255, 255}, {87, 255, 255}, {242, 255, 255}, {132, 255, 252}, {132, 255, 252}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {203, 255, 255}, {87, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {118, 255, 255}, {0, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {0, 0, 0}, {0, 0, 0}, {89, 255, 255}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {146, 255, 255}, {89, 255, 255}, {89, 255, 255}, {89, 255, 255}, {146, 255, 255}, {87, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {118, 255, 255}},
+    [1] = {{161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {87, 255, 255}, {87, 255, 255}, {242, 255, 255}, {132, 255, 252}, {132, 255, 252}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {203, 255, 255}, {87, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {118, 255, 255}, {0, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {34, 255, 255}, {34, 255, 255}, {89, 255, 255}, {34, 255, 255}, {0, 0, 0}, {87, 255, 255}, {146, 255, 255}, {89, 255, 255}, {89, 255, 255}, {89, 255, 255}, {146, 255, 255}, {87, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {118, 255, 255}},
 
     [2] = {{0, 255, 219}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {87, 255, 255}, {0, 0, 0}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {41, 245, 224}, {87, 255, 255}, {0, 0, 0}, {121, 211, 222}, {188, 186, 204}, {108, 255, 255}, {156, 217, 143}, {87, 255, 255}, {236, 255, 255}, {0, 0, 0}, {23, 171, 255}, {9, 255, 199}, {0, 0, 0}, {114, 255, 182}, {0, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {184, 255, 255}, {121, 211, 222}, {87, 255, 255}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {0, 0, 0}, {87, 255, 255}, {45, 255, 255}, {162, 227, 246}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {114, 255, 182}},
 
@@ -294,40 +308,47 @@ bool rgb_matrix_indicators_user(void)
     return true;
 }
 
+// Selection helpers
+void cover_selection_with(const char *opening, const char *closing)
+{
+    // Save modifiers
+    const uint8_t mods = get_mods();
+    clear_oneshot_mods();
+    unregister_mods(MOD_MASK_CSAG);
+
+    if (is_mac_os())
+    {
+        // On Mac: Move to start of selection
+        SEND_STRING(SS_LGUI(SS_LSFT(SS_TAP(X_LEFT))));
+        // Type opening bracket
+        send_string(opening);
+        // Move to end of selection
+        SEND_STRING(SS_LGUI(SS_LSFT(SS_TAP(X_RIGHT))));
+        // Type closing bracket
+        send_string(closing);
+    }
+    else
+    {
+        // On Windows/Linux: Move to start of selection
+        SEND_STRING(SS_TAP(X_HOME));
+        // Type opening bracket
+        send_string(opening);
+        // Move to end of selection
+        SEND_STRING(SS_LSFT(SS_TAP(X_END)));
+        // Type closing bracket
+        send_string(closing);
+    }
+
+    // Restore modifiers
+    register_mods(mods);
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
-    // Adding Keycodes for QMK Select Word
-
+    // Process selection word functionality
     if (!process_select_word(keycode, record))
     {
         return false;
-    }
-
-    // Handle arrow keys for selection when in selection mode
-    if (selection_mode_active)
-    {
-        // Only handle arrow keys when in selection mode
-        if (record->event.pressed)
-        {
-            switch (keycode)
-            {
-            case KC_LEFT:
-                select_word_register('B'); // Backward word selection
-                return false;
-            case KC_RIGHT:
-                select_word_register('W'); // Forward word selection
-                return false;
-            case KC_DOWN:
-                select_word_register('L'); // Line selection
-                return false;
-            }
-        }
-        else if (keycode == KC_LEFT || keycode == KC_RIGHT || keycode == KC_DOWN)
-        {
-            select_word_unregister();
-            return false;
-        }
-        // If no selection active, let the arrow keys pass through normally
     }
 
     switch (keycode)
@@ -340,6 +361,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             // Start selection mode
             selection_mode_active = true;
             selection_mode_timer = timer_read();
+            cover_selection_keypress(); // Mark selection as active
         }
         else
         {
@@ -350,7 +372,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     case SELFWD:
         if (record->event.pressed)
         {
-            select_word_register('W'); // Forward selection
+            select_word_register('W');     // Forward selection
+            cover_selection_keypress(); // Mark selection as active
         }
         else
         {
@@ -361,7 +384,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     case SELBWD:
         if (record->event.pressed)
         {
-            select_word_register('B'); // Backward selection
+            select_word_register('B');     // Backward selection
+            cover_selection_keypress(); // Mark selection as active
         }
         else
         {
@@ -372,7 +396,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     case SELLINE:
         if (record->event.pressed)
         {
-            select_word_register('L'); // Line selection
+            select_word_register('L');     // Line selection
+            cover_selection_keypress(); // Mark selection as active
         }
         else
         {
@@ -381,10 +406,44 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         return false;
 
     case BRACES: // Types [], {}, or <> and puts cursor between braces.
+    {
+        const uint8_t mods = get_mods();
+        const uint8_t oneshot_mods = get_oneshot_mods();
+
+        // Check if selection is active and handle accordingly
         if (record->event.pressed)
         {
-            const uint8_t mods = get_mods();
-            const uint8_t oneshot_mods = get_oneshot_mods();
+            // Try to handle as selection first
+            if ((mods | oneshot_mods) & MOD_MASK_SHIFT)
+            {
+                if (!process_cover_key(keycode, record, "{", "}"))
+                {
+                    return false;
+                }
+            }
+            else if ((mods | oneshot_mods) & MOD_MASK_CTRL)
+            {
+                if (!process_cover_key(keycode, record, "<", ">"))
+                {
+                    return false;
+                }
+            }
+            else if ((mods | oneshot_mods) & MOD_MASK_ALT)
+            {
+                if (!process_cover_key(keycode, record, "(", ")"))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (!process_cover_key(keycode, record, "[", "]"))
+                {
+                    return false;
+                }
+            }
+
+            // If we get here, there's no active selection, insert empty brackets
             clear_oneshot_mods(); // Temporarily disable mods.
             unregister_mods(MOD_MASK_CSAG);
             if ((mods | oneshot_mods) & MOD_MASK_SHIFT)
@@ -406,9 +465,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             tap_code(KC_LEFT);   // Move cursor between braces.
             register_mods(mods); // Restore mods.
         }
+    }
         return false;
 
     case SBRACKET: // Square brackets []
+        if (!process_cover_key(keycode, record, "[", "]"))
+        {
+            return false;
+        }
         if (record->event.pressed)
         {
             const uint8_t mods = get_mods();
@@ -421,6 +485,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         return false;
 
     case CBRACE: // Curly braces {}
+        if (!process_cover_key(keycode, record, "{", "}"))
+        {
+            return false;
+        }
         if (record->event.pressed)
         {
             const uint8_t mods = get_mods();
@@ -433,6 +501,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         return false;
 
     case ABRACKET: // Angle brackets <>
+        if (!process_cover_key(keycode, record, "<", ">"))
+        {
+            return false;
+        }
         if (record->event.pressed)
         {
             const uint8_t mods = get_mods();
@@ -445,6 +517,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         return false;
 
     case PAREN: // Parentheses ()
+        if (!process_cover_key(keycode, record, "(", ")"))
+        {
+            return false;
+        }
         if (record->event.pressed)
         {
             const uint8_t mods = get_mods();
@@ -547,5 +623,6 @@ void housekeeping_task_user(void)
     if (selection_mode_active && timer_elapsed(selection_mode_timer) > SELECTION_MODE_TIMEOUT)
     {
         selection_mode_active = false;
+        selection_active = false; // Also reset the selection state
     }
 }

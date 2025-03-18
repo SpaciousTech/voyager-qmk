@@ -316,7 +316,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     if (keycode == LT(3, KC_BSPC) && record->event.pressed)
     {
         const uint8_t mods = get_mods();
-        if (mods & MOD_MASK_SHIFT)
+
+        // Check for Shift+Opt+Backspace to send Opt+Delete
+        if ((mods & MOD_MASK_SHIFT) && (mods & MOD_MASK_ALT))
+        {
+            // Send Opt+Delete
+            uint8_t alt_mods = mods & MOD_MASK_ALT; // Preserve just the Option mods
+            clear_mods();
+            register_mods(alt_mods);
+            tap_code(KC_DEL);
+            clear_mods();
+            register_mods(mods);
+            return false;
+        }
+        // Regular Shift+Backspace to send Delete
+        else if (mods & MOD_MASK_SHIFT)
         {
             // If shift is held, send Delete instead
             clear_mods();
@@ -325,6 +339,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             return false;
         }
     }
+
+    // Handle Shift+ Opt+Backspace to output Opt+Delete
 
     switch (keycode)
     {
@@ -461,7 +477,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         if (!record->event.pressed && action->state.count && !action->state.finished)
         {
             tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)action->user_data;
-            tap_code16(tap_hold->tap);
+
+            // Use our custom function instead of directly tapping
+            process_tap_dance_with_mods(&action->state, tap_hold->tap);
         }
         break;
     case RGB_SLD:
@@ -472,6 +490,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         return false;
     }
     return true;
+}
+
+void process_tap_dance_with_mods(tap_dance_state_t *state, uint16_t keycode)
+{
+    const uint8_t mods = get_mods();
+
+    // If shift is pressed with Alt+Backspace, send Option+Delete
+    if ((mods & MOD_MASK_SHIFT) && keycode == LALT(KC_BSPC))
+    {
+        clear_mods();             // Clear all mods
+        register_code(KC_LALT);   // Press Option
+        tap_code(KC_DEL);         // Tap Delete
+        unregister_code(KC_LALT); // Release Option
+        register_mods(mods);      // Restore mods
+        return;
+    }
+    // Otherwise fall back to normal behavior
+    tap_code16(keycode);
 }
 
 void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data)

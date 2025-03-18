@@ -1,5 +1,5 @@
 #include QMK_KEYBOARD_H
-#include "select_word.h"
+#include "features/select_word.h"
 #include "version.h"
 #include "i18n.h"
 #define MOON_LED_LEVEL LED_LEVEL

@@ -28,11 +28,6 @@
 #error "select_word: QMK version is too old to build. Please update QMK."
 #else
 
-// Default to a timeout of 5 seconds.
-#ifndef SELECT_WORD_TIMEOUT
-#define SELECT_WORD_TIMEOUT 5000
-#endif // SELECT_WORD_TIMEOUT
-
 __attribute__((weak)) uint16_t SELECT_WORD_KEYCODE = KC_NO;
 static int8_t selection_dir = 0;
 static bool reset_before_next_event = false;

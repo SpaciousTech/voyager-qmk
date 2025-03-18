@@ -10,11 +10,16 @@ enum custom_keycodes
     RGB_SLD = ML_SAFE_RANGE,
     // Adding Keycodes for QMK Select Word
     SELWORD,
+    // Adding custom brace keycodes
+    BRACES,   // General bracket key with modifier detection
+    SBRACKET, // Square brackets []
+    CBRACE,   // Curly braces {}
+    ABRACKET, // Angle brackets <>
+    PAREN,    // Parentheses ()
 };
 
 // Adding Keycodes for QMK Select Word
 uint16_t SELECT_WORD_KEYCODE = SELWORD;
-
 
 typedef struct
 {
@@ -38,7 +43,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         LT(3, KC_BSPC), TD(DANCE_0), MT(MOD_RSFT, KC_SPACE), LT(1, KC_TAB)),
     [1] = LAYOUT_voyager(
         KC_TRANSPARENT, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
-        KC_TRANSPARENT, TO(3), CW_TOGG, KC_NO, KC_NO, SELWORD, KC_NO, KC_NO, KC_UP, KC_NO, KC_NO, KC_TRANSPARENT,
+        KC_TRANSPARENT, TO(3), CW_TOGG, BRACES, PAREN, SELWORD, KC_NO, KC_NO, KC_UP, KC_NO, KC_NO, KC_TRANSPARENT,
         KC_TRANSPARENT, KC_LEFT_GUI, KC_LEFT_SHIFT, KC_LEFT_ALT, KC_LEFT_CTRL, LGUI(KC_A), LALT(KC_LEFT), KC_LEFT, KC_DOWN, KC_RIGHT, LALT(KC_RIGHT), KC_TRANSPARENT,
         KC_TRANSPARENT, LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), LGUI(LSFT(KC_Z)), KC_NO, KC_NO, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
         KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT),
@@ -131,7 +136,7 @@ void keyboard_post_init_user(void)
 const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
     [0] = {{156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {87, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {118, 255, 255}, {0, 255, 219}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {87, 255, 255}, {34, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {87, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {0, 255, 219}, {87, 255, 255}, {0, 255, 219}, {118, 255, 255}},
 
-    [1] = {{161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {87, 255, 255}, {87, 255, 255}, {242, 255, 255}, {0, 0, 0}, {0, 0, 0}, {156, 255, 255}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {203, 255, 255}, {87, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {118, 255, 255}, {0, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {0, 0, 0}, {0, 0, 0}, {89, 255, 255}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {146, 255, 255}, {89, 255, 255}, {89, 255, 255}, {89, 255, 255}, {146, 255, 255}, {87, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {118, 255, 255}},
+    [1] = {{161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {87, 255, 255}, {87, 255, 255}, {242, 255, 255}, {87, 255, 255}, {87, 255, 255}, {156, 255, 255}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {203, 255, 255}, {87, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {118, 255, 255}, {0, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {0, 0, 0}, {0, 0, 0}, {89, 255, 255}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {146, 255, 255}, {89, 255, 255}, {89, 255, 255}, {89, 255, 255}, {146, 255, 255}, {87, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {118, 255, 255}},
 
     [2] = {{0, 255, 219}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {87, 255, 255}, {0, 0, 0}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {41, 245, 224}, {87, 255, 255}, {0, 0, 0}, {121, 211, 222}, {188, 186, 204}, {108, 255, 255}, {156, 217, 143}, {87, 255, 255}, {236, 255, 255}, {0, 0, 0}, {23, 171, 255}, {9, 255, 199}, {0, 0, 0}, {114, 255, 182}, {0, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {184, 255, 255}, {121, 211, 222}, {87, 255, 255}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {0, 0, 0}, {87, 255, 255}, {45, 255, 255}, {162, 227, 246}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {114, 255, 182}},
 
@@ -219,6 +224,81 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
 
     switch (keycode)
     {
+    case BRACES: // Types [], {}, or <> and puts cursor between braces.
+        if (record->event.pressed)
+        {
+            const uint8_t mods = get_mods();
+            const uint8_t oneshot_mods = get_oneshot_mods();
+            clear_oneshot_mods(); // Temporarily disable mods.
+            unregister_mods(MOD_MASK_CSAG);
+            if ((mods | oneshot_mods) & MOD_MASK_SHIFT)
+            {
+                SEND_STRING("{}");
+            }
+            else if ((mods | oneshot_mods) & MOD_MASK_CTRL)
+            {
+                SEND_STRING("<>");
+            }
+            else if ((mods | oneshot_mods) & MOD_MASK_ALT)
+            {
+                SEND_STRING("()");
+            }
+            else
+            {
+                SEND_STRING("[]");
+            }
+            tap_code(KC_LEFT);   // Move cursor between braces.
+            register_mods(mods); // Restore mods.
+        }
+        return false;
+
+    case SBRACKET: // Square brackets []
+        if (record->event.pressed)
+        {
+            const uint8_t mods = get_mods();
+            clear_oneshot_mods();
+            unregister_mods(MOD_MASK_CSAG);
+            SEND_STRING("[]");
+            tap_code(KC_LEFT);
+            register_mods(mods);
+        }
+        return false;
+
+    case CBRACE: // Curly braces {}
+        if (record->event.pressed)
+        {
+            const uint8_t mods = get_mods();
+            clear_oneshot_mods();
+            unregister_mods(MOD_MASK_CSAG);
+            SEND_STRING("{}");
+            tap_code(KC_LEFT);
+            register_mods(mods);
+        }
+        return false;
+
+    case ABRACKET: // Angle brackets <>
+        if (record->event.pressed)
+        {
+            const uint8_t mods = get_mods();
+            clear_oneshot_mods();
+            unregister_mods(MOD_MASK_CSAG);
+            SEND_STRING("<>");
+            tap_code(KC_LEFT);
+            register_mods(mods);
+        }
+        return false;
+
+    case PAREN: // Parentheses ()
+        if (record->event.pressed)
+        {
+            const uint8_t mods = get_mods();
+            clear_oneshot_mods();
+            unregister_mods(MOD_MASK_CSAG);
+            SEND_STRING("()");
+            tap_code(KC_LEFT);
+            register_mods(mods);
+        }
+        return false;
 
     case TD(DANCE_0):
         action = &tap_dance_actions[TD_INDEX(keycode)];
@@ -281,9 +361,6 @@ void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data)
 tap_dance_action_t tap_dance_actions[] = {
     [DANCE_0] = ACTION_TAP_DANCE_TAP_HOLD(LALT(KC_BSPC), KC_LEFT_GUI),
 };
-
-
-
 
 // QMK Config
 

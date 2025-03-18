@@ -1,4 +1,4 @@
-// Copyright 2023-2024
+// Copyright 2021-2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,17 +19,38 @@
 
 #include "cover_selection.h"
 
-// Track if we have an active selection
-bool selection_active = false;
+// Internal selection state
+static bool selection_active = false;
 
+// Check if selection is active
+bool is_selection_active(void)
+{
+    return selection_active;
+}
+
+// Set selection active state
+void set_selection_active(bool active)
+{
+    selection_active = active;
+}
+
+// Mark selection as active
+void cover_selection_keypress(void)
+{
+    selection_active = true;
+}
+
+#ifdef SELECT_WORD_OS_MAC
 bool is_mac_os(void)
 {
-#ifdef SELECT_WORD_OS_MAC
     return true;
-#else
-    return false;
-#endif
 }
+#else
+bool is_mac_os(void)
+{
+    return false;
+}
+#endif
 
 void cover_selection_with(const char *opening, const char *closing)
 {
@@ -65,27 +86,14 @@ void cover_selection_with(const char *opening, const char *closing)
     register_mods(mods);
 }
 
-void cover_selection_keypress(void)
-{
-    selection_active = true;
-}
-
 bool process_cover_key(uint16_t keycode, keyrecord_t *record, const char *opening, const char *closing)
 {
-    if (record->event.pressed)
+    if (record->event.pressed && is_selection_active())
     {
-        if (selection_active)
-        {
-            // We have text selected, cover it with brackets
-            cover_selection_with(opening, closing);
-            selection_active = false;
-            return false;
-        }
-        else
-        {
-            // No selection, let the regular process handle it
-            return true;
-        }
+        // We have an active selection, surround it
+        cover_selection_with(opening, closing);
+        selection_active = false; // Reset selection state
+        return false;             // Skip regular key processing
     }
-    return true;
+    return true; // Continue with regular key processing
 }

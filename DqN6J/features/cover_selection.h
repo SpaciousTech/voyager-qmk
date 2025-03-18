@@ -1,4 +1,4 @@
-// Copyright 2023-2024
+// Copyright 2021-2025 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 /**
  * @file cover_selection.h
- * @brief Cover selection with brackets feature
+ * @brief Cover selection with brackets
  *
  * This feature allows covering selected text with various types of brackets.
  * It works in conjunction with the select_word feature to detect active selections.
@@ -34,40 +34,35 @@ extern "C"
 #define COVER_SELECTION_ENABLE true
 #endif
 
-    // Track if we have an active selection
-    extern bool selection_active;
+    // Selection state tracking
+    bool is_selection_active(void);
+    void set_selection_active(bool active);
 
     /**
-     * @brief Detect if the host OS is Mac
+     * @brief Cover selected text with opening and closing characters.
      *
-     * @return true if Mac OS, false otherwise
-     */
-    bool is_mac_os(void);
-
-    /**
-     * @brief Cover selected text with specified opening and closing brackets
-     *
-     * @param opening The opening bracket string
-     * @param closing The closing bracket string
+     * @param opening  Opening bracket/character
+     * @param closing  Closing bracket/character
      */
     void cover_selection_with(const char *opening, const char *closing);
 
     /**
-     * @brief This function should be called from your process_record_user for each selection keycode
-     * to set the selection_active flag to true.
-     */
-    void cover_selection_keypress(void);
-
-    /**
-     * @brief Process key events for bracket keys to add cover selection capability
+     * @brief Process a key event for covering selection with brackets.
      *
-     * @param keycode The keycode being processed
-     * @param record Key press/release event information
-     * @param opening The opening bracket string
-     * @param closing The closing bracket string
-     * @return true if the keycode should be processed further, false otherwise
+     * @param keycode  Keycode being processed
+     * @param record   Key record
+     * @param opening  Opening bracket/character
+     * @param closing  Closing bracket/character
+     * @return bool    True if the key should be processed normally, false if handled
      */
     bool process_cover_key(uint16_t keycode, keyrecord_t *record, const char *opening, const char *closing);
+
+    /**
+     * @brief Check if system is Mac OS.
+     *
+     * @return bool  True if system is Mac OS
+     */
+    bool is_mac_os(void);
 
 #ifdef __cplusplus
 }

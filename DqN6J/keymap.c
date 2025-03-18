@@ -110,15 +110,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [APPS] = LAYOUT_LR(
         QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,
-        _______, _______, MOD_HYPR(KC_W), MOD_HYPR(KC_E), MOD_HYPR(KC_R), MOD_HYPR(KC_T),
-        _______, _______, MOD_HYPR(KC_S), MOD_HYPR(KC_D), LGUI(KC_SPACE), MOD_HYPR(KC_G),
-        TO(0), _______, _______, MOD_HYPR(KC_C), MOD_HYPR(KC_V), _______,
+        _______, _______, HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T),
+        _______, _______, HYPR(KC_S), HYPR(KC_D), LGUI(KC_SPACE), HYPR(KC_G),
+        TO(0), _______, _______, HYPR(KC_C), HYPR(KC_V), _______,
         _______, _______,
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
-        MOD_HYPR(KC_Y), MOD_HYPR(KC_U), MOD_HYPR(KC_I), MOD_HYPR(KC_O), MOD_HYPR(KC_P), _______,
-        MOD_HYPR(KC_H), MOD_HYPR(KC_J), MOD_HYPR(KC_K), MOD_HYPR(KC_L), _______, _______,
-        MOD_HYPR(KC_N), MOD_HYPR(KC_M), _______, _______, _______, _______,
+        HYPR(KC_Y), HYPR(KC_U), HYPR(KC_I), HYPR(KC_O), HYPR(KC_P), _______,
+        HYPR(KC_H), HYPR(KC_J), HYPR(KC_K), HYPR(KC_L), _______, _______,
+        HYPR(KC_N), HYPR(KC_M), _______, _______, _______, _______,
         _______, _______),
 
     [SYM] = LAYOUT_LR(
@@ -162,14 +162,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [MEHF] = LAYOUT_LR(
         QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, MOD_MEH(KC_Q), MOD_MEH(KC_W), LGUI(LCTL(KC_SPACE)), MOD_MEH(KC_R), LALT(LSFT(KC_T)),
-        _______, MOD_MEH(KC_A), MOD_MEH(KC_S), MOD_MEH(KC_D), LGUI(KC_SPACE), MOD_MEH(KC_G),
+        XXXXXXX, MEH(KC_Q), MEH(KC_W), LGUI(LCTL(KC_SPACE)), MEH(KC_R), LALT(LSFT(KC_T)),
+        _______, MEH(KC_A), MEH(KC_S), MEH(KC_D), LGUI(KC_SPACE), MEH(KC_G),
         _______, XXXXXXX, XXXXXXX, LALT(LCTL(KC_C)), XXXXXXX, XXXXXXX,
         _______, _______,
 
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        MOD_MEH(KC_Y), MOD_MEH(KC_U), MOD_MEH(KC_I), MOD_MEH(KC_O), MOD_MEH(KC_P), MOD_MEH(KC_BSLS),
-        MOD_MEH(KC_H), MOD_MEH(KC_J), MOD_MEH(KC_K), MOD_MEH(KC_L), MOD_MEH(KC_SCLN), _______,
+        MEH(KC_Y), MEH(KC_U), MEH(KC_I), MEH(KC_O), MEH(KC_P), MEH(KC_BSLS),
+        MEH(KC_H), MEH(KC_J), MEH(KC_K), MEH(KC_L), MEH(KC_SCLN), _______,
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
         _______, _______),
 };

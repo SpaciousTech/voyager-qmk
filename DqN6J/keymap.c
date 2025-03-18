@@ -372,7 +372,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     case SELFWD:
         if (record->event.pressed)
         {
-            select_word_register('W');     // Forward selection
+            select_word_register('W');  // Forward selection
             cover_selection_keypress(); // Mark selection as active
         }
         else
@@ -384,7 +384,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     case SELBWD:
         if (record->event.pressed)
         {
-            select_word_register('B');     // Backward selection
+            select_word_register('B');  // Backward selection
             cover_selection_keypress(); // Mark selection as active
         }
         else
@@ -396,7 +396,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     case SELLINE:
         if (record->event.pressed)
         {
-            select_word_register('L');     // Line selection
+            select_word_register('L');  // Line selection
             cover_selection_keypress(); // Mark selection as active
         }
         else

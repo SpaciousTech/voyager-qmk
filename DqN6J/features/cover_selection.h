@@ -37,6 +37,7 @@ extern "C"
     // Selection state tracking
     bool is_selection_active(void);
     void set_selection_active(bool active);
+    void cover_selection_keypress(void);
 
     /**
      * @brief Cover selected text with opening and closing characters.

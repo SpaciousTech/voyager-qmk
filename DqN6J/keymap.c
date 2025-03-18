@@ -209,11 +209,11 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
 }
 
 // Define the Shift+Backspace -> Delete key override
-const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_BSPC, KC_DEL);
-
+// Disabled in favor of direct handling in process_record_user
+// const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, LT(3, KC_BSPC), KC_DEL);
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
-    &delete_key_override,
+    // &delete_key_override,  // Disabled - now handled in process_record_user
     NULL // Null terminate the array
 };
 
@@ -310,6 +310,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     if (!process_select_word(keycode, record))
     {
         return false;
+    }
+
+    // Handle Shift+Backspace to output Delete
+    if (keycode == LT(3, KC_BSPC) && record->event.pressed)
+    {
+        const uint8_t mods = get_mods();
+        if (mods & MOD_MASK_SHIFT)
+        {
+            // If shift is held, send Delete instead
+            clear_mods();
+            tap_code(KC_DEL);
+            register_mods(mods);
+            return false;
+        }
     }
 
     switch (keycode)

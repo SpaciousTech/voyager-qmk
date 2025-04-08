@@ -3,6 +3,7 @@
 #include "layout.h"
 #include "version.h"
 #include "i18n.h"
+#include "rgb_colors.h" // Include the new RGB configuration
 
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
@@ -10,6 +11,25 @@
 // Function prototype for process_tap_dance_with_mods
 void process_tap_dance_with_mods(tap_dance_state_t *state, uint16_t keycode);
 
+// Define custom keycodes
+enum custom_keycodes
+{
+    RGB_SLD = ML_SAFE_RANGE, // Example: Use the defined starting point
+
+    // Keycodes for QMK Select Word
+    SELWORD, // Select forward word
+    SELBWD,  // Select backward word
+    SELLINE, // Select line
+
+    // Custom brace keycodes
+    BRACES,   // General bracket key with modifier detection
+    SBRACKET, // Square brackets []
+    CBRACE,   // Curly braces {}
+    ABRACKET, // Angle brackets <>
+    PAREN,    // Parentheses ()
+};
+
+// Define the layers used in the keymap
 enum layers
 {
     BASE,
@@ -21,23 +41,8 @@ enum layers
     MEHF,
 };
 
-enum custom_keycodes
-{
-    RGB_SLD = ML_SAFE_RANGE,
-    // Adding Keycodes for QMK Select Word
-    SELWORD, // Select forward word
-    SELBWD,  // Select backward word
-    SELLINE, // Select line
-    NEXTSEN, // Go to next sentence
-    // Adding custom brace keycodes
-    BRACES,   // General bracket key with modifier detection
-    SBRACKET, // Square brackets []
-    CBRACE,   // Curly braces {}
-    ABRACKET, // Angle brackets <>
-    PAREN,    // Parentheses ()
-};
-
 // Adding Keycodes for QMK Select Word
+// Definition needs to be in a .c file, not .h
 uint16_t SELECT_WORD_KEYCODE = SELWORD;
 
 // Selection mode variables
@@ -73,95 +78,95 @@ enum tap_dance_codes
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_LR(
-        LCG_EQUAL, KC_1, KC_2, KC_3, KC_4, KC_5,
-        LCA_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,
-        LT(2, KC_ESCAPE), HRM_A, HRM_S, HRM_D, HRM_F, KC_G,
-        TT(1), MEH_T(KC_Z), KC_X, KC_C, KC_V, KC_B,
-        LT(3, KC_BSPC), TD(DANCE_0),
+        LCG_EQUAL, KC_1, KC_2, KC_3, KC_4, KC_5,             // Top Row
+        LCA_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,         // Second Row
+        LT(APPS, KC_ESCAPE), HRM_A, HRM_S, HRM_D, HRM_F, KC_G,  // Third Row
+        TT(NAV), MEH_T(KC_Z), KC_X, KC_C, KC_V, KC_B,          // Fourth Row
+        LT(SYM, KC_BSPC), TD(DANCE_0),                         // Thumbs Row
 
-        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
-        KC_Y, KC_U, KC_I, KC_O, KC_P, RCALT_BSLS,
-        KC_H, HRM_J, HRM_K, HRM_L, HRM_SCLN, LT(6, KC_QUOTE),
-        KC_N, KC_M, KC_COMMA, KC_DOT, ALL_T(KC_SLASH), RCTL_T(KC_ENTER),
-        RSFT_T(KC_SPACE), LT(1, KC_TAB)),
+        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                           // Top Row
+        KC_Y, KC_U, KC_I, KC_O, KC_P, RCALT_BSLS,                         // Second Row
+        KC_H, HRM_J, HRM_K, HRM_L, HRM_SCLN, LT(MEHF, KC_QUOTE),             // Third Row
+        KC_N, KC_M, KC_COMMA, KC_DOT, ALL_T(KC_SLASH), RCTL_T(KC_ENTER),  // Fourth Row
+        RSFT_T(KC_SPACE), LT(NAV, KC_TAB)),                                 // Thumbs Row
 
     [NAV] = LAYOUT_LR(
-        _______, KC_1, KC_2, KC_3, KC_4, KC_5,
-        _______, TO(3), CW_TOGG, NEXTSEN, XXXXXXX, XXXXXXX,
-        _______, KC_LGUI, KC_LSFT, KC_LALT, KC_LCTL, LGUI(KC_A),
-        _______, LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), LGUI(LSFT(KC_Z)),
-        _______, _______,
+        _______, KC_1, KC_2, KC_3, KC_4, KC_5,                              // Top Row
+        _______, TO(SYM), CW_TOGG, SELLINE, SELBWD, SELWORD,                  // Second Row
+        _______, KC_LGUI, KC_LSFT, KC_LALT, KC_LCTL, LGUI(KC_A),            // Third Row
+        _______, LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), LSG(KC_Z), // Fourth Row
+        _______, _______,                                                   // Thumbs Row
 
-        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
-        SELLINE, SELBWD, KC_UP, SELWORD, XXXXXXX, _______,
-        LALT(KC_LEFT), KC_LEFT, KC_DOWN, KC_RIGHT, LALT(KC_RIGHT), _______,
-        XXXXXXX, XXXXXXX, _______, _______, _______, _______,
-        _______, _______),
+        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                           // Top Row
+        _______, LALT(KC_LEFT), KC_UP, LALT(KC_RIGHT), _______, _______,  // Second Row
+        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, _______,              // Third Row
+        XXXXXXX, XXXXXXX, _______, _______, _______, _______,             // Fourth Row
+        _______, _______),                                                // Thumbs Row
 
     [APPS] = LAYOUT_LR(
-        QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,
-        _______, _______, HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T),
-        _______, _______, HYPR(KC_S), HYPR(KC_D), LGUI(KC_SPACE), HYPR(KC_G),
-        TO(0), _______, _______, HYPR(KC_C), HYPR(KC_V), _______,
-        _______, _______,
+        QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,                                // Top Row
+        _______, _______, HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T),     // Second Row
+        _______, _______, HYPR(KC_S), HYPR(KC_D), LGUI(KC_SPACE), HYPR(KC_G), // Third Row
+        TO(BASE), _______, _______, HYPR(KC_C), HYPR(KC_V), _______,             // Fourth Row
+        _______, _______,                                                     // Thumbs Row
 
-        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,
-        HYPR(KC_Y), HYPR(KC_U), HYPR(KC_I), HYPR(KC_O), HYPR(KC_P), _______,
-        HYPR(KC_H), HYPR(KC_J), HYPR(KC_K), HYPR(KC_L), _______, _______,
-        HYPR(KC_N), HYPR(KC_M), _______, _______, _______, _______,
-        _______, _______),
+        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                              // Top Row
+        HYPR(KC_Y), HYPR(KC_U), HYPR(KC_I), HYPR(KC_O), HYPR(KC_P), _______, // Second Row
+        HYPR(KC_H), HYPR(KC_J), HYPR(KC_K), HYPR(KC_L), _______, _______,    // Third Row
+        HYPR(KC_N), HYPR(KC_M), _______, _______, _______, _______,          // Fourth Row
+        _______, _______),                                                   // Thumbs Row
 
     [SYM] = LAYOUT_LR(
-        QK_LLCK, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC,
-        _______, TO(1), CW_TOGG, BRACES, PAREN, CBRACE,
-        _______, KC_PIPE, KC_TILD, KC_GRAVE, KC_CIRC, KC_ASTR,
-        TO(0), XXXXXXX, XXXXXXX, KC_DQUO, XXXXXXX, XXXXXXX,
-        _______, _______,
+        QK_LLCK, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC,        // Top Row
+        _______, TO(NAV), CW_TOGG, BRACES, PAREN, CBRACE,           // Second Row
+        _______, KC_PIPE, KC_TILD, KC_GRAVE, KC_CIRC, KC_ASTR,    // Third Row
+        TO(BASE), KC_LBRC, KC_RBRC, KC_DQUO, S(KC_LBRC), S(KC_RBRC), // Fourth Row
+        _______, _______,                                         // Thumbs Row
 
-        KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS,
-        KC_EXLM, KC_UNDS, KC_MINUS, KC_EQUAL, KC_PLUS, _______,
-        KC_HASH, KC_DLR, LALT(LSFT(KC_2)), LALT(KC_3), KC_COLN, _______,
-        KC_PERC, KC_AMPR, KC_LABK, KC_RABK, KC_QUES, _______,
-        _______, _______),
+        KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS,    // Top Row
+        KC_EXLM, KC_UNDS, KC_MINUS, KC_EQUAL, KC_PLUS, _______,   // Second Row
+        KC_HASH, KC_DLR, LSA(KC_2), LALT(KC_3), KC_COLN, _______, // Third Row
+        KC_PERC, KC_AMPR, KC_LABK, KC_RABK, KC_QUES, _______,     // Fourth Row
+        _______, _______),                                        // Thumbs Row
 
     [FUN] = LAYOUT_LR(
-        XXXXXXX, XXXXXXX, XXXXXXX, QK_DYNAMIC_TAPPING_TERM_DOWN, QK_DYNAMIC_TAPPING_TERM_UP, QK_DYNAMIC_TAPPING_TERM_PRINT,
-        RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI,
-        RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI,
-        TO(0), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP,
-        _______, _______,
+        XXXXXXX, XXXXXXX, XXXXXXX, QK_DYNAMIC_TAPPING_TERM_DOWN, QK_DYNAMIC_TAPPING_TERM_UP, QK_DYNAMIC_TAPPING_TERM_PRINT,    // Top Row
+        RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI,          // Second Row
+        RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI,        // Third Row
+        TO(BASE), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, // Fourth Row
+        _______, _______,                                                       // Thumbs Row
 
-        KC_AUDIO_VOL_UP, KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_NEXT_TRACK, XXXXXXX, TO(0),
-        KC_AUDIO_VOL_DOWN, XXXXXXX, KC_UP, XXXXXXX, XXXXXXX, XXXXXXX,
-        KC_AUDIO_MUTE, KC_LEFT, KC_DOWN, KC_RIGHT, XXXXXXX, XXXXXXX,
-        XXXXXXX, XXXXXXX, LGUI(KC_COMMA), XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, _______),
+        KC_AUDIO_VOL_UP, KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_NEXT_TRACK, XXXXXXX, TO(BASE), // Top Row
+        KC_AUDIO_VOL_DOWN, XXXXXXX, KC_UP, XXXXXXX, XXXXXXX, XXXXXXX,                                   // Second Row
+        KC_AUDIO_MUTE, KC_LEFT, KC_DOWN, KC_RIGHT, XXXXXXX, XXXXXXX,                                    // Third Row
+        XXXXXXX, XXXXXXX, LGUI(KC_COMMA), XXXXXXX, XXXXXXX, XXXXXXX,                                    // Fourth Row
+        _______, _______),                                                                              // Thumbs Row
 
     [WIN] = LAYOUT_LR(
-        XXXXXXX, XXXXXXX, LALT(LCTL(KC_LBRC)), XXXXXXX, LALT(LCTL(KC_RBRC)), XXXXXXX,
-        XXXXXXX, XXXXXXX, LALT(LCTL(KC_KP_7)), LALT(LCTL(KC_KP_8)), LALT(LCTL(KC_KP_9)), XXXXXXX,
-        _______, XXXXXXX, LALT(LCTL(KC_4)), LALT(LCTL(KC_KP_5)), LALT(LCTL(KC_6)), XXXXXXX,
-        TO(0), XXXXXXX, LALT(LCTL(KC_KP_1)), LALT(LCTL(KC_KP_2)), LALT(LCTL(KC_KP_3)), XXXXXXX,
-        LALT(LCTL(KC_DOWN)), LALT(LCTL(US_UNDS)),
+        XXXXXXX, XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX,       // Top Row
+        XXXXXXX, XXXXXXX, LCA(KC_KP_7), LCA(KC_KP_8), LCA(KC_KP_9), XXXXXXX,  // Second Row
+        _______, XXXXXXX, LCA(KC_4), LCA(KC_KP_5)), LCA(KC_6), XXXXXXX,       // Third Row
+        TO(BASE), XXXXXXX, LCA(KC_KP_1), LCA(KC_KP_2), LCA(KC_KP_3), XXXXXXX,    // Fourth Row
+        LCA(KC_DOWN), LCA(KC_UNDS),                                           // Thumbs Row
 
-        XXXXXXX, LALT(LCTL(KC_LBRC)), XXXXXXX, LALT(LCTL(KC_RBRC)), XXXXXXX, TO(0),
-        XXXXXXX, LALT(LCTL(KC_KP_7)), LALT(LCTL(KC_KP_8)), LALT(LCTL(KC_KP_9)), XXXXXXX, XXXXXXX,
-        XXXXXXX, LALT(LCTL(KC_4)), LALT(LCTL(KC_KP_5)), LALT(LCTL(KC_6)), XXXXXXX, XXXXXXX,
-        XXXXXXX, LALT(LCTL(KC_KP_1)), LALT(LCTL(KC_KP_2)), LALT(LCTL(KC_KP_3)), XXXXXXX, LALT(LCTL(KC_ENTER)),
-        LALT(LCTL(US_PLUS)), _______),
+        XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX, TO(BASE),               // Top Row
+        XXXXXXX, LCA(KC_KP_7), LCA(KC_KP_8), LCA(KC_KP_9), XXXXXXX, XXXXXXX,        // Second Row
+        XXXXXXX, LCA(KC_4), LCA(KC_KP_5), LCA(KC_6), XXXXXXX, XXXXXXX,              // Third Row
+        XXXXXXX, LCA(KC_KP_1), LCA(KC_KP_2), LCA(KC_KP_3), XXXXXXX, LCA(KC_ENTER),  // Fourth Row
+        LCA(KC_PLUS), _______),                                                     // Thumbs Row
 
     [MEHF] = LAYOUT_LR(
-        QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        XXXXXXX, MEH(KC_Q), MEH(KC_W), LGUI(LCTL(KC_SPACE)), MEH(KC_R), SGUI_T(KC_T),
-        _______, MEH(KC_A), MEH(KC_S), MEH(KC_D), LGUI(KC_SPACE), MEH(KC_G),
-        _______, XXXXXXX, XXXXXXX, LALT(LCTL(KC_C)), XXXXXXX, XXXXXXX,
-        _______, _______,
+        QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                          // Top Row
+        XXXXXXX, MEH(KC_Q), MEH(KC_W), LGUI(LCTL(KC_SPACE)), MEH(KC_R), SGUI_T(KC_T),  // Second Row
+        _______, MEH(KC_A), MEH(KC_S), MEH(KC_D), LGUI(KC_SPACE), MEH(KC_G),           // Third Row
+        _______, XXXXXXX, XXXXXXX, LALT(LCTL(KC_C)), XXXXXXX, XXXXXXX,                 // Fourth Row
+        _______, _______,                                                              // Thumbs Row
 
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        MEH(KC_Y), MEH(KC_U), MEH(KC_I), MEH(KC_O), MEH(KC_P), MEH(KC_BSLS),
-        MEH(KC_H), MEH(KC_J), MEH(KC_K), MEH(KC_L), MEH(KC_SCLN), _______,
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-        _______, _______),
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                  // Top Row
+        MEH(KC_Y), MEH(KC_U), MEH(KC_I), MEH(KC_O), MEH(KC_P), MEH(KC_BSLS),   // Second Row
+        MEH(KC_H), MEH(KC_J), MEH(KC_K), MEH(KC_L), MEH(KC_SCLN), _______,     // Third Row
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                  // Fourth Row
+        _______, _______),                                                     // Thumbs Row
 };
 
 const uint16_t PROGMEM combo0[] = {KC_MINUS, KC_0, COMBO_END};
@@ -172,12 +177,12 @@ const uint16_t PROGMEM combo4[] = {LCG_EQUAL, KC_4, COMBO_END};
 const uint16_t PROGMEM combo5[] = {LCG_EQUAL, KC_5, COMBO_END};
 
 combo_t key_combos[COMBO_COUNT] = {
-    COMBO(combo0, TO(0)),
-    COMBO(combo1, TO(0)),
-    COMBO(combo2, TO(2)),
-    COMBO(combo3, TO(3)),
-    COMBO(combo4, TO(4)),
-    COMBO(combo5, TO(5)),
+    COMBO(combo0, TO(BASE)),
+    COMBO(combo1, TO(BASE)),
+    COMBO(combo2, TO(APPS)),
+    COMBO(combo3, TO(SYM)),
+    COMBO(combo4, TO(FUN)),
+    COMBO(combo5, TO(WIN)),
 };
 
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
@@ -185,27 +190,27 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
     switch (keycode)
     {
     case LCG_EQUAL:
-        return g_tapping_term - 50;
+        return g_tapping_term - 75;
     case LCA_T(KC_TAB):
+        return g_tapping_term - 75;
+    case LT(APPS, KC_ESCAPE):
+        return g_tapping_term - 75;
+    case LT(SYM, KC_BSPC):
         return g_tapping_term - 50;
-    case LT(2, KC_ESCAPE):
-        return g_tapping_term - 50;
-    case LT(3, KC_BSPC):
-        return g_tapping_term - 25;
     case TD(DANCE_0):
-        return g_tapping_term - 50;
+        return g_tapping_term - 75;
     case RCALT_BSLS:
-        return g_tapping_term - 50;
-    case LT(6, KC_QUOTE):
-        return g_tapping_term - 50;
+        return g_tapping_term - 75;
+    case LT(MEHF, KC_QUOTE):
+        return g_tapping_term - 75;
     case ALL_T(KC_SLASH):
-        return g_tapping_term - 25;
+        return g_tapping_term - 50;
     case RCTL_T(KC_ENTER):
-        return g_tapping_term - 50;
+        return g_tapping_term - 75;
     case RSFT_T(KC_SPACE):
-        return g_tapping_term - 50;
-    case LT(1, KC_TAB):
-        return g_tapping_term - 50;
+        return g_tapping_term - 75;
+    case LT(NAV, KC_TAB):
+        return g_tapping_term - 75;
     default:
         return g_tapping_term;
     }
@@ -213,7 +218,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
 
 // Define the Shift+Backspace -> Delete key override
 // Disabled in favor of direct handling in process_record_user
-// const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, LT(3, KC_BSPC), KC_DEL);
+// const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT, LT(SYM, KC_BSPC), KC_DEL);
 // This globally defines all key overrides to be used
 const key_override_t **key_overrides = (const key_override_t *[]){
     // &delete_key_override,  // Disabled - now handled in process_record_user
@@ -227,21 +232,136 @@ void keyboard_post_init_user(void)
     rgb_matrix_enable();
 }
 
+// --- Color Definitions Start ---
+// Define some common colors using HSV format {Hue, Saturation, Value}
+// Standard Colors
+#define C_RED {0, 255, 255}       // Red
+#define C_BROWN {0, 218, 204}     // Red-Brownish
+#define C_ORANGE {21, 255, 255}   // Orange
+#define C_YELLOW {36, 255, 255}   // Yellow
+#define C_GREEN {78, 255, 255}    // Green
+#define C_TEAL {115, 255, 204}    // Teal
+#define C_CYAN {117, 255, 255}    // Cyan
+#define C_BLUE {153, 255, 255}    // Blue
+#define C_PURPLE {196, 255, 255}  // Purple
+#define C_MAGENTA {209, 255, 255} // Magenta
+#define C_PINK {236, 255, 255}    // Pink
+#define C_WHITE {0, 0, 255}       // White
+#define C_OFF {0, 0, 0}           // LED Off (Black)
+
+#define C_MODS {0, 255, 255}     // Red used for Home Row Mods
+#define C_LAYER {87, 255, 255}   // Green used for layer keys
+#define C_ARROW {89, 255, 255}   // Green for arrow keys
+#define C_THUMBS {117, 255, 255} // Cyan used for small thumbs keys
+#define C_FUNC {13, 255, 255}    // Dark Orange used for function Layer
+
+#define C_MACRO {115, 255, 204}   // Teal for Macros keys (Select, Hyper, MEH)
+#define C_CMDPLUS {170, 255, 255} // Dark Blue for CMD + keys
+#define C_SHIFTED {40, 255, 255}  // Yellow for Shifted keys (!@#$%^&*)
+// --- Color Definitions End ---
+
 const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
-    [0] = {{156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {87, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {34, 255, 255}, {87, 255, 255}, {0, 255, 219}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {118, 255, 255}, {0, 255, 219}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {87, 255, 255}, {34, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {87, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {34, 255, 255}, {0, 255, 219}, {87, 255, 255}, {0, 255, 219}, {118, 255, 255}},
+    [BASE] = {
+        // Left Hand Side
+        C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,           // Top row
+        C_LAYER, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, // Second row
+        C_LAYER, C_MODS, C_MODS, C_MODS, C_MODS, C_ORANGE,         // Third row (Home Row Mods)
+        C_LAYER, C_TEAL, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,   // Fourth row
+        C_THUMBS, C_RED,                                           // Thumb cluster
 
-    [1] = {{161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {87, 255, 255}, {87, 255, 255}, {242, 255, 255}, {34, 255, 255}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {0, 255, 219}, {203, 255, 255}, {87, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {203, 255, 255}, {118, 255, 255}, {0, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {161, 255, 255}, {34, 255, 255}, {34, 255, 255}, {89, 255, 255}, {34, 255, 255}, {0, 0, 0}, {87, 255, 255}, {146, 255, 255}, {89, 255, 255}, {89, 255, 255}, {89, 255, 255}, {146, 255, 255}, {87, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {118, 255, 255}},
+        // Right Hand Side
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,            // Top row
+        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_LAYER, // Second row
+        C_ORANGE, C_MODS, C_MODS, C_MODS, C_MODS, C_LAYER,         // Third row (Home Row Mods)
+        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_TEAL, C_LAYER,   // Fourth row
+        C_RED, C_THUMBS                                            // Thumb cluster
+    },
+    [NAV] = {
+        // Left Hand Side
+        C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,                // Top row
+        C_LAYER, C_LAYER, C_PINK, C_MACRO, C_MACRO, C_MACRO,            // Second row
+        C_LAYER, C_MODS, C_MODS, C_MODS, C_MODS, C_CMDPLUS,             // Third row
+        C_LAYER, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, // Fourth row
+        C_THUMBS, C_RED,                                                // Thumb cluster
 
-    [2] = {{0, 255, 219}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {87, 255, 255}, {0, 0, 0}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {41, 245, 224}, {87, 255, 255}, {0, 0, 0}, {121, 211, 222}, {188, 186, 204}, {108, 255, 255}, {156, 217, 143}, {87, 255, 255}, {236, 255, 255}, {0, 0, 0}, {23, 171, 255}, {9, 255, 199}, {0, 0, 0}, {114, 255, 182}, {0, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {156, 255, 255}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {184, 255, 255}, {121, 211, 222}, {87, 255, 255}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {121, 211, 222}, {0, 0, 0}, {87, 255, 255}, {45, 255, 255}, {162, 227, 246}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {87, 255, 255}, {0, 255, 255}, {114, 255, 182}},
+        // Right Hand Side
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,     // Top row
+        C_OFF, C_SHIFTED, C_OFF, C_SHIFTED, C_OFF, C_LAYER, // Second row
+        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_OFF, C_LAYER, // Third row
+        C_OFF, C_OFF, C_OFF, C_OFF, C_MODS, C_LAYER,        // Fourth row
+        C_RED, C_THUMBS                                     // Thumb cluster
+    },
+    [APPS] = {
+        // Left Hand Side
+        C_RED, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,  // Top row
+        C_LAYER, C_OFF, C_TEAL, C_TEAL, C_TEAL, C_TEAL, // Second row
+        C_LAYER, C_OFF, C_TEAL, C_TEAL, C_TEAL, C_TEAL, // Third row
+        C_LAYER, C_TEAL, C_OFF, C_TEAL, C_TEAL, C_OFF,  // Fourth row
+        C_THUMBS, C_RED,                                // Left Thumb cluster
 
-    [3] = {{0, 255, 219}, {40, 255, 255}, {40, 255, 255}, {40, 255, 255}, {40, 255, 255}, {40, 255, 255}, {87, 255, 255}, {87, 255, 255}, {0, 246, 255}, {132, 255, 252}, {132, 255, 252}, {132, 255, 252}, {87, 255, 255}, {197, 214, 255}, {197, 214, 255}, {197, 214, 255}, {197, 214, 255}, {197, 214, 255}, {87, 255, 255}, {0, 0, 0}, {0, 0, 0}, {197, 214, 255}, {0, 0, 0}, {0, 0, 0}, {118, 255, 255}, {0, 255, 255}, {40, 255, 255}, {39, 255, 255}, {39, 255, 255}, {39, 255, 255}, {39, 255, 255}, {39, 255, 255}, {175, 255, 255}, {175, 255, 255}, {175, 255, 255}, {175, 255, 255}, {175, 255, 255}, {87, 255, 255}, {175, 255, 255}, {175, 255, 255}, {147, 255, 255}, {175, 255, 255}, {175, 255, 255}, {87, 255, 255}, {175, 255, 255}, {175, 255, 255}, {175, 255, 255}, {175, 255, 255}, {175, 255, 255}, {87, 255, 255}, {0, 255, 255}, {118, 255, 255}},
+        // Right Hand Side
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,  // Top row
+        C_TEAL, C_TEAL, C_TEAL, C_TEAL, C_TEAL, C_LAYER, // Second row
+        C_TEAL, C_TEAL, C_TEAL, C_TEAL, C_OFF, C_LAYER,  // Third row
+        C_TEAL, C_TEAL, C_OFF, C_OFF, C_OFF, C_LAYER,    // Fourth row
+        C_RED, C_THUMBS                                  // Right Thumb cluster
+    },
+    [SYM] = {
+        // Left Hand Side
+        C_RED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, // Top row
+        C_LAYER, C_LAYER, C_PINK, C_MACRO, C_MACRO, C_MACRO,          // Second row
+        C_LAYER, C_PURPLE, C_BLUE, C_PURPLE, C_PURPLE, C_PURPLE,      // Third row
+        C_LAYER, C_TEAL, C_TEAL, C_PURPLE, C_TEAL, C_TEAL,            // Fourth row
+        C_THUMBS, C_RED,                                              // Left Thumb cluster
 
-    [4] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {61, 178, 154}, {83, 255, 206}, {202, 211, 219}, {102, 250, 255}, {132, 255, 255}, {116, 255, 255}, {52, 255, 255}, {32, 255, 255}, {15, 255, 255}, {174, 255, 233}, {156, 255, 255}, {190, 255, 255}, {215, 255, 255}, {232, 255, 255}, {0, 255, 255}, {110, 255, 160}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {32, 251, 255}, {32, 251, 255}, {118, 255, 255}, {0, 255, 219}, {199, 255, 255}, {162, 223, 235}, {162, 223, 235}, {162, 223, 235}, {0, 0, 0}, {110, 255, 160}, {207, 174, 226}, {0, 0, 0}, {89, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {217, 219, 170}, {89, 255, 255}, {89, 255, 255}, {89, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {230, 252, 192}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 255, 219}, {118, 255, 255}},
+        C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, // Top row
+        C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_LAYER,        // Second row
+        C_PURPLE, C_PURPLE, C_BLUE, C_PURPLE, C_PURPLE, C_LAYER,          // Third row
+        C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_LAYER,        // Fourth row
+        C_RED, C_THUMBS                                                   // Right Thumb cluster
+    },
+    [FUN] = {
+        // Left Hand Side
+        C_OFF, C_OFF, C_OFF, C_YELLOW, C_YELLOW, C_YELLOW, // Top row
+        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC,    // Second row
+        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_RED,     // Third row
+        C_FUNC, C_OFF, C_OFF, C_OFF, C_MAGENTA, C_MAGENTA, // Fourth row
+        C_THUMBS, C_RED,                                   // Left Thumb cluster
 
-    [5] = {{0, 0, 0}, {0, 0, 0}, {203, 255, 255}, {0, 0, 0}, {203, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 218, 204}, {154, 255, 255}, {0, 218, 204}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {154, 255, 255}, {120, 254, 255}, {154, 255, 255}, {0, 0, 0}, {110, 255, 160}, {0, 0, 0}, {0, 218, 204}, {154, 255, 255}, {0, 218, 204}, {0, 0, 0}, {0, 218, 204}, {0, 255, 219}, {0, 0, 0}, {203, 255, 255}, {0, 0, 0}, {203, 255, 255}, {0, 0, 0}, {110, 255, 160}, {0, 0, 0}, {0, 218, 204}, {154, 255, 255}, {0, 218, 204}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {154, 255, 255}, {120, 254, 255}, {154, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 218, 204}, {154, 255, 255}, {0, 218, 204}, {0, 0, 0}, {0, 218, 204}, {89, 255, 255}, {118, 255, 255}},
+        C_OFF, C_PURPLE, C_PURPLE, C_PURPLE, C_OFF, C_LAYER, // Top row
+        C_OFF, C_TEAL, C_TEAL, C_TEAL, C_OFF, C_OFF,         // Second row
+        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_OFF, C_OFF,    // Third row
+        C_OFF, C_OFF, C_ORANGE, C_OFF, C_OFF, C_OFF,         // Fourth row
+        C_RED, C_THUMBS                                      // Right Thumb cluster
+    },
+    [WIN] = {
+        // Left Hand Side
+        C_OFF, C_OFF, C_PURPLE, C_OFF, C_PURPLE, C_OFF,  // Top row
+        C_OFF, C_OFF, C_BROWN, C_BLUE, C_BROWN, C_OFF,   // Second row
+        C_OFF, C_OFF, C_BLUE, C_TEAL, C_BLUE, C_OFF,     // Third row
+        C_LAYER, C_OFF, C_BROWN, C_BLUE, C_BROWN, C_OFF, // Fourth row
+        C_BROWN, C_RED,                                  // Left Thumb cluster
 
-    [6] = {{0, 255, 219}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {126, 246, 210}, {126, 246, 210}, {239, 229, 255}, {34, 171, 255}, {60, 254, 255}, {87, 255, 255}, {34, 171, 255}, {34, 171, 255}, {34, 171, 255}, {108, 255, 255}, {34, 171, 255}, {87, 255, 255}, {0, 0, 0}, {0, 0, 0}, {23, 252, 255}, {0, 0, 0}, {0, 0, 0}, {118, 255, 255}, {0, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {34, 171, 255}, {34, 171, 255}, {34, 171, 255}, {34, 171, 255}, {34, 171, 255}, {60, 254, 255}, {34, 171, 255}, {34, 171, 255}, {34, 171, 255}, {34, 171, 255}, {34, 171, 255}, {87, 255, 255}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 255, 255}, {118, 255, 255}},
+        C_OFF, C_PURPLE, C_OFF, C_PURPLE, C_OFF, C_LAYER, // Top row
+        C_OFF, C_BROWN, C_BLUE, C_BROWN, C_OFF, C_OFF,    // Second row
+        C_OFF, C_BLUE, C_TEAL, C_BLUE, C_OFF, C_OFF,      // Third row
+        C_OFF, C_BROWN, C_BLUE, C_BROWN, C_OFF, C_YELLOW, // Fourth row
+        C_ARROW, C_THUMBS                                 // Right Thumb cluster
+    },
+    [MEHF] = {
+        // Left Hand Side
+        C_RED, C_OFF, C_OFF, C_OFF, C_OFF, C_OFF,                 // Top row
+        C_OFF, C_TEAL, C_TEAL, C_PINK, C_SHIFTED, C_ORANGE,       // Second row
+        C_LAYER, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_CYAN, C_TEAL, // Third row
+        C_LAYER, C_OFF, C_OFF, C_ORANGE, C_OFF, C_OFF,            // Fourth row
+        C_THUMBS, C_RED,                                          // Left Thumb cluster
 
+        C_OFF, C_OFF, C_OFF, C_OFF, C_OFF, C_OFF,                        // Top row
+        C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_ORANGE, // Second row
+        C_TEAL, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_LAYER,     // Third row
+        C_OFF, C_OFF, C_OFF, C_OFF, C_OFF, C_OFF,                        // Fourth row
+        C_RED, C_THUMBS                                                  // Right Thumb cluster
+    },
 };
 
 void set_layer_color(int layer)
@@ -278,26 +398,26 @@ bool rgb_matrix_indicators_user(void)
     }
     switch (biton32(layer_state))
     {
-    case 0:
-        set_layer_color(0);
+    case BASE:
+        set_layer_color(BASE);
         break;
-    case 1:
-        set_layer_color(1);
+    case NAV:
+        set_layer_color(NAV);
         break;
-    case 2:
-        set_layer_color(2);
+    case APPS:
+        set_layer_color(APPS);
         break;
-    case 3:
-        set_layer_color(3);
+    case SYM:
+        set_layer_color(SYM);
         break;
-    case 4:
-        set_layer_color(4);
+    case FUN:
+        set_layer_color(FUN);
         break;
-    case 5:
-        set_layer_color(5);
+    case WIN:
+        set_layer_color(WIN);
         break;
-    case 6:
-        set_layer_color(6);
+    case MEHF:
+        set_layer_color(MEHF);
         break;
     default:
         if (rgb_matrix_get_flags() == LED_FLAG_NONE)
@@ -316,7 +436,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     }
 
     // Handle Shift+Backspace to output Delete
-    if (keycode == LT(3, KC_BSPC) && record->event.pressed)
+    if (keycode == LT(SYM, KC_BSPC) && record->event.pressed)
     {
         const uint8_t mods = get_mods();
 
@@ -464,14 +584,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             SEND_STRING("()");
             tap_code(KC_LEFT);
             register_mods(mods);
-        }
-        return false;
-
-    case NEXTSEN: // Next sentence macro.
-        if (record->event.pressed)
-        {
-            SEND_STRING(". ");
-            add_oneshot_mods(MOD_BIT(KC_LSFT)); // Set one-shot mod for shift.
         }
         return false;
 

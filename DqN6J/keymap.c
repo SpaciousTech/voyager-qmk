@@ -88,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Y, KC_U, KC_I, KC_O, KC_P, RCALT_BSLS,                         // Second Row
         KC_H, HRM_J, HRM_K, HRM_L, HRM_SCLN, LT(MEHF, KC_QUOTE),             // Third Row
         KC_N, KC_M, KC_COMMA, KC_DOT, ALL_T(KC_SLASH), RCTL_T(KC_ENTER),  // Fourth Row
-        RSFT_T(KC_SPACE), LT(NAV, KC_TAB)),                                 // Thumbs Row
+        RSFT_T(KC_SPACE), LT(NAV, KC_TAB),                                 // Thumbs Row
 
     [NAV] = LAYOUT_LR(
         _______, KC_1, KC_2, KC_3, KC_4, KC_5,                              // Top Row
@@ -145,7 +145,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [WIN] = LAYOUT_LR(
         XXXXXXX, XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX,       // Top Row
         XXXXXXX, XXXXXXX, LCA(KC_KP_7), LCA(KC_KP_8), LCA(KC_KP_9), XXXXXXX,  // Second Row
-        _______, XXXXXXX, LCA(KC_4), LCA(KC_KP_5)), LCA(KC_6), XXXXXXX,       // Third Row
+        _______, XXXXXXX, LCA(KC_4), LCA(KC_KP_5), LCA(KC_6), XXXXXXX,       // Third Row
         TO(BASE), XXXXXXX, LCA(KC_KP_1), LCA(KC_KP_2), LCA(KC_KP_3), XXXXXXX,    // Fourth Row
         LCA(KC_DOWN), LCA(KC_UNDS),                                           // Thumbs Row
 
@@ -159,7 +159,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                          // Top Row
         XXXXXXX, MEH(KC_Q), MEH(KC_W), LGUI(LCTL(KC_SPACE)), MEH(KC_R), SGUI_T(KC_T),  // Second Row
         _______, MEH(KC_A), MEH(KC_S), MEH(KC_D), LGUI(KC_SPACE), MEH(KC_G),           // Third Row
-        _______, XXXXXXX, XXXXXXX, LALT(LCTL(KC_C)), XXXXXXX, XXXXXXX,                 // Fourth Row
+        _______, XXXXXXX, XXXXXXX, LCA(KC_C), XXXXXXX, XXXXXXX,                 // Fourth Row
         _______, _______,                                                              // Thumbs Row
 
         XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                  // Top Row

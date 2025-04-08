@@ -77,36 +77,36 @@ enum tap_dance_codes
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_LR(
-        LCG_EQUAL, KC_1, KC_2, KC_3, KC_4, KC_5,             // Top Row
-        LCA_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,         // Second Row
-        LT(APPS, KC_ESCAPE), HRM_A, HRM_S, HRM_D, HRM_F, KC_G,  // Third Row
+        LCG_EQUAL, KC_1, KC_2, KC_3, KC_4, KC_5,               // Top Row
+        LCA_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,           // Second Row
+        LT(APPS, KC_ESCAPE), HRM_A, HRM_S, HRM_D, HRM_F, KC_G, // Third Row
         TT(NAV), MEH_T(KC_Z), KC_X, KC_C, KC_V, KC_B,          // Fourth Row
         LT(SYM, KC_BSPC), TD(DANCE_0),                         // Thumbs Row
 
-        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                           // Top Row
-        KC_Y, KC_U, KC_I, KC_O, KC_P, RCALT_BSLS,                         // Second Row
-        KC_H, HRM_J, HRM_K, HRM_L, HRM_SCLN, LT(MEHF, KC_QUOTE),             // Third Row
-        KC_N, KC_M, KC_COMMA, KC_DOT, ALL_T(KC_SLASH), RCTL_T(KC_ENTER),  // Fourth Row
-        RSFT_T(KC_SPACE), LT(NAV, KC_TAB),                                 // Thumbs Row
+        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                          // Top Row
+        KC_Y, KC_U, KC_I, KC_O, KC_P, RCALT_BSLS,                        // Second Row
+        KC_H, HRM_J, HRM_K, HRM_L, HRM_SCLN, LT(MEHF, KC_QUOTE),         // Third Row
+        KC_N, KC_M, KC_COMMA, KC_DOT, ALL_T(KC_SLASH), RCTL_T(KC_ENTER), // Fourth Row
+        RSFT_T(KC_SPACE), LT(NAV, KC_TAB)),                              // Thumbs Row
 
     [NAV] = LAYOUT_LR(
         _______, KC_1, KC_2, KC_3, KC_4, KC_5,                              // Top Row
-        _______, TO(SYM), CW_TOGG, SELLINE, SELBWD, SELWORD,                  // Second Row
+        _______, TO(SYM), CW_TOGG, SELLINE, SELBWD, SELWORD,                // Second Row
         _______, KC_LGUI, KC_LSFT, KC_LALT, KC_LCTL, LGUI(KC_A),            // Third Row
         _______, LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), LSG(KC_Z), // Fourth Row
         _______, _______,                                                   // Thumbs Row
 
-        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                           // Top Row
-        _______, LALT(KC_LEFT), KC_UP, LALT(KC_RIGHT), _______, _______,  // Second Row
-        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, _______,              // Third Row
-        XXXXXXX, XXXXXXX, _______, _______, _______, _______,             // Fourth Row
-        _______, _______),                                                // Thumbs Row
+        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                          // Top Row
+        _______, LALT(KC_LEFT), KC_UP, LALT(KC_RIGHT), _______, _______, // Second Row
+        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, _______,             // Third Row
+        XXXXXXX, XXXXXXX, _______, _______, _______, _______,            // Fourth Row
+        _______, _______),                                               // Thumbs Row
 
     [APPS] = LAYOUT_LR(
         QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,                                // Top Row
         _______, _______, HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T),     // Second Row
         _______, _______, HYPR(KC_S), HYPR(KC_D), LGUI(KC_SPACE), HYPR(KC_G), // Third Row
-        TO(BASE), _______, _______, HYPR(KC_C), HYPR(KC_V), _______,             // Fourth Row
+        TO(BASE), _______, _______, HYPR(KC_C), HYPR(KC_V), _______,          // Fourth Row
         _______, _______,                                                     // Thumbs Row
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                              // Top Row
@@ -116,11 +116,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______),                                                   // Thumbs Row
 
     [SYM] = LAYOUT_LR(
-        QK_LLCK, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC,        // Top Row
-        _______, TO(NAV), CW_TOGG, BRACES, PAREN, CBRACE,           // Second Row
-        _______, KC_PIPE, KC_TILD, KC_GRAVE, KC_CIRC, KC_ASTR,    // Third Row
+        QK_LLCK, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC,           // Top Row
+        _______, TO(NAV), CW_TOGG, BRACES, PAREN, CBRACE,            // Second Row
+        _______, KC_PIPE, KC_TILD, KC_GRAVE, KC_CIRC, KC_ASTR,       // Third Row
         TO(BASE), KC_LBRC, KC_RBRC, KC_DQUO, S(KC_LBRC), S(KC_RBRC), // Fourth Row
-        _______, _______,                                         // Thumbs Row
+        _______, _______,                                            // Thumbs Row
 
         KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS,    // Top Row
         KC_EXLM, KC_UNDS, KC_MINUS, KC_EQUAL, KC_PLUS, _______,   // Second Row
@@ -129,43 +129,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______),                                        // Thumbs Row
 
     [FUN] = LAYOUT_LR(
-        XXXXXXX, XXXXXXX, XXXXXXX, QK_DYNAMIC_TAPPING_TERM_DOWN, QK_DYNAMIC_TAPPING_TERM_UP, QK_DYNAMIC_TAPPING_TERM_PRINT,    // Top Row
-        RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI,          // Second Row
-        RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI,        // Third Row
-        TO(BASE), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, // Fourth Row
-        _______, _______,                                                       // Thumbs Row
+        XXXXXXX, XXXXXXX, XXXXXXX, QK_DYNAMIC_TAPPING_TERM_DOWN, QK_DYNAMIC_TAPPING_TERM_UP, QK_DYNAMIC_TAPPING_TERM_PRINT, // Top Row
+        RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI,                                                      // Second Row
+        RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI,                                                    // Third Row
+        TO(BASE), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP,                                          // Fourth Row
+        _______, _______,                                                                                                   // Thumbs Row
 
         KC_AUDIO_VOL_UP, KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_NEXT_TRACK, XXXXXXX, TO(BASE), // Top Row
-        KC_AUDIO_VOL_DOWN, XXXXXXX, KC_UP, XXXXXXX, XXXXXXX, XXXXXXX,                                   // Second Row
-        KC_AUDIO_MUTE, KC_LEFT, KC_DOWN, KC_RIGHT, XXXXXXX, XXXXXXX,                                    // Third Row
-        XXXXXXX, XXXXXXX, LGUI(KC_COMMA), XXXXXXX, XXXXXXX, XXXXXXX,                                    // Fourth Row
-        _______, _______),                                                                              // Thumbs Row
+        KC_AUDIO_VOL_DOWN, XXXXXXX, KC_UP, XXXXXXX, XXXXXXX, XXXXXXX,                                      // Second Row
+        KC_AUDIO_MUTE, KC_LEFT, KC_DOWN, KC_RIGHT, XXXXXXX, XXXXXXX,                                       // Third Row
+        XXXXXXX, XXXXXXX, LGUI(KC_COMMA), XXXXXXX, XXXXXXX, XXXXXXX,                                       // Fourth Row
+        _______, _______),                                                                                 // Thumbs Row
 
     [WIN] = LAYOUT_LR(
         XXXXXXX, XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX,       // Top Row
         XXXXXXX, XXXXXXX, LCA(KC_KP_7), LCA(KC_KP_8), LCA(KC_KP_9), XXXXXXX,  // Second Row
-        _______, XXXXXXX, LCA(KC_4), LCA(KC_KP_5), LCA(KC_6), XXXXXXX,       // Third Row
-        TO(BASE), XXXXXXX, LCA(KC_KP_1), LCA(KC_KP_2), LCA(KC_KP_3), XXXXXXX,    // Fourth Row
+        _______, XXXXXXX, LCA(KC_4), LCA(KC_KP_5), LCA(KC_6), XXXXXXX,        // Third Row
+        TO(BASE), XXXXXXX, LCA(KC_KP_1), LCA(KC_KP_2), LCA(KC_KP_3), XXXXXXX, // Fourth Row
         LCA(KC_DOWN), LCA(KC_UNDS),                                           // Thumbs Row
 
-        XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX, TO(BASE),               // Top Row
-        XXXXXXX, LCA(KC_KP_7), LCA(KC_KP_8), LCA(KC_KP_9), XXXXXXX, XXXXXXX,        // Second Row
-        XXXXXXX, LCA(KC_4), LCA(KC_KP_5), LCA(KC_6), XXXXXXX, XXXXXXX,              // Third Row
-        XXXXXXX, LCA(KC_KP_1), LCA(KC_KP_2), LCA(KC_KP_3), XXXXXXX, LCA(KC_ENTER),  // Fourth Row
-        LCA(KC_PLUS), _______),                                                     // Thumbs Row
+        XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX, TO(BASE),           // Top Row
+        XXXXXXX, LCA(KC_KP_7), LCA(KC_KP_8), LCA(KC_KP_9), XXXXXXX, XXXXXXX,       // Second Row
+        XXXXXXX, LCA(KC_4), LCA(KC_KP_5), LCA(KC_6), XXXXXXX, XXXXXXX,             // Third Row
+        XXXXXXX, LCA(KC_KP_1), LCA(KC_KP_2), LCA(KC_KP_3), XXXXXXX, LCA(KC_ENTER), // Fourth Row
+        LCA(KC_PLUS), _______),                                                    // Thumbs Row
 
     [MEHF] = LAYOUT_LR(
-        QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                          // Top Row
-        XXXXXXX, MEH(KC_Q), MEH(KC_W), LGUI(LCTL(KC_SPACE)), MEH(KC_R), SGUI_T(KC_T),  // Second Row
-        _______, MEH(KC_A), MEH(KC_S), MEH(KC_D), LGUI(KC_SPACE), MEH(KC_G),           // Third Row
-        _______, XXXXXXX, XXXXXXX, LCA(KC_C), XXXXXXX, XXXXXXX,                 // Fourth Row
-        _______, _______,                                                              // Thumbs Row
+        QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                         // Top Row
+        XXXXXXX, MEH(KC_Q), MEH(KC_W), LGUI(LCTL(KC_SPACE)), MEH(KC_R), SGUI_T(KC_T), // Second Row
+        _______, MEH(KC_A), MEH(KC_S), MEH(KC_D), LGUI(KC_SPACE), MEH(KC_G),          // Third Row
+        _______, XXXXXXX, XXXXXXX, LCA(KC_C), XXXXXXX, XXXXXXX,                       // Fourth Row
+        _______, _______,                                                             // Thumbs Row
 
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                  // Top Row
-        MEH(KC_Y), MEH(KC_U), MEH(KC_I), MEH(KC_O), MEH(KC_P), MEH(KC_BSLS),   // Second Row
-        MEH(KC_H), MEH(KC_J), MEH(KC_K), MEH(KC_L), MEH(KC_SCLN), _______,     // Third Row
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                  // Fourth Row
-        _______, _______),                                                     // Thumbs Row
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                // Top Row
+        MEH(KC_Y), MEH(KC_U), MEH(KC_I), MEH(KC_O), MEH(KC_P), MEH(KC_BSLS), // Second Row
+        MEH(KC_H), MEH(KC_J), MEH(KC_K), MEH(KC_L), MEH(KC_SCLN), _______,   // Third Row
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                // Fourth Row
+        _______, _______),                                                   // Thumbs Row
 };
 
 const uint16_t PROGMEM combo0[] = {KC_MINUS, KC_0, COMBO_END};

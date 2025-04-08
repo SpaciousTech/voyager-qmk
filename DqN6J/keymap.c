@@ -135,11 +135,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TO(BASE), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP,                                          // Fourth Row
         _______, _______,                                                                                                   // Thumbs Row
 
-        KC_AUDIO_VOL_UP, KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_NEXT_TRACK, XXXXXXX, TO(BASE), // Top Row
-        KC_AUDIO_VOL_DOWN, XXXXXXX, KC_UP, XXXXXXX, XXXXXXX, XXXXXXX,                                      // Second Row
-        KC_AUDIO_MUTE, KC_LEFT, KC_DOWN, KC_RIGHT, XXXXXXX, XXXXXXX,                                       // Third Row
-        XXXXXXX, XXXXXXX, LGUI(KC_COMMA), XXXXXXX, XXXXXXX, XXXXXXX,                                       // Fourth Row
-        _______, _______),                                                                                 // Thumbs Row
+        XXXXXXX, KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_NEXT_TRACK, XXXXXXX, TO(BASE), // Top Row
+        XXXXXXX, KC_AUDIO_MUTE, KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP, XXXXXXX, XXXXXXX,              // Second Row
+        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, XXXXXXX,                                       // Third Row
+        XXXXXXX, XXXXXXX, LGUI(KC_COMMA), XXXXXXX, XXXXXXX, XXXXXXX,                               // Fourth Row
+        _______, _______),                                                                         // Thumbs Row
 
     [WIN] = LAYOUT_LR(
         XXXXXXX, XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX,       // Top Row
@@ -285,7 +285,7 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
 
         // Right Hand Side
         C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,     // Top row
-        C_OFF, C_SHIFTED, C_OFF, C_SHIFTED, C_OFF, C_LAYER, // Second row
+        C_SHIFTED, C_OFF, C_OFF, C_SHIFTED, C_OFF, C_LAYER, // Second row
         C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_OFF, C_LAYER, // Third row
         C_OFF, C_OFF, C_OFF, C_OFF, C_MODS, C_LAYER,        // Fourth row
         C_RED, C_THUMBS                                     // Thumb cluster
@@ -309,23 +309,23 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
         // Left Hand Side
         C_RED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, // Top row
         C_LAYER, C_LAYER, C_PINK, C_MACRO, C_MACRO, C_MACRO,          // Second row
-        C_LAYER, C_PURPLE, C_BLUE, C_PURPLE, C_PURPLE, C_PURPLE,      // Third row
-        C_LAYER, C_TEAL, C_TEAL, C_PURPLE, C_TEAL, C_TEAL,            // Fourth row
+        C_LAYER, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,    // Third row
+        C_LAYER, C_TEAL, C_TEAL, C_ORANGE, C_TEAL, C_TEAL,            // Fourth row
         C_THUMBS, C_RED,                                              // Left Thumb cluster
 
         C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, // Top row
         C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_LAYER,        // Second row
-        C_PURPLE, C_PURPLE, C_BLUE, C_PURPLE, C_PURPLE, C_LAYER,          // Third row
+        C_PURPLE, C_PURPLE, C_CMDPLUS, C_CMDPLUS, C_PURPLE, C_LAYER,      // Third row
         C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_LAYER,        // Fourth row
         C_RED, C_THUMBS                                                   // Right Thumb cluster
     },
     [FUN] = {
         // Left Hand Side
-        C_OFF, C_OFF, C_OFF, C_YELLOW, C_YELLOW, C_YELLOW, // Top row
-        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC,    // Second row
-        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_RED,     // Third row
-        C_FUNC, C_OFF, C_OFF, C_OFF, C_MAGENTA, C_MAGENTA, // Fourth row
-        C_THUMBS, C_RED,                                   // Left Thumb cluster
+        C_OFF, C_OFF, C_OFF, C_YELLOW, C_YELLOW, C_YELLOW,  // Top row
+        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC,     // Second row
+        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_RED,      // Third row
+        C_LAYER, C_OFF, C_OFF, C_OFF, C_MAGENTA, C_MAGENTA, // Fourth row
+        C_THUMBS, C_RED,                                    // Left Thumb cluster
 
         C_OFF, C_PURPLE, C_PURPLE, C_PURPLE, C_OFF, C_LAYER, // Top row
         C_OFF, C_TEAL, C_TEAL, C_TEAL, C_OFF, C_OFF,         // Second row

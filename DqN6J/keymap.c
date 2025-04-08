@@ -96,11 +96,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), LSG(KC_Z), // Fourth Row
         _______, _______,                                                   // Thumbs Row
 
-        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                          // Top Row
-        _______, LALT(KC_LEFT), KC_UP, LALT(KC_RIGHT), _______, _______, // Second Row
-        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, _______,             // Third Row
-        XXXXXXX, XXXXXXX, _______, _______, _______, _______,            // Fourth Row
-        _______, _______),                                               // Thumbs Row
+        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                            // Top Row
+        LALT(KC_LEFT), XXXXXXX, XXXXXXX, LALT(KC_RIGHT), XXXXXXX, _______, // Second Row
+        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, _______,               // Third Row
+        XXXXXXX, XXXXXXX, _______, _______, _______, _______,              // Fourth Row
+        _______, _______),                                                 // Thumbs Row
 
     [APPS] = LAYOUT_LR(
         QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,                                // Top Row

@@ -11,6 +11,18 @@
 // Function prototype for process_tap_dance_with_mods
 void process_tap_dance_with_mods(tap_dance_state_t *state, uint16_t keycode);
 
+// Define the layers used in the keymap
+enum layers
+{
+    BASE,
+    NAV,
+    APPS,
+    SYM,
+    FUN,
+    WIN,
+    MEHF,
+};
+
 // Define custom keycodes
 enum custom_keycodes
 {
@@ -29,20 +41,7 @@ enum custom_keycodes
     PAREN,    // Parentheses ()
 };
 
-// Define the layers used in the keymap
-enum layers
-{
-    BASE,
-    NAV,
-    APPS,
-    SYM,
-    FUN,
-    WIN,
-    MEHF,
-};
-
 // Adding Keycodes for QMK Select Word
-// Definition needs to be in a .c file, not .h
 uint16_t SELECT_WORD_KEYCODE = SELWORD;
 
 // Selection mode variables
@@ -700,4 +699,10 @@ void housekeeping_task_user(void)
         selection_mode_active = false;
         selection_active = false; // Also reset the selection state
     }
+
+    // Ensure we're using these variables to avoid unused variable warnings
+    // This is a compiler hint that we intend to use these variables
+    (void)selection_mode_active;
+    (void)selection_active;
+    (void)selection_mode_timer;
 }

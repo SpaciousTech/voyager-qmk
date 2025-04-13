@@ -39,7 +39,13 @@ enum custom_keycodes
     CBRACE,   // Curly braces {}
     ABRACKET, // Angle brackets <>
     PAREN,    // Parentheses ()
+
+    // Custom keycode for Layer-Tap Repeat
+    SYM_REP, // Tap: Repeat last key, Hold: SYM layer
 };
+
+// Variable to store the last basic key pressed
+static uint16_t last_keycode = KC_NO;
 
 // Adding Keycodes for QMK Select Word
 uint16_t SELECT_WORD_KEYCODE = SELWORD;
@@ -55,12 +61,12 @@ static uint16_t selection_mode_timer = 0;
 #define HRM_S LSFT_T(KC_S)
 #define HRM_D LOPT_T(KC_D)
 #define HRM_F LCTL_T(KC_F)
-#define HRM_J RCTL_T(KC_J)
+// #define HRM_J RCTL_T(KC_J)
 #define HRM_K ROPT_T(KC_K)
 #define HRM_L RSFT_T(KC_L)
-#define HRM_SCLN RGUI_T(KC_SCLN)
+// #define HRM_SCLN RGUI_T(KC_SCLN)
 #define LCG_EQUAL MT(MOD_LCTL | MOD_LGUI, KC_EQUAL)
-#define RCALT_BSLS MT(MOD_RCTL | MOD_RALT, KC_BSLS)
+// #define RCALT_BSLS MT(MOD_RCTL | MOD_RALT, KC_BSLS)
 
 typedef struct
 {
@@ -77,17 +83,17 @@ enum tap_dance_codes
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_LR(
-        LCG_EQUAL, KC_1, KC_2, KC_3, KC_4, KC_5,               // Top Row
-        LCA_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,           // Second Row
-        LT(APPS, KC_ESCAPE), HRM_A, HRM_S, HRM_D, HRM_F, KC_G, // Third Row
-        TT(NAV), MEH_T(KC_Z), KC_X, KC_C, KC_V, KC_B,          // Fourth Row
-        LT(SYM, KC_BSPC), TD(DANCE_0),                         // Thumbs Row
+        LCG_EQUAL, KC_1, KC_2, KC_3, KC_4, KC_5,              // Top Row
+        LCA_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,          // Second Row
+        LT(SYM, KC_ESCAPE), HRM_A, HRM_S, HRM_D, HRM_F, KC_G, // Third Row
+        TT(NAV), ALL_T(KC_Z), KC_X, KC_C, KC_V, KC_B,         // Fourth Row
+        LT(NAV, KC_BSPC), TD(DANCE_0),                        // Thumbs Row
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                          // Top Row
-        KC_Y, KC_U, KC_I, KC_O, KC_P, RCALT_BSLS,                        // Second Row
-        KC_H, HRM_J, HRM_K, HRM_L, HRM_SCLN, LT(MEHF, KC_QUOTE),         // Third Row
-        KC_N, KC_M, KC_COMMA, KC_DOT, ALL_T(KC_SLASH), RCTL_T(KC_ENTER), // Fourth Row
-        RSFT_T(KC_SPACE), LT(NAV, KC_TAB)),                              // Thumbs Row
+        KC_Y, KC_U, KC_I, KC_O, KC_P, LT(MEHF, KC_BSLS),                 // Second Row
+        KC_H, KC_J, HRM_K, HRM_L, KC_SCLN, LT(APPS, KC_QUOTE),           // Third Row
+        KC_N, KC_M, KC_COMMA, KC_DOT, MEH_T(KC_SLASH), RCTL_T(KC_ENTER), // Fourth Row
+        RSFT_T(KC_SPACE), SYM_REP,                                      // Thumbs Row
 
     [NAV] = LAYOUT_LR(
         _______, KC_1, KC_2, KC_3, KC_4, KC_5,                              // Top Row
@@ -161,11 +167,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, XXXXXXX, XXXXXXX, LCA(KC_C), XXXXXXX, XXXXXXX,                       // Fourth Row
         _______, _______,                                                             // Thumbs Row
 
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                // Top Row
-        MEH(KC_Y), MEH(KC_U), MEH(KC_I), MEH(KC_O), MEH(KC_P), MEH(KC_BSLS), // Second Row
-        MEH(KC_H), MEH(KC_J), MEH(KC_K), MEH(KC_L), MEH(KC_SCLN), _______,   // Third Row
-        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                // Fourth Row
-        _______, _______),                                                   // Thumbs Row
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,              // Top Row
+        MEH(KC_Y), MEH(KC_U), MEH(KC_I), MEH(KC_O), MEH(KC_P), _______,    // Second Row
+        MEH(KC_H), MEH(KC_J), MEH(KC_K), MEH(KC_L), MEH(KC_SCLN), _______, // Third Row
+        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,              // Fourth Row
+        _______, _______),                                                 // Thumbs Row
 };
 
 const uint16_t PROGMEM combo0[] = {KC_MINUS, KC_0, COMBO_END};
@@ -189,27 +195,29 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
     switch (keycode)
     {
     case LCG_EQUAL:
-        return g_tapping_term - 75;
+        return g_tapping_term - 125;
     case LCA_T(KC_TAB):
-        return g_tapping_term - 75;
-    case LT(APPS, KC_ESCAPE):
-        return g_tapping_term - 75;
-    case LT(SYM, KC_BSPC):
-        return g_tapping_term - 50;
+        return g_tapping_term - 125;
+    case LT(SYM, KC_ESCAPE):
+        return g_tapping_term - 125;
+    case LT(NAV, KC_BSPC):
+        return g_tapping_term - 100;
     case TD(DANCE_0):
-        return g_tapping_term - 75;
-    case RCALT_BSLS:
-        return g_tapping_term - 75;
-    case LT(MEHF, KC_QUOTE):
-        return g_tapping_term - 75;
-    case ALL_T(KC_SLASH):
-        return g_tapping_term - 50;
+        return g_tapping_term - 125;
+    // case RCALT_BSLS:
+    //     return g_tapping_term - 125;
+    case LT(MEHF, KC_BSLS):
+        return g_tapping_term - 125;
+    case LT(APPS, KC_QUOTE):
+        return g_tapping_term - 125;
+    case ALL_T(KC_Z):
+        return g_tapping_term - 100;
     case RCTL_T(KC_ENTER):
-        return g_tapping_term - 75;
+        return g_tapping_term - 125;
     case RSFT_T(KC_SPACE):
-        return g_tapping_term - 75;
+        return g_tapping_term - 125;
     case LT(NAV, KC_TAB):
-        return g_tapping_term - 75;
+        return g_tapping_term - 125;
     default:
         return g_tapping_term;
     }
@@ -435,7 +443,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     }
 
     // Handle Shift+Backspace to output Delete
-    if (keycode == LT(SYM, KC_BSPC) && record->event.pressed)
+    if (keycode == LT(NAV, KC_BSPC) && record->event.pressed)
     {
         const uint8_t mods = get_mods();
 
@@ -602,6 +610,39 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             rgblight_mode(1);
         }
         return false;
+
+    // Handle our new Layer-Tap Repeat key
+    case SYM_REP:
+        if (record->tap.count > 0 && record->event.pressed)
+        {
+            // --- Tap Action ---
+            // If tapped, check if there's a valid last keycode to repeat
+            if (last_keycode != KC_NO)
+            {
+                // Send the last pressed basic keycode
+                tap_code16(last_keycode);
+            }
+            // Return false to prevent default Layer-Tap behavior (which would send KC_TAB)
+            return false;
+        }
+        else if (record->tap.count == 0)
+        {
+            // --- Hold Action ---
+            // This is the hold action. Activate the layer when pressed, deactivate on release.
+            if (record->event.pressed)
+            {
+                layer_on(SYM); // Activate SYM layer
+            }
+            else
+            {
+                layer_off(SYM); // Deactivate SYM layer
+            }
+            // Return false because we've handled the layer change manually
+            return false;
+        }
+        // If it's a tap release event (record->tap.count > 0 && !record->event.pressed),
+        // we don't need to do anything special here, so let it fall through.
+        break; // Added break statement
     }
     return true;
 }

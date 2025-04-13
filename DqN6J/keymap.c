@@ -39,9 +39,6 @@ enum custom_keycodes
     CBRACE,   // Curly braces {}
     ABRACKET, // Angle brackets <>
     PAREN,    // Parentheses ()
-
-    // Custom keycode for Layer-Tap Repeat
-    SYM_REP, // Tap: Repeat last key, Hold: SYM layer
 };
 
 // Adding Keycodes for QMK Select Word
@@ -52,9 +49,6 @@ static bool selection_mode_active = false;
 static bool selection_active = false;
 static uint16_t selection_mode_timer = 0;
 #define SELECTION_MODE_TIMEOUT 5000 // 5 seconds timeout
-
-static uint16_t last_keycode = KC_NO; // Variable to store the last basic key pressed
-static bool sym_rep_active = false;   // Track if we're currently processing SYM_REP
 
 // Short aliases for Home row mods and other tap-hold keys
 #define HRM_A LGUI_T(KC_A)
@@ -67,7 +61,7 @@ static bool sym_rep_active = false;   // Track if we're currently processing SYM
 // #define HRM_SCLN RGUI_T(KC_SCLN)
 #define LCG_EQUAL MT(MOD_LCTL | MOD_LGUI, KC_EQUAL)
 // #define RCALT_BSLS MT(MOD_RCTL | MOD_RALT, KC_BSLS)
-
+#define LT_REP LT(SYM, KC_0) // Layer-Tap Repeat
 typedef struct
 {
     uint16_t tap;
@@ -93,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Y, KC_U, KC_I, KC_O, KC_P, LT(MEHF, KC_BSLS),                 // Second Row
         KC_H, KC_J, HRM_K, HRM_L, KC_SCLN, LT(APPS, KC_QUOTE),           // Third Row
         KC_N, KC_M, KC_COMMA, KC_DOT, MEH_T(KC_SLASH), RCTL_T(KC_ENTER), // Fourth Row
-        RSFT_T(KC_SPACE), SYM_REP),                                      // Thumbs Row
+        RSFT_T(KC_SPACE), LT_REP),                                       // Thumbs Row
 
     [NAV] = LAYOUT_LR(
         _______, KC_1, KC_2, KC_3, KC_4, KC_5,                              // Top Row
@@ -216,8 +210,10 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
         return g_tapping_term - 125;
     case RSFT_T(KC_SPACE):
         return g_tapping_term - 125;
-    case SYM_REP:
+    case LT_REP:
         return g_tapping_term - 100; // Add faster tapping term for SYM_REP key
+    case TT(NAV):                    // Tap-Tap Navigation Layer
+        return g_tapping_term - 150;
     default:
         return g_tapping_term;
     }
@@ -434,40 +430,22 @@ bool rgb_matrix_indicators_user(void)
     return true;
 }
 
+// Function to control which keys are remembered for the repeat key
+bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *remembered_mods)
+{
+    if (keycode == LT_REP)
+    {
+        return false;
+    }
+    return true;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
     // Process selection word functionality
     if (!process_select_word(keycode, record))
     {
         return false;
-    }
-
-    // Store the last keycode, but only on press events
-    // Don't update last_keycode when we're processing SYM_REP itself
-    // Only update for basic keycodes (letters, numbers, punctuation)
-    if (record->event.pressed &&
-        keycode != SYM_REP &&
-        !sym_rep_active)
-    {
-        // Update last_keycode for basic keycodes or mod-tap keys that are tapped
-        if (IS_QK_BASIC_KEYCODE(keycode) ||
-            (IS_QK_MOD_TAP(keycode) && record->tap.count > 0) ||
-            (IS_QK_LAYER_TAP(keycode) && record->tap.count > 0))
-        {
-            // For mod-tap or layer-tap keys, store the basic keycode part
-            if (IS_QK_MOD_TAP(keycode))
-            {
-                last_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
-            }
-            else if (IS_QK_LAYER_TAP(keycode))
-            {
-                last_keycode = QK_LAYER_TAP_GET_TAP_KEYCODE(keycode);
-            }
-            else
-            {
-                last_keycode = keycode;
-            }
-        }
     }
 
     // Handle Shift+Backspace to output Delete
@@ -498,44 +476,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         }
     }
 
-    // Handle Shift+ Opt+Backspace to output Opt+Delete
-
     switch (keycode)
     {
-    // Handle our custom SYM_REP key
-    case SYM_REP:
-        // Check if this is a keydown or keyup event
-        if (record->event.pressed)
-        {
-            // This is a keydown event
-            if (record->tap.count > 0)
-            {
-                // This is a tap action (the key was tapped)
-                sym_rep_active = true; // Set flag to prevent recording this repeat
-                if (last_keycode != KC_NO)
-                {
-                    // Send the last pressed basic keycode
-                    tap_code16(last_keycode);
-                }
-                sym_rep_active = false; // Clear flag after repeating
-                return false;           // Don't continue with default handling
-            }
-            else
-            {
-                // This is a hold action - layer switch
-                layer_on(SYM);
-            }
+
+    // Layer-Tap Repeat keycodes
+    case LT_REP: // SYM layer on hold, Repeat Key on tap.
+        if (record->tap.count)
+        {                                      // on tap.
+            repeat_key_invoke(&record->event); // Repeat the last key.
+            return false;
         }
-        else
-        {
-            // This is a keyup event
-            if (record->tap.count == 0)
-            {
-                // This was a hold that's now being released
-                layer_off(SYM);
-            }
-        }
-        return false; // We handled the key ourselves
+        break;
 
     // Word selection keycodes
     case SELWORD:

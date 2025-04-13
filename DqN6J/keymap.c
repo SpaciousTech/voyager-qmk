@@ -93,7 +93,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Y, KC_U, KC_I, KC_O, KC_P, LT(MEHF, KC_BSLS),                 // Second Row
         KC_H, KC_J, HRM_K, HRM_L, KC_SCLN, LT(APPS, KC_QUOTE),           // Third Row
         KC_N, KC_M, KC_COMMA, KC_DOT, MEH_T(KC_SLASH), RCTL_T(KC_ENTER), // Fourth Row
-        RSFT_T(KC_SPACE), SYM_REP,                                      // Thumbs Row
+        RSFT_T(KC_SPACE), SYM_REP),                                      // Thumbs Row
 
     [NAV] = LAYOUT_LR(
         _______, KC_1, KC_2, KC_3, KC_4, KC_5,                              // Top Row

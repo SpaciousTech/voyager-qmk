@@ -80,10 +80,10 @@
 // QMK Config
 
 #define MK_KINETIC_SPEED
-#define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS 8 // Initial delay before scrolling begins
-#define MOUSEKEY_WHEEL_BASE_MOVEMENTS 16 // Time between wheel movements
-#define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 36 // Maximum number of scroll speed
-#define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS 4 // Time to reach maximum speed
+#define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS 16     // Initial delay before scrolling begins
+#define MOUSEKEY_WHEEL_BASE_MOVEMENTS 32        // Time between wheel movements
+#define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 20 // Maximum number of scroll speed
+#define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS 16 // Time to reach maximum speed
 
 #define SELECT_WORD_OS_MAC
 #define SELECT_WORD_OS_DYNAMIC

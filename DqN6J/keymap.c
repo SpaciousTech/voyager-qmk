@@ -63,8 +63,6 @@ tap_dance_action_t *action;
 enum tap_dance_codes
 {
     OPTDEL_CMD, // Tap-dance for Option+Delete, Hold for CMD layer
-    PIPE_MEHF,  // Tap-dance for Pipe (|), Hold for MEHF layer
-    DQUO_APPS,  // Tap-dance for Double Quote ("), Hold for APPS layer
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -101,11 +99,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TO(BASE), XXXXXXX, KC_AT, KC_DLR, KC_EURO, KC_GBP,     // Fourth Row
         _______, _______,                                      // Thumbs Row
 
-        KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS,       // Top Row
-        KC_EQUAL, KC_UNDS, KC_LBRC, KC_RBRC, KC_PLUS, TD(PIPE_MEHF), // Second Row
-        KC_HASH, KC_CIRC, KC_LCBR, KC_RCBR, KC_COLN, TD(DQUO_APPS),  // Third Row
-        KC_EXLM, KC_MINUS, KC_LABK, KC_RABK, KC_QUES, _______,       // Fourth Row
-        _______, _______),                                           // Thumbs Row
+        KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS, // Top Row
+        KC_EQUAL, KC_UNDS, KC_LBRC, KC_RBRC, KC_PLUS, KC_PIPE, // Second Row
+        KC_HASH, KC_CIRC, KC_LCBR, KC_RCBR, KC_COLN, KC_DQUO,  // Third Row
+        KC_EXLM, KC_MINUS, KC_LABK, KC_RABK, KC_QUES, _______, // Fourth Row
+        _______, _______),                                     // Thumbs Row
 
     [APPS] = LAYOUT_LR(
         QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,                                // Top Row
@@ -196,10 +194,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
         return g_tapping_term - 125;
     // case RCALT_BSLS:
     //     return g_tapping_term - 125;
-    case TD(PIPE_MEHF):
-        return g_tapping_term - 125;
-    case TD(DQUO_APPS):
-        return g_tapping_term - 125;
     case ALL_T(KC_Z):
         return g_tapping_term - 100;
     case RCTL_T(KC_ENTER):
@@ -671,8 +665,6 @@ void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data)
 
 tap_dance_action_t tap_dance_actions[] = {
     [OPTDEL_CMD] = ACTION_TAP_DANCE_TAP_HOLD(LALT(KC_BSPC), KC_LGUI), // Tap: Opt+BKPC -> Del a word, Hold: Left CMD
-    [PIPE_MEHF] = ACTION_TAP_DANCE_LAYER_MOVE(KC_PIPE, _______),      // Tap: Shift+BSLS -> |, Hold: Transparent
-    [DQUO_APPS] = ACTION_TAP_DANCE_LAYER_MOVE(KC_DQUO, _______),      // Tap: Shift+QUOTE -> ", Hold: Transparent
 };
 
 // QMK Config

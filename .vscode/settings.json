@@ -9,5 +9,9 @@
 	"html.format.wrapAttributes": "auto",
 	"evenBetterToml.formatter.compactInlineTables": false,
 	"editor.wordWrapColumn": 120,
-	"debug.console.wordWrap": true
+	"debug.console.wordWrap": true,
+	"files.associations": {
+		".cursorrules": "markdown",
+		"select_word.h": "c"
+	}
 }

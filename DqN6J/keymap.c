@@ -39,6 +39,9 @@ enum custom_keycodes
     CBRACE,   // Curly braces {}
     ABRACKET, // Angle brackets <>
     PAREN,    // Parentheses ()
+
+    // Vim motion macros
+    VIM_EOL, // Vim End of Line (Esc followed by A)
 };
 
 // Adding Keycodes for QMK Select Word
@@ -62,6 +65,8 @@ static uint16_t selection_mode_timer = 0;
 #define LCG_EQUAL MT(MOD_LCTL | MOD_LGUI, KC_EQUAL)
 // #define RCALT_BSLS MT(MOD_RCTL | MOD_RALT, KC_BSLS)
 #define LT_REP LT(SYM, KC_0) // Layer-Tap Repeat
+#define KC_EURO LSA(KC_2)    // Euro symbol
+#define KC_GBP LALT(KC_3)    // British Pound symbol
 typedef struct
 {
     uint16_t tap;
@@ -97,8 +102,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,                                                   // Thumbs Row
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                            // Top Row
-        LALT(KC_LEFT), XXXXXXX, XXXXXXX, LALT(KC_RIGHT), XXXXXXX, _______, // Second Row
-        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, _______,               // Third Row
+        LALT(KC_LEFT), MS_WHLD, MS_WHLU, LALT(KC_RIGHT), XXXXXXX, _______, // Second Row
+        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, VIM_EOL, _______,               // Third Row
         XXXXXXX, XXXXXXX, _______, _______, _______, _______,              // Fourth Row
         _______, _______),                                                 // Thumbs Row
 
@@ -116,43 +121,43 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______),                                                   // Thumbs Row
 
     [SYM] = LAYOUT_LR(
-        QK_LLCK, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC,           // Top Row
-        _______, TO(NAV), CW_TOGG, BRACES, PAREN, CBRACE,            // Second Row
-        _______, KC_PIPE, KC_TILD, KC_GRAVE, KC_CIRC, KC_ASTR,       // Third Row
-        TO(BASE), KC_LBRC, KC_RBRC, KC_DQUO, S(KC_LBRC), S(KC_RBRC), // Fourth Row
-        _______, _______,                                            // Thumbs Row
+        QK_LLCK, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC,     // Top Row
+        _______, TO(NAV), CW_TOGG, BRACES, PAREN, CBRACE,      // Second Row
+        _______, KC_AMPR, KC_TILD, KC_GRAVE, KC_PERC, KC_ASTR, // Third Row
+        TO(BASE), XXXXXXX, KC_AT, KC_DLR, KC_EURO, KC_GBP,     // Fourth Row
+        _______, _______,                                      // Thumbs Row
 
-        KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS,    // Top Row
-        KC_EXLM, KC_UNDS, KC_MINUS, KC_EQUAL, KC_PLUS, _______,   // Second Row
-        KC_HASH, KC_DLR, LSA(KC_2), LALT(KC_3), KC_COLN, _______, // Third Row
-        KC_PERC, KC_AMPR, KC_LABK, KC_RABK, KC_QUES, _______,     // Fourth Row
-        _______, _______),                                        // Thumbs Row
+        KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS,           // Top Row
+        KC_EQUAL, KC_UNDS, KC_LBRC, KC_RBRC, KC_PLUS, LT(MEHF, KC_PIPE), // Second Row
+        KC_HASH, KC_CIRC, KC_LCBR, KC_RCBR, KC_COLN, LT(APPS, KC_DQUO),  // Third Row
+        KC_EXLM, KC_MINUS, KC_LABK, KC_RABK, KC_QUES, _______,           // Fourth Row
+        _______, _______),                                               // Thumbs Row
 
     [FUN] = LAYOUT_LR(
-        XXXXXXX, XXXXXXX, XXXXXXX, QK_DYNAMIC_TAPPING_TERM_DOWN, QK_DYNAMIC_TAPPING_TERM_UP, QK_DYNAMIC_TAPPING_TERM_PRINT, // Top Row
-        RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI,                                                      // Second Row
-        RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI,                                                    // Third Row
-        TO(BASE), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP,                                          // Fourth Row
-        _______, _______,                                                                                                   // Thumbs Row
+        MS_ACL0, MS_ACL1, MS_ACL2, DT_DOWN, DT_UP, DT_PRNT,              // Top Row
+        RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI,   // Second Row
+        RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI, // Third Row
+        TO(BASE), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRID, KC_BRIU,           // Fourth Row
+        _______, _______,                                                // Thumbs Row
 
-        XXXXXXX, KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE, KC_MEDIA_NEXT_TRACK, XXXXXXX, TO(BASE), // Top Row
-        XXXXXXX, KC_AUDIO_MUTE, KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP, XXXXXXX, XXXXXXX,              // Second Row
-        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, XXXXXXX,                                       // Third Row
-        XXXXXXX, XXXXXXX, LGUI(KC_COMMA), XXXXXXX, XXXXXXX, XXXXXXX,                               // Fourth Row
-        _______, _______),                                                                         // Thumbs Row
+        XXXXXXX, KC_MPRV, KC_MPLY, KC_MNXT, XXXXXXX, TO(BASE),       // Top Row
+        XXXXXXX, KC_MUTE, KC_VOLD, KC_VOLU, XXXXXXX, XXXXXXX,        // Second Row
+        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, XXXXXXX, XXXXXXX,         // Third Row
+        XXXXXXX, XXXXXXX, LGUI(KC_COMMA), XXXXXXX, XXXXXXX, XXXXXXX, // Fourth Row
+        _______, _______),                                           // Thumbs Row
 
     [WIN] = LAYOUT_LR(
-        XXXXXXX, XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX,       // Top Row
-        XXXXXXX, XXXXXXX, LCA(KC_KP_7), LCA(KC_KP_8), LCA(KC_KP_9), XXXXXXX,  // Second Row
-        _______, XXXXXXX, LCA(KC_4), LCA(KC_KP_5), LCA(KC_6), XXXXXXX,        // Third Row
-        TO(BASE), XXXXXXX, LCA(KC_KP_1), LCA(KC_KP_2), LCA(KC_KP_3), XXXXXXX, // Fourth Row
-        LCA(KC_DOWN), LCA(KC_UNDS),                                           // Thumbs Row
+        XXXXXXX, XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX, // Top Row
+        XXXXXXX, XXXXXXX, LCA(KC_7), LCA(KC_8), LCA(KC_9), XXXXXXX,     // Second Row
+        _______, XXXXXXX, LCA(KC_4), LCA(KC_5), LCA(KC_6), XXXXXXX,     // Third Row
+        TO(BASE), XXXXXXX, LCA(KC_1), LCA(KC_2), LCA(KC_3), XXXXXXX,    // Fourth Row
+        LCA(KC_DOWN), LCA(KC_UNDS),                                     // Thumbs Row
 
-        XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX, TO(BASE),           // Top Row
-        XXXXXXX, LCA(KC_KP_7), LCA(KC_KP_8), LCA(KC_KP_9), XXXXXXX, XXXXXXX,       // Second Row
-        XXXXXXX, LCA(KC_4), LCA(KC_KP_5), LCA(KC_6), XXXXXXX, XXXXXXX,             // Third Row
-        XXXXXXX, LCA(KC_KP_1), LCA(KC_KP_2), LCA(KC_KP_3), XXXXXXX, LCA(KC_ENTER), // Fourth Row
-        LCA(KC_PLUS), _______),                                                    // Thumbs Row
+        XXXXXXX, LCA(KC_LBRC), XXXXXXX, LCA(KC_RBRC), XXXXXXX, TO(BASE),  // Top Row
+        XXXXXXX, LCA(KC_7), LCA(KC_8), LCA(KC_9), XXXXXXX, XXXXXXX,       // Second Row
+        XXXXXXX, LCA(KC_4), LCA(KC_5), LCA(KC_6), XXXXXXX, XXXXXXX,       // Third Row
+        XXXXXXX, LCA(KC_1), LCA(KC_2), LCA(KC_3), XXXXXXX, LCA(KC_ENTER), // Fourth Row
+        LCA(KC_PLUS), _______),                                           // Thumbs Row
 
     [MEHF] = LAYOUT_LR(
         QK_LLCK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                         // Top Row
@@ -202,7 +207,11 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
     //     return g_tapping_term - 125;
     case LT(MEHF, KC_BSLS):
         return g_tapping_term - 125;
+    case LT(MEHF, KC_PIPE):
+        return g_tapping_term - 125;
     case LT(APPS, KC_QUOTE):
+        return g_tapping_term - 125;
+    case LT(APPS, KC_DQUO):
         return g_tapping_term - 125;
     case ALL_T(KC_Z):
         return g_tapping_term - 100;
@@ -243,9 +252,12 @@ void keyboard_post_init_user(void)
 #define C_ORANGE {21, 255, 255}   // Orange
 #define C_YELLOW {36, 255, 255}   // Yellow
 #define C_GREEN {78, 255, 255}    // Green
+#define C_LTGREEN {103, 255, 255} // Light Green
 #define C_TEAL {115, 255, 204}    // Teal
 #define C_CYAN {117, 255, 255}    // Cyan
+#define C_LTBLUE {138, 255, 255}  // Light Blue
 #define C_BLUE {153, 255, 255}    // Blue
+#define C_DKBLUE {170, 255, 255}  // Dark Blue
 #define C_PURPLE {196, 255, 255}  // Purple
 #define C_MAGENTA {209, 255, 255} // Magenta
 #define C_PINK {236, 255, 255}    // Pink
@@ -255,7 +267,7 @@ void keyboard_post_init_user(void)
 #define C_MODS {0, 255, 255}     // Red used for Home Row Mods
 #define C_LAYER {87, 255, 255}   // Green used for layer keys
 #define C_ARROW {89, 255, 255}   // Green for arrow keys
-#define C_THUMBS {117, 255, 255} // Cyan used for small thumbs keys
+#define C_THUMBS {115, 255, 204} // Teal used for small thumbs keys
 #define C_FUNC {13, 255, 255}    // Dark Orange used for function Layer
 
 #define C_MACRO {115, 255, 204}   // Teal for Macros keys (Select, Hyper, MEH)
@@ -275,7 +287,7 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
         // Right Hand Side
         C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,            // Top row
         C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_LAYER, // Second row
-        C_ORANGE, C_MODS, C_MODS, C_MODS, C_MODS, C_LAYER,         // Third row (Home Row Mods)
+        C_ORANGE, C_ORANGE, C_MODS, C_MODS, C_ORANGE, C_LAYER,     // Third row (Home Row Mods)
         C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_TEAL, C_LAYER,   // Fourth row
         C_RED, C_THUMBS                                            // Thumb cluster
     },
@@ -288,48 +300,48 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
         C_THUMBS, C_RED,                                                // Thumb cluster
 
         // Right Hand Side
-        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,     // Top row
-        C_SHIFTED, C_OFF, C_OFF, C_SHIFTED, C_OFF, C_LAYER, // Second row
-        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_OFF, C_LAYER, // Third row
-        C_OFF, C_OFF, C_OFF, C_OFF, C_MODS, C_LAYER,        // Fourth row
-        C_RED, C_THUMBS                                     // Thumb cluster
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,           // Top row
+        C_SHIFTED, C_LTBLUE, C_LTBLUE, C_SHIFTED, C_OFF, C_LAYER, // Second row
+        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_MACRO, C_LAYER,     // Third row
+        C_OFF, C_OFF, C_OFF, C_OFF, C_MODS, C_LAYER,              // Fourth row
+        C_RED, C_THUMBS                                           // Thumb cluster
     },
     [APPS] = {
         // Left Hand Side
-        C_RED, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,  // Top row
-        C_LAYER, C_OFF, C_TEAL, C_TEAL, C_TEAL, C_TEAL, // Second row
-        C_LAYER, C_OFF, C_TEAL, C_TEAL, C_TEAL, C_TEAL, // Third row
-        C_LAYER, C_TEAL, C_OFF, C_TEAL, C_TEAL, C_OFF,  // Fourth row
-        C_THUMBS, C_RED,                                // Left Thumb cluster
+        C_RED, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,           // Top row
+        C_LAYER, C_OFF, C_LTBLUE, C_LTBLUE, C_LTBLUE, C_LTGREEN, // Second row
+        C_LAYER, C_OFF, C_YELLOW, C_ORANGE, C_BROWN, C_TEAL,     // Third row
+        C_LAYER, C_TEAL, C_OFF, C_TEAL, C_RED, C_OFF,            // Fourth row
+        C_THUMBS, C_RED,                                         // Left Thumb cluster
 
         // Right Hand Side
-        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,  // Top row
-        C_TEAL, C_TEAL, C_TEAL, C_TEAL, C_TEAL, C_LAYER, // Second row
-        C_TEAL, C_TEAL, C_TEAL, C_TEAL, C_OFF, C_LAYER,  // Third row
-        C_TEAL, C_TEAL, C_OFF, C_OFF, C_OFF, C_LAYER,    // Fourth row
-        C_RED, C_THUMBS                                  // Right Thumb cluster
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,             // Top row
+        C_ORANGE, C_ORANGE, C_ORANGE, C_MAGENTA, C_ORANGE, C_LAYER, // Second row
+        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_OFF, C_LAYER,     // Third row
+        C_RED, C_RED, C_OFF, C_OFF, C_OFF, C_LAYER,                 // Fourth row
+        C_RED, C_THUMBS                                             // Right Thumb cluster
     },
     [SYM] = {
         // Left Hand Side
         C_RED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, // Top row
-        C_LAYER, C_LAYER, C_PINK, C_MACRO, C_MACRO, C_MACRO,          // Second row
+        C_LAYER, C_LAYER, C_PINK, C_BROWN, C_BROWN, C_BROWN,          // Second row
         C_LAYER, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,    // Third row
-        C_LAYER, C_TEAL, C_TEAL, C_ORANGE, C_TEAL, C_TEAL,            // Fourth row
+        C_LAYER, C_OFF, C_ORANGE, C_BROWN, C_BROWN, C_BROWN,          // Fourth row
         C_THUMBS, C_RED,                                              // Left Thumb cluster
 
         C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, // Top row
-        C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_LAYER,        // Second row
-        C_PURPLE, C_PURPLE, C_CMDPLUS, C_CMDPLUS, C_PURPLE, C_LAYER,      // Third row
-        C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_PURPLE, C_LAYER,        // Fourth row
+        C_PURPLE, C_PURPLE, C_PINK, C_PINK, C_PURPLE, C_SHIFTED,          // Second row
+        C_PURPLE, C_PURPLE, C_PINK, C_PINK, C_SHIFTED, C_SHIFTED,         // Third row
+        C_PURPLE, C_PURPLE, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_LAYER,     // Fourth row
         C_RED, C_THUMBS                                                   // Right Thumb cluster
     },
     [FUN] = {
         // Left Hand Side
-        C_OFF, C_OFF, C_OFF, C_YELLOW, C_YELLOW, C_YELLOW,  // Top row
-        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC,     // Second row
-        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_RED,      // Third row
-        C_LAYER, C_OFF, C_OFF, C_OFF, C_MAGENTA, C_MAGENTA, // Fourth row
-        C_THUMBS, C_RED,                                    // Left Thumb cluster
+        C_BROWN, C_BROWN, C_BROWN, C_YELLOW, C_YELLOW, C_YELLOW, // Top row
+        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC,          // Second row
+        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_RED,           // Third row
+        C_LAYER, C_OFF, C_OFF, C_OFF, C_MAGENTA, C_MAGENTA,      // Fourth row
+        C_THUMBS, C_RED,                                         // Left Thumb cluster
 
         C_OFF, C_PURPLE, C_PURPLE, C_PURPLE, C_OFF, C_LAYER, // Top row
         C_OFF, C_TEAL, C_TEAL, C_TEAL, C_OFF, C_OFF,         // Second row
@@ -433,11 +445,17 @@ bool rgb_matrix_indicators_user(void)
 // Function to control which keys are remembered for the repeat key
 bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *remembered_mods)
 {
-    if (keycode == LT_REP)
+    // Keys to be ignored by the Repeat Key
+    switch (keycode)
     {
-        return false;
+    case LT_REP:           // Don't repeat the repeat key itself
+    case KC_BSPC:          // Don't repeat backspace
+    case TD(DANCE_0):      // Don't repeat the tap dance
+    case LT(NAV, KC_BSPC): // Don't repeat the Nav layer backspace
+    case VIM_EOL:          // Don't repeat the Vim End of Line key
+        return false;      // Ignore these keys
     }
-    return true;
+    return true; // Remember all other keys
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
@@ -605,6 +623,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             SEND_STRING("()");
             tap_code(KC_LEFT);
             register_mods(mods);
+        }
+        return false;
+
+    case VIM_EOL: // Vim End of Line - Esc followed by 'A'
+        if (record->event.pressed)
+        {
+            tap_code(KC_ESC);    // Sends Escape
+            tap_code16(S(KC_A)); // Sends Shift + a (capital A)
         }
         return false;
 

@@ -102,7 +102,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,                                                   // Thumbs Row
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                            // Top Row
-        LALT(KC_LEFT), MS_WHLD, MS_WHLU, LALT(KC_RIGHT), XXXXXXX, _______, // Second Row
+        LALT(KC_LEFT), KC_WH_D, KC_WH_U, LALT(KC_RIGHT), XXXXXXX, _______, // Second Row
         KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, VIM_EOL, _______,               // Third Row
         XXXXXXX, XXXXXXX, _______, _______, _______, _______,              // Fourth Row
         _______, _______),                                                 // Thumbs Row
@@ -134,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______),                                               // Thumbs Row
 
     [FUN] = LAYOUT_LR(
-        MS_ACL0, MS_ACL1, MS_ACL2, DT_DOWN, DT_UP, DT_PRNT,              // Top Row
+        KC_ACL0, KC_ACL1, KC_ACL2, DT_DOWN, DT_UP, DT_PRNT,              // Top Row
         RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI,   // Second Row
         RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI, // Third Row
         TO(BASE), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRID, KC_BRIU,           // Fourth Row

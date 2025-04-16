@@ -207,11 +207,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
     //     return g_tapping_term - 125;
     case LT(MEHF, KC_BSLS):
         return g_tapping_term - 125;
-    case LT(MEHF, KC_PIPE):
-        return g_tapping_term - 125;
     case LT(APPS, KC_QUOTE):
-        return g_tapping_term - 125;
-    case LT(APPS, KC_DQUO):
         return g_tapping_term - 125;
     case ALL_T(KC_Z):
         return g_tapping_term - 100;

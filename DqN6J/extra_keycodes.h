@@ -14,7 +14,3 @@
 #define LT_REP LT(SYM, KC_0) // Layer-Tap Repeat
 #define KC_EURO LSA(KC_2)    // Euro symbol
 #define KC_GBP LALT(KC_3)    // British Pound symbol
-
-#define KC_PIPE S(KC_BSLS)
-#define KC_DQUO S(KC_QUOTE)
-

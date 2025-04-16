@@ -85,7 +85,7 @@
 #undef MOUSEKEY_WHEEL_DELTA
 #define MOUSEKEY_WHEEL_DELTA 1 // Increase the amount of scroll steps (default is 1)
 #undef MOUSEKEY_WHEEL_MAX_SPEED
-#define MOUSEKEY_WHEEL_MAX_SPEED 8 // Lower the maximum scroll speed (default is 8)
+#define MOUSEKEY_WHEEL_MAX_SPEED 4 // Lower the maximum scroll speed (default is 8)
 #undef MOUSEKEY_WHEEL_TIME_TO_MAX
 #define MOUSEKEY_WHEEL_TIME_TO_MAX 40 // Make it take longer to reach max speed (default is 40)
 

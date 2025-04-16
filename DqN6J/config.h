@@ -84,16 +84,10 @@
 #undef MOUSEKEY_WHEEL_TIME_TO_MAX
 
 #define MOUSEKEY_WHEEL_DELAY 10       // Initial delay before scrolling begins
-#define MOUSEKEY_WHEEL_INTERVAL 80    // Time between scroll steps
-#define MOUSEKEY_WHEEL_DELTA 1        // Default scroll amount per step
-#define MOUSEKEY_WHEEL_MAX_SPEED 8    // Maximum scroll speed
-#define MOUSEKEY_WHEEL_TIME_TO_MAX 40 // Time to reach maximum speed
-
-#define MK_KINETIC_SPEED                    // Enable kinetic scrolling
-#define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS 16 // Kinetic scrolling parameters
-#define MOUSEKEY_WHEEL_BASE_MOVEMENTS 32
-#define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 48
-#define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS 8
+#define MOUSEKEY_WHEEL_INTERVAL 120   // Time between wheel movements
+#define MOUSEKEY_WHEEL_DELTA 1        // Wheel movement step size
+#define MOUSEKEY_WHEEL_MAX_SPEED 8    // Maximum number of scroll speed
+#define MOUSEKEY_WHEEL_TIME_TO_MAX 50 // Time to reach maximum speed
 
 #define SELECT_WORD_OS_MAC
 #define SELECT_WORD_OS_DYNAMIC

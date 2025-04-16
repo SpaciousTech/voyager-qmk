@@ -77,7 +77,9 @@ tap_dance_action_t *action;
 
 enum tap_dance_codes
 {
-    DANCE_0,
+    OPTDEL_CMD, // Tap-dance for Option+Delete, Hold for CMD layer
+    PIPE_MEHF, // Tap-dance for Pipe (|), Hold for MEHF layer
+    DQUO_APPS, // Tap-dance for Double Quote ("), Hold for APPS layer
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -86,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         LCA_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,          // Second Row
         LT(SYM, KC_ESCAPE), HRM_A, HRM_S, HRM_D, HRM_F, KC_G, // Third Row
         TT(NAV), ALL_T(KC_Z), KC_X, KC_C, KC_V, KC_B,         // Fourth Row
-        LT(NAV, KC_BSPC), TD(DANCE_0),                        // Thumbs Row
+        LT(NAV, KC_BSPC), TD(OPTDEL_CMD),                     // Thumbs Row
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                          // Top Row
         KC_Y, KC_U, KC_I, KC_O, KC_P, LT(MEHF, KC_BSLS),                 // Second Row
@@ -102,7 +104,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______,                                                   // Thumbs Row
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                            // Top Row
-        LALT(KC_LEFT), KC_WH_D, KC_WH_U, LALT(KC_RIGHT), XXXXXXX, _______, // Second Row
+        LALT(KC_LEFT), KC_WH_U, KC_WH_D, LALT(KC_RIGHT), XXXXXXX, _______, // Second Row
         KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, VIM_EOL, _______,               // Third Row
         XXXXXXX, XXXXXXX, _______, _______, _______, _______,              // Fourth Row
         _______, _______),                                                 // Thumbs Row
@@ -127,11 +129,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TO(BASE), XXXXXXX, KC_AT, KC_DLR, KC_EURO, KC_GBP,     // Fourth Row
         _______, _______,                                      // Thumbs Row
 
-        KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS,           // Top Row
-        KC_EQUAL, KC_UNDS, KC_LBRC, KC_RBRC, KC_PLUS, LT(MEHF, KC_PIPE), // Second Row
-        KC_HASH, KC_CIRC, KC_LCBR, KC_RCBR, KC_COLN, LT(APPS, KC_DQUO),  // Third Row
-        KC_EXLM, KC_MINUS, KC_LABK, KC_RABK, KC_QUES, _______,           // Fourth Row
-        _______, _______),                                               // Thumbs Row
+        KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_MINUS,       // Top Row
+        KC_EQUAL, KC_UNDS, KC_LBRC, KC_RBRC, KC_PLUS, TD(PIPE_MEHF), // Second Row
+        KC_HASH, KC_CIRC, KC_LCBR, KC_RCBR, KC_COLN, TD(DQUO_APPS),  // Third Row
+        KC_EXLM, KC_MINUS, KC_LABK, KC_RABK, KC_QUES, _______,       // Fourth Row
+        _______, _______),                                           // Thumbs Row
 
     [FUN] = LAYOUT_LR(
         KC_ACL0, KC_ACL1, KC_ACL2, DT_DOWN, DT_UP, DT_PRNT,              // Top Row
@@ -201,13 +203,17 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record)
         return g_tapping_term - 125;
     case LT(NAV, KC_BSPC):
         return g_tapping_term - 100;
-    case TD(DANCE_0):
-        return g_tapping_term - 125;
-    // case RCALT_BSLS:
-    //     return g_tapping_term - 125;
     case LT(MEHF, KC_BSLS):
         return g_tapping_term - 125;
     case LT(APPS, KC_QUOTE):
+        return g_tapping_term - 125;
+    case TD(OPTDEL_CMD):
+        return g_tapping_term - 125;
+    // case RCALT_BSLS:
+    //     return g_tapping_term - 125;
+    case TD(PIPE_MEHF):
+        return g_tapping_term - 125;
+    case TD(DQUO_APPS):
         return g_tapping_term - 125;
     case ALL_T(KC_Z):
         return g_tapping_term - 100;
@@ -414,8 +420,9 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *reme
     switch (keycode)
     {
     case LT_REP:           // Don't repeat the repeat key itself
+    case KC_NO:            // Don't repeat the no key
     case KC_BSPC:          // Don't repeat backspace
-    case TD(DANCE_0):      // Don't repeat the tap dance
+    case TD(OPTDEL_CMD):   // Don't repeat the tap dance
     case LT(NAV, KC_BSPC): // Don't repeat the Nav layer backspace
     case VIM_EOL:          // Don't repeat the Vim End of Line key
         return false;      // Ignore these keys
@@ -599,7 +606,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
         }
         return false;
 
-    case TD(DANCE_0):
+    case TD(OPTDEL_CMD):
         action = &tap_dance_actions[TD_INDEX(keycode)];
         if (!record->event.pressed && action->state.count && !action->state.finished)
         {
@@ -678,7 +685,9 @@ void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data)
     }
 
 tap_dance_action_t tap_dance_actions[] = {
-    [DANCE_0] = ACTION_TAP_DANCE_TAP_HOLD(LALT(KC_BSPC), KC_LEFT_GUI),
+    [OPTDEL_CMD] = ACTION_TAP_DANCE_TAP_HOLD(LALT(KC_BSPC), KC_LGUI),  // Tap: Opt+BKPC -> Del a word, Hold: Left CMD
+    [PIPE_MEHF] = ACTION_TAP_DANCE_LAYER_MOVE(S(KC_BSLS), MEHF),  // Tap: Shift+BSLS -> |, Hold: MEHF
+    [DQUO_APPS] = ACTION_TAP_DANCE_LAYER_MOVE(S(KC_QUOTE), APPS), // Tap: Shift+QUOTE -> ", Hold: APPS
 };
 
 // QMK Config

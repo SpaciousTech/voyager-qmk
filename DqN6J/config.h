@@ -78,14 +78,16 @@
 #undef ENABLE_RGB_MATRIX_RIVERFLOW
 
 // QMK Config
-#undef MOUSEKEY_WHEEL_INTERVAL
-#define MOUSEKEY_WHEEL_INTERVAL 120 // Increase time between scroll steps (default is 80)
 #undef MOUSEKEY_WHEEL_DELAY
 #define MOUSEKEY_WHEEL_DELAY 0 // Remove delay before scrolling starts (default is 10)
-#undef MOUSEKEY_WHEEL_TIME_TO_MAX
-#define MOUSEKEY_WHEEL_TIME_TO_MAX 100 // Make it take longer to reach max speed (default is 40)
+#undef MOUSEKEY_WHEEL_INTERVAL
+#define MOUSEKEY_WHEEL_INTERVAL 60 // Increase time between scroll steps (default is 80)
+#undef MOUSEKEY_WHEEL_DELTA
+#define MOUSEKEY_WHEEL_DELTA 1 // Increase the amount of scroll steps (default is 1)
 #undef MOUSEKEY_WHEEL_MAX_SPEED
 #define MOUSEKEY_WHEEL_MAX_SPEED 6 // Lower the maximum scroll speed (default is 8)
+#undef MOUSEKEY_WHEEL_TIME_TO_MAX
+#define MOUSEKEY_WHEEL_TIME_TO_MAX 60 // Make it take longer to reach max speed (default is 40)
 
 #define SELECT_WORD_OS_MAC
 #define SELECT_WORD_OS_DYNAMIC

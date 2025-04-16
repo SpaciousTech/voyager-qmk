@@ -2,7 +2,7 @@
 #include "features/select_word.h"
 #include "layout.h"
 #include "version.h"
-#include "i18n.h"
+#include "extra_keycodes.h"
 #include "rgb_colors.h" // Include the new RGB configuration
 
 #define MOON_LED_LEVEL LED_LEVEL
@@ -16,8 +16,8 @@ enum layers
 {
     BASE,
     NAV,
-    APPS,
     SYM,
+    APPS,
     FUN,
     WIN,
     MEHF,
@@ -52,21 +52,6 @@ static bool selection_mode_active = false;
 static bool selection_active = false;
 static uint16_t selection_mode_timer = 0;
 #define SELECTION_MODE_TIMEOUT 5000 // 5 seconds timeout
-
-// Short aliases for Home row mods and other tap-hold keys
-#define HRM_A LGUI_T(KC_A)
-#define HRM_S LSFT_T(KC_S)
-#define HRM_D LOPT_T(KC_D)
-#define HRM_F LCTL_T(KC_F)
-// #define HRM_J RCTL_T(KC_J)
-#define HRM_K ROPT_T(KC_K)
-#define HRM_L RSFT_T(KC_L)
-// #define HRM_SCLN RGUI_T(KC_SCLN)
-#define LCG_EQUAL MT(MOD_LCTL | MOD_LGUI, KC_EQUAL)
-// #define RCALT_BSLS MT(MOD_RCTL | MOD_RALT, KC_BSLS)
-#define LT_REP LT(SYM, KC_0) // Layer-Tap Repeat
-#define KC_EURO LSA(KC_2)    // Euro symbol
-#define KC_GBP LALT(KC_3)    // British Pound symbol
 typedef struct
 {
     uint16_t tap;
@@ -78,8 +63,8 @@ tap_dance_action_t *action;
 enum tap_dance_codes
 {
     OPTDEL_CMD, // Tap-dance for Option+Delete, Hold for CMD layer
-    PIPE_MEHF, // Tap-dance for Pipe (|), Hold for MEHF layer
-    DQUO_APPS, // Tap-dance for Double Quote ("), Hold for APPS layer
+    PIPE_MEHF,  // Tap-dance for Pipe (|), Hold for MEHF layer
+    DQUO_APPS,  // Tap-dance for Double Quote ("), Hold for APPS layer
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -109,19 +94,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         XXXXXXX, XXXXXXX, _______, _______, _______, _______,              // Fourth Row
         _______, _______),                                                 // Thumbs Row
 
-    [APPS] = LAYOUT_LR(
-        QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,                                // Top Row
-        _______, _______, HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T),     // Second Row
-        _______, _______, HYPR(KC_S), HYPR(KC_D), LGUI(KC_SPACE), HYPR(KC_G), // Third Row
-        TO(BASE), _______, _______, HYPR(KC_C), HYPR(KC_V), _______,          // Fourth Row
-        _______, _______,                                                     // Thumbs Row
-
-        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                              // Top Row
-        HYPR(KC_Y), HYPR(KC_U), HYPR(KC_I), HYPR(KC_O), HYPR(KC_P), _______, // Second Row
-        HYPR(KC_H), HYPR(KC_J), HYPR(KC_K), HYPR(KC_L), _______, _______,    // Third Row
-        HYPR(KC_N), HYPR(KC_M), _______, _______, _______, _______,          // Fourth Row
-        _______, _______),                                                   // Thumbs Row
-
     [SYM] = LAYOUT_LR(
         QK_LLCK, KC_EXLM, KC_AT, KC_HASH, KC_DLR, KC_PERC,     // Top Row
         _______, TO(NAV), CW_TOGG, BRACES, PAREN, CBRACE,      // Second Row
@@ -135,8 +107,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_EXLM, KC_MINUS, KC_LABK, KC_RABK, KC_QUES, _______,       // Fourth Row
         _______, _______),                                           // Thumbs Row
 
+    [APPS] = LAYOUT_LR(
+        QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,                                // Top Row
+        _______, _______, HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T),     // Second Row
+        _______, _______, HYPR(KC_S), HYPR(KC_D), LGUI(KC_SPACE), HYPR(KC_G), // Third Row
+        TO(BASE), _______, _______, HYPR(KC_C), HYPR(KC_V), _______,          // Fourth Row
+        _______, _______,                                                     // Thumbs Row
+
+        KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                              // Top Row
+        HYPR(KC_Y), HYPR(KC_U), HYPR(KC_I), HYPR(KC_O), HYPR(KC_P), _______, // Second Row
+        HYPR(KC_H), HYPR(KC_J), HYPR(KC_K), HYPR(KC_L), _______, _______,    // Third Row
+        HYPR(KC_N), HYPR(KC_M), _______, _______, _______, _______,          // Fourth Row
+        _______, _______),                                                   // Thumbs Row
+
     [FUN] = LAYOUT_LR(
-        KC_ACL0, KC_ACL1, KC_ACL2, DT_DOWN, DT_UP, DT_PRNT,              // Top Row
+        XXXXXXX, XXXXXXX, XXXXXXX, DT_DOWN, DT_UP, DT_PRNT,              // Top Row
         RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI,   // Second Row
         RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI, // Third Row
         TO(BASE), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRID, KC_BRIU,           // Fourth Row
@@ -271,26 +256,11 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
         C_THUMBS, C_RED,                                                // Thumb cluster
 
         // Right Hand Side
-        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,           // Top row
-        C_SHIFTED, C_LTBLUE, C_LTBLUE, C_SHIFTED, C_OFF, C_LAYER, // Second row
-        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_MACRO, C_LAYER,     // Third row
-        C_OFF, C_OFF, C_OFF, C_OFF, C_MODS, C_LAYER,              // Fourth row
-        C_RED, C_THUMBS                                           // Thumb cluster
-    },
-    [APPS] = {
-        // Left Hand Side
-        C_RED, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,           // Top row
-        C_LAYER, C_OFF, C_LTBLUE, C_LTBLUE, C_LTBLUE, C_LTGREEN, // Second row
-        C_LAYER, C_OFF, C_YELLOW, C_ORANGE, C_BROWN, C_TEAL,     // Third row
-        C_LAYER, C_TEAL, C_OFF, C_TEAL, C_RED, C_OFF,            // Fourth row
-        C_THUMBS, C_RED,                                         // Left Thumb cluster
-
-        // Right Hand Side
-        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,             // Top row
-        C_ORANGE, C_ORANGE, C_ORANGE, C_MAGENTA, C_ORANGE, C_LAYER, // Second row
-        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_OFF, C_LAYER,     // Third row
-        C_RED, C_RED, C_OFF, C_OFF, C_OFF, C_LAYER,                 // Fourth row
-        C_RED, C_THUMBS                                             // Right Thumb cluster
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,         // Top row
+        C_SHIFTED, C_BROWN, C_BROWN, C_SHIFTED, C_OFF, C_LAYER, // Second row
+        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_MACRO, C_LAYER,   // Third row
+        C_OFF, C_OFF, C_OFF, C_OFF, C_MODS, C_LAYER,            // Fourth row
+        C_RED, C_THUMBS                                         // Thumb cluster
     },
     [SYM] = {
         // Left Hand Side
@@ -306,13 +276,28 @@ const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
         C_PURPLE, C_PURPLE, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_LAYER,     // Fourth row
         C_RED, C_THUMBS                                                   // Right Thumb cluster
     },
+    [APPS] = {
+        // Left Hand Side
+        C_RED, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,              // Top row
+        C_LAYER, C_OFF, C_MAGENTA, C_MAGENTA, C_MAGENTA, C_LTGREEN, // Second row
+        C_LAYER, C_OFF, C_YELLOW, C_ORANGE, C_BROWN, C_TEAL,        // Third row
+        C_LAYER, C_TEAL, C_OFF, C_TEAL, C_RED, C_OFF,               // Fourth row
+        C_THUMBS, C_RED,                                            // Left Thumb cluster
+
+        // Right Hand Side
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,             // Top row
+        C_ORANGE, C_ORANGE, C_ORANGE, C_MAGENTA, C_ORANGE, C_LAYER, // Second row
+        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_OFF, C_LAYER,     // Third row
+        C_RED, C_RED, C_OFF, C_OFF, C_OFF, C_LAYER,                 // Fourth row
+        C_RED, C_THUMBS                                             // Right Thumb cluster
+    },
     [FUN] = {
         // Left Hand Side
-        C_BROWN, C_BROWN, C_BROWN, C_YELLOW, C_YELLOW, C_YELLOW, // Top row
-        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC,          // Second row
-        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_RED,           // Third row
-        C_LAYER, C_OFF, C_OFF, C_OFF, C_MAGENTA, C_MAGENTA,      // Fourth row
-        C_THUMBS, C_RED,                                         // Left Thumb cluster
+        C_OFF, C_OFF, C_OFF, C_YELLOW, C_YELLOW, C_YELLOW,  // Top row
+        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC,     // Second row
+        C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_RED,      // Third row
+        C_LAYER, C_OFF, C_OFF, C_OFF, C_MAGENTA, C_MAGENTA, // Fourth row
+        C_THUMBS, C_RED,                                    // Left Thumb cluster
 
         C_OFF, C_PURPLE, C_PURPLE, C_PURPLE, C_OFF, C_LAYER, // Top row
         C_OFF, C_TEAL, C_TEAL, C_TEAL, C_OFF, C_OFF,         // Second row
@@ -390,11 +375,11 @@ bool rgb_matrix_indicators_user(void)
     case NAV:
         set_layer_color(NAV);
         break;
-    case APPS:
-        set_layer_color(APPS);
-        break;
     case SYM:
         set_layer_color(SYM);
+        break;
+    case APPS:
+        set_layer_color(APPS);
         break;
     case FUN:
         set_layer_color(FUN);
@@ -685,9 +670,9 @@ void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data)
     }
 
 tap_dance_action_t tap_dance_actions[] = {
-    [OPTDEL_CMD] = ACTION_TAP_DANCE_TAP_HOLD(LALT(KC_BSPC), KC_LGUI),  // Tap: Opt+BKPC -> Del a word, Hold: Left CMD
-    [PIPE_MEHF] = ACTION_TAP_DANCE_LAYER_MOVE(S(KC_BSLS), MEHF),  // Tap: Shift+BSLS -> |, Hold: MEHF
-    [DQUO_APPS] = ACTION_TAP_DANCE_LAYER_MOVE(S(KC_QUOTE), APPS), // Tap: Shift+QUOTE -> ", Hold: APPS
+    [OPTDEL_CMD] = ACTION_TAP_DANCE_TAP_HOLD(LALT(KC_BSPC), KC_LGUI), // Tap: Opt+BKPC -> Del a word, Hold: Left CMD
+    [PIPE_MEHF] = ACTION_TAP_DANCE_LAYER_MOVE(KC_PIPE, _______),      // Tap: Shift+BSLS -> |, Hold: Transparent
+    [DQUO_APPS] = ACTION_TAP_DANCE_LAYER_MOVE(KC_DQUO, _______),      // Tap: Shift+QUOTE -> ", Hold: Transparent
 };
 
 // QMK Config

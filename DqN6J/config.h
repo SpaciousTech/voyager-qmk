@@ -78,16 +78,12 @@
 #undef ENABLE_RGB_MATRIX_RIVERFLOW
 
 // QMK Config
-#undef MOUSEKEY_WHEEL_DELAY
-#undef MOUSEKEY_WHEEL_INTERVAL
-#undef MOUSEKEY_WHEEL_MAX_SPEED
-#undef MOUSEKEY_WHEEL_TIME_TO_MAX
 
-#define MOUSEKEY_WHEEL_DELAY 10       // Initial delay before scrolling begins
-#define MOUSEKEY_WHEEL_INTERVAL 120   // Time between wheel movements
-#define MOUSEKEY_WHEEL_DELTA 1        // Wheel movement step size
-#define MOUSEKEY_WHEEL_MAX_SPEED 8    // Maximum number of scroll speed
-#define MOUSEKEY_WHEEL_TIME_TO_MAX 50 // Time to reach maximum speed
+#define MK_KINETIC_SPEED
+#define MOUSEKEY_WHEEL_INITIAL_MOVEMENTS 8 // Initial delay before scrolling begins
+#define MOUSEKEY_WHEEL_BASE_MOVEMENTS 16 // Time between wheel movements
+#define MOUSEKEY_WHEEL_ACCELERATED_MOVEMENTS 36 // Maximum number of scroll speed
+#define MOUSEKEY_WHEEL_DECELERATED_MOVEMENTS 4 // Time to reach maximum speed
 
 #define SELECT_WORD_OS_MAC
 #define SELECT_WORD_OS_DYNAMIC

@@ -217,7 +217,7 @@ void keyboard_post_init_user(void) { rgb_matrix_enable(); }
 
 // clang-format off
 const uint8_t
-    PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] =
+    PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
     [BASE] = {
         // Left Hand Side
         C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,           // 1st row

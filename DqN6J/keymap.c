@@ -409,6 +409,32 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *reme
     return true; // Remember all other keys
 }
 
+uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods)
+{
+}
+
+static void process_optrep(uint16_t keycode, uint8_t mods)
+{
+    switch (keycode)
+    {
+    case KC_A:
+        SEND_STRING(/*a*/ "tion");
+        break;
+    case KC_I:
+        SEND_STRING(/*i*/ "tion");
+        break;
+    case KC_S:
+        SEND_STRING(/*s*/ "sion");
+        break;
+    case KC_T:
+        SEND_STRING(/*t*/ "heir");
+        break;
+    case KC_W:
+        SEND_STRING(/*w*/ "hich");
+        break;
+    }
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record)
 {
     // Process selection word functionality
@@ -451,211 +477,223 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
     // Layer-Tap Repeat keycodes
     case LT_REP: // SYM layer on hold, Repeat Key on tap.
         if (record->tap.count)
-        {                                      // on tap.
-            repeat_key_invoke(&record->event); // Repeat the last key.
-            return false;
-        }
-        break;
-
-    // Word selection keycodes
-    case SELWORD:
-        if (record->event.pressed)
         {
-            select_word_register('W'); // Forward selection
-            // Start selection mode
-            selection_mode_active = true;
-            selection_mode_timer = timer_read();
-            selection_active = true; // Mark selection as active
-        }
-        else
-        {
-            select_word_unregister();
-        }
-        return false;
-
-    case SELBWD:
-        if (record->event.pressed)
-        {
-            select_word_register('B'); // Backward selection
-            selection_active = true;   // Mark selection as active
-        }
-        else
-        {
-            select_word_unregister();
-        }
-        return false;
-
-    case SELLINE:
-        if (record->event.pressed)
-        {
-            select_word_register('L'); // Line selection
-            selection_active = true;   // Mark selection as active
-        }
-        else
-        {
-            select_word_unregister();
-        }
-        return false;
-
-    case BRACES: // Types [], {}, or <> and puts cursor between braces.
-    {
-        const uint8_t mods = get_mods();
-        const uint8_t oneshot_mods = get_oneshot_mods();
-
-        // Check if selection is active and handle accordingly
-        if (record->event.pressed)
-        {
-            clear_oneshot_mods(); // Temporarily disable mods.
-            unregister_mods(MOD_MASK_CSAG);
-            if ((mods | oneshot_mods) & MOD_MASK_SHIFT)
+            // 1) Option (Alt) + tap → invoke Alternate‑Repeat
+            if (get_mods() & MOD_MASK_ALT)
             {
-                SEND_STRING("{}");
+                process_optrep(get_last_keycode(), get_last_mods());
             }
-            else if ((mods | oneshot_mods) & MOD_MASK_CTRL)
+            // 2) GUI + tap → default Alternate Repeat
+            else if (get_mods() & MOD_MASK_GUI)
             {
-                SEND_STRING("<>");
+                alt_repeat_key_tap();
             }
-            else if ((mods | oneshot_mods) & MOD_MASK_ALT)
+            else
+            {                                      // on tap.
+                repeat_key_invoke(&record->event); // Repeat the last key.
+                return false;
+            }
+            break;
+
+        // Word selection keycodes
+        case SELWORD:
+            if (record->event.pressed)
             {
-                SEND_STRING("()");
+                select_word_register('W'); // Forward selection
+                // Start selection mode
+                selection_mode_active = true;
+                selection_mode_timer = timer_read();
+                selection_active = true; // Mark selection as active
             }
             else
             {
-                SEND_STRING("[]");
+                select_word_unregister();
             }
-            tap_code(KC_LEFT);   // Move cursor between braces.
-            register_mods(mods); // Restore mods.
+            return false;
+
+        case SELBWD:
+            if (record->event.pressed)
+            {
+                select_word_register('B'); // Backward selection
+                selection_active = true;   // Mark selection as active
+            }
+            else
+            {
+                select_word_unregister();
+            }
+            return false;
+
+        case SELLINE:
+            if (record->event.pressed)
+            {
+                select_word_register('L'); // Line selection
+                selection_active = true;   // Mark selection as active
+            }
+            else
+            {
+                select_word_unregister();
+            }
+            return false;
+
+        case BRACES: // Types [], {}, or <> and puts cursor between braces.
+        {
+            const uint8_t mods = get_mods();
+            const uint8_t oneshot_mods = get_oneshot_mods();
+
+            // Check if selection is active and handle accordingly
+            if (record->event.pressed)
+            {
+                clear_oneshot_mods(); // Temporarily disable mods.
+                unregister_mods(MOD_MASK_CSAG);
+                if ((mods | oneshot_mods) & MOD_MASK_SHIFT)
+                {
+                    SEND_STRING("{}");
+                }
+                else if ((mods | oneshot_mods) & MOD_MASK_CTRL)
+                {
+                    SEND_STRING("<>");
+                }
+                else if ((mods | oneshot_mods) & MOD_MASK_ALT)
+                {
+                    SEND_STRING("()");
+                }
+                else
+                {
+                    SEND_STRING("[]");
+                }
+                tap_code(KC_LEFT);   // Move cursor between braces.
+                register_mods(mods); // Restore mods.
+            }
         }
+            return false;
+
+        case SBRACKET: // Square brackets []
+            if (record->event.pressed)
+            {
+                const uint8_t mods = get_mods();
+                clear_oneshot_mods();
+                unregister_mods(MOD_MASK_CSAG);
+                SEND_STRING("[]");
+                tap_code(KC_LEFT);
+                register_mods(mods);
+            }
+            return false;
+
+        case CBRACE: // Curly braces {}
+            if (record->event.pressed)
+            {
+                const uint8_t mods = get_mods();
+                clear_oneshot_mods();
+                unregister_mods(MOD_MASK_CSAG);
+                SEND_STRING("{}");
+                tap_code(KC_LEFT);
+                register_mods(mods);
+            }
+            return false;
+
+        case ABRACKET: // Angle brackets <>
+            if (record->event.pressed)
+            {
+                const uint8_t mods = get_mods();
+                clear_oneshot_mods();
+                unregister_mods(MOD_MASK_CSAG);
+                SEND_STRING("<>");
+                tap_code(KC_LEFT);
+                register_mods(mods);
+            }
+            return false;
+
+        case PAREN: // Parentheses ()
+            if (record->event.pressed)
+            {
+                const uint8_t mods = get_mods();
+                clear_oneshot_mods();
+                unregister_mods(MOD_MASK_CSAG);
+                SEND_STRING("()");
+                tap_code(KC_LEFT);
+                register_mods(mods);
+            }
+            return false;
+
+        case VIM_EOL: // Vim End of Line - Esc followed by 'A'
+            if (record->event.pressed)
+            {
+                tap_code(KC_ESC);    // Sends Escape
+                tap_code16(S(KC_A)); // Sends Shift + a (capital A)
+            }
+            return false;
+
+        case TD(OPTDEL_CMD):
+            action = &tap_dance_actions[TD_INDEX(keycode)];
+            if (!record->event.pressed && action->state.count && !action->state.finished)
+            {
+                tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)action->user_data;
+
+                // Use our custom function instead of directly tapping
+                process_tap_dance_with_mods(&action->state, tap_hold->tap);
+            }
+            break;
+        case RGB_SLD:
+            if (record->event.pressed)
+            {
+                rgblight_mode(1);
+            }
+            return false;
+        }
+        return true;
     }
-        return false;
 
-    case SBRACKET: // Square brackets []
-        if (record->event.pressed)
-        {
-            const uint8_t mods = get_mods();
-            clear_oneshot_mods();
-            unregister_mods(MOD_MASK_CSAG);
-            SEND_STRING("[]");
-            tap_code(KC_LEFT);
-            register_mods(mods);
-        }
-        return false;
-
-    case CBRACE: // Curly braces {}
-        if (record->event.pressed)
-        {
-            const uint8_t mods = get_mods();
-            clear_oneshot_mods();
-            unregister_mods(MOD_MASK_CSAG);
-            SEND_STRING("{}");
-            tap_code(KC_LEFT);
-            register_mods(mods);
-        }
-        return false;
-
-    case ABRACKET: // Angle brackets <>
-        if (record->event.pressed)
-        {
-            const uint8_t mods = get_mods();
-            clear_oneshot_mods();
-            unregister_mods(MOD_MASK_CSAG);
-            SEND_STRING("<>");
-            tap_code(KC_LEFT);
-            register_mods(mods);
-        }
-        return false;
-
-    case PAREN: // Parentheses ()
-        if (record->event.pressed)
-        {
-            const uint8_t mods = get_mods();
-            clear_oneshot_mods();
-            unregister_mods(MOD_MASK_CSAG);
-            SEND_STRING("()");
-            tap_code(KC_LEFT);
-            register_mods(mods);
-        }
-        return false;
-
-    case VIM_EOL: // Vim End of Line - Esc followed by 'A'
-        if (record->event.pressed)
-        {
-            tap_code(KC_ESC);    // Sends Escape
-            tap_code16(S(KC_A)); // Sends Shift + a (capital A)
-        }
-        return false;
-
-    case TD(OPTDEL_CMD):
-        action = &tap_dance_actions[TD_INDEX(keycode)];
-        if (!record->event.pressed && action->state.count && !action->state.finished)
-        {
-            tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)action->user_data;
-
-            // Use our custom function instead of directly tapping
-            process_tap_dance_with_mods(&action->state, tap_hold->tap);
-        }
-        break;
-    case RGB_SLD:
-        if (record->event.pressed)
-        {
-            rgblight_mode(1);
-        }
-        return false;
-    }
-    return true;
-}
-
-void process_tap_dance_with_mods(tap_dance_state_t *state, uint16_t keycode)
-{
-    const uint8_t mods = get_mods();
-
-    // If shift is pressed with Alt+Backspace, send Option+Delete
-    if ((mods & MOD_MASK_SHIFT) && keycode == LALT(KC_BSPC))
+    void process_tap_dance_with_mods(tap_dance_state_t * state, uint16_t keycode)
     {
-        clear_mods();             // Clear all mods
-        register_code(KC_LALT);   // Press Option
-        tap_code(KC_DEL);         // Tap Delete
-        unregister_code(KC_LALT); // Release Option
-        register_mods(mods);      // Restore mods
-        return;
+        const uint8_t mods = get_mods();
+
+        // If shift is pressed with Alt+Backspace, send Option+Delete
+        if ((mods & MOD_MASK_SHIFT) && keycode == LALT(KC_BSPC))
+        {
+            clear_mods();             // Clear all mods
+            register_code(KC_LALT);   // Press Option
+            tap_code(KC_DEL);         // Tap Delete
+            unregister_code(KC_LALT); // Release Option
+            register_mods(mods);      // Restore mods
+            return;
+        }
+        // Otherwise fall back to normal behavior
+        tap_code16(keycode);
     }
-    // Otherwise fall back to normal behavior
-    tap_code16(keycode);
-}
 
-void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data)
-{
-    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
-
-    if (state->pressed)
+    void tap_dance_tap_hold_finished(tap_dance_state_t * state, void *user_data)
     {
-        if (state->count == 1
+        tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
+
+        if (state->pressed)
+        {
+            if (state->count == 1
 #ifndef PERMISSIVE_HOLD
-            && !state->interrupted
+                && !state->interrupted
 #endif
-        )
-        {
-            register_code16(tap_hold->hold);
-            tap_hold->held = tap_hold->hold;
-        }
-        else
-        {
-            register_code16(tap_hold->tap);
-            tap_hold->held = tap_hold->tap;
+            )
+            {
+                register_code16(tap_hold->hold);
+                tap_hold->held = tap_hold->hold;
+            }
+            else
+            {
+                register_code16(tap_hold->tap);
+                tap_hold->held = tap_hold->tap;
+            }
         }
     }
-}
 
-void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data)
-{
-    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
-
-    if (tap_hold->held)
+    void tap_dance_tap_hold_reset(tap_dance_state_t * state, void *user_data)
     {
-        unregister_code16(tap_hold->held);
-        tap_hold->held = 0;
+        tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
+
+        if (tap_hold->held)
+        {
+            unregister_code16(tap_hold->held);
+            tap_hold->held = 0;
+        }
     }
-}
 
 #define ACTION_TAP_DANCE_TAP_HOLD(tap, hold)                                 \
     {                                                                        \
@@ -663,45 +701,45 @@ void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data)
         .user_data = (void *)&((tap_dance_tap_hold_t){tap, hold, 0}),        \
     }
 
-tap_dance_action_t tap_dance_actions[] = {
-    [OPTDEL_CMD] = ACTION_TAP_DANCE_TAP_HOLD(LALT(KC_BSPC), KC_LGUI), // Tap: Opt+BKPC -> Del a word, Hold: Left CMD
-};
+    tap_dance_action_t tap_dance_actions[] = {
+        [OPTDEL_CMD] = ACTION_TAP_DANCE_TAP_HOLD(LALT(KC_BSPC), KC_LGUI), // Tap: Opt+BKPC -> Del a word, Hold: Left CMD
+    };
 
-// QMK Config
+    // QMK Config
 
 #ifdef CHORDAL_HOLD
-// Handedness for Chordal Hold.
-const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
-    LAYOUT_LR(
-        '*', '*', '*', '*', '*', '*',
-        '*', 'L', 'L', 'L', 'L', 'L',
-        '*', 'L', 'L', 'L', 'L', 'L',
-        '*', 'L', 'L', 'L', 'L', 'L',
-        '*', '*',
+    // Handedness for Chordal Hold.
+    const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM =
+        LAYOUT_LR(
+            '*', '*', '*', '*', '*', '*',
+            '*', 'L', 'L', 'L', 'L', 'L',
+            '*', 'L', 'L', 'L', 'L', 'L',
+            '*', 'L', 'L', 'L', 'L', 'L',
+            '*', '*',
 
-        '*', '*', '*', '*', '*', '*',
-        'R', 'R', 'R', 'R', 'R', '*',
-        'R', 'R', 'R', 'R', 'R', '*',
-        'R', 'R', 'R', 'R', 'R', '*',
-        '*', '*');
+            '*', '*', '*', '*', '*', '*',
+            'R', 'R', 'R', 'R', 'R', '*',
+            'R', 'R', 'R', 'R', 'R', '*',
+            'R', 'R', 'R', 'R', 'R', '*',
+            '*', '*');
 #endif // CHORDAL_HOLD
 
-// Add a housekeeping task to check for selection mode timeouts
-void housekeeping_task_user(void)
-{
-    // Call the select_word task for its own timeout handling
-    select_word_task();
-
-    // Handle our selection mode timeout
-    if (selection_mode_active && timer_elapsed(selection_mode_timer) > SELECTION_MODE_TIMEOUT)
+    // Add a housekeeping task to check for selection mode timeouts
+    void housekeeping_task_user(void)
     {
-        selection_mode_active = false;
-        selection_active = false; // Also reset the selection state
-    }
+        // Call the select_word task for its own timeout handling
+        select_word_task();
 
-    // Ensure we're using these variables to avoid unused variable warnings
-    // This is a compiler hint that we intend to use these variables
-    (void)selection_mode_active;
-    (void)selection_active;
-    (void)selection_mode_timer;
-}
+        // Handle our selection mode timeout
+        if (selection_mode_active && timer_elapsed(selection_mode_timer) > SELECTION_MODE_TIMEOUT)
+        {
+            selection_mode_active = false;
+            selection_active = false; // Also reset the selection state
+        }
+
+        // Ensure we're using these variables to avoid unused variable warnings
+        // This is a compiler hint that we intend to use these variables
+        (void)selection_mode_active;
+        (void)selection_active;
+        (void)selection_mode_timer;
+    }

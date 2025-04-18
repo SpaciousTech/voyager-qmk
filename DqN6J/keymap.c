@@ -487,7 +487,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             // 2) GUI + tap → default Alternate Repeat
             else if (get_mods() & MOD_MASK_GUI)
             {
-                alt_repeat_key_invoke();
+                alt_repeat_key_invoke(&record->event);
             }
             else
             {                                      // on tap.

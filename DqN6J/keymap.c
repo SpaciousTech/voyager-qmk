@@ -8,8 +8,9 @@
 #define MOON_LED_LEVEL LED_LEVEL
 #define ML_SAFE_RANGE SAFE_RANGE
 
-// Function prototype for process_tap_dance_with_mods
+// Function prototypes
 void process_tap_dance_with_mods(tap_dance_state_t *state, uint16_t keycode);
+static void process_optrep(uint16_t keycode, uint8_t mods);
 
 // Define the layers used in the keymap
 enum layers {

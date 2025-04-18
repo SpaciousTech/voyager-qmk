@@ -411,6 +411,7 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record, uint8_t *reme
 
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods)
 {
+    return KC_TRNS;
 }
 
 static void process_optrep(uint16_t keycode, uint8_t mods)
@@ -486,7 +487,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record)
             // 2) GUI + tap → default Alternate Repeat
             else if (get_mods() & MOD_MASK_GUI)
             {
-                alt_repeat_key_tap();
+                alt_repeat_key_invoke();
             }
             else
             {                                      // on tap.

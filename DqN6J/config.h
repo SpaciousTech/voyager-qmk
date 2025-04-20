@@ -83,11 +83,11 @@
 #undef MOUSEKEY_WHEEL_DELAY
 #define MOUSEKEY_WHEEL_DELAY 0 // Remove delay before scrolling starts (default is 10)
 #undef MOUSEKEY_WHEEL_INTERVAL
-#define MOUSEKEY_WHEEL_INTERVAL 100 // Too Low = Too Fast, Too High = Too Slow (default is 80)
+#define MOUSEKEY_WHEEL_INTERVAL 120 // Too Low = Too Fast, Too High = Too Slow (default is 80)
 #undef MOUSEKEY_WHEEL_DELTA
 #define MOUSEKEY_WHEEL_DELTA 1 // Increase the amount of scroll steps (default is 1)
 #undef MOUSEKEY_WHEEL_MAX_SPEED
-#define MOUSEKEY_WHEEL_MAX_SPEED 2 // The maximum scroll speed (default is 8)
+#define MOUSEKEY_WHEEL_MAX_SPEED 1 // The maximum scroll speed (default is 8)
 #undef MOUSEKEY_WHEEL_TIME_TO_MAX
 #define MOUSEKEY_WHEEL_TIME_TO_MAX 0 // Make it take longer to reach max speed (default is 40)
 // clang-format on

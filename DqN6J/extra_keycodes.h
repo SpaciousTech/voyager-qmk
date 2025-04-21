@@ -1,5 +1,9 @@
 // extra_keycodes.h
 
+#pragma once
+#include QMK_KEYBOARD_H
+
+
 // Short aliases for Home row mods and other tap-hold keys
 #define HRM_A LGUI_T(KC_A)
 #define HRM_S LSFT_T(KC_S)
@@ -11,6 +15,6 @@
 // #define HRM_SCLN RGUI_T(KC_SCLN)
 #define LCG_EQUAL MT(MOD_LCTL | MOD_LGUI, KC_EQUAL)
 // #define RCALT_BSLS MT(MOD_RCTL | MOD_RALT, KC_BSLS)
-#define LT_REP LT(SYM, KC_0) // Layer-Tap Repeat
-#define KC_EURO LSA(KC_2)    // Euro symbol
-#define KC_GBP LALT(KC_3)    // British Pound symbol
+#define LT_REP LT(SYM, KC_0)  // Layer-Tap Repeat
+#define KC_EURO LSA(KC_2)     // Euro symbol
+#define KC_GBP LALT(KC_3)     // British Pound symbol

@@ -3,12 +3,13 @@
 #define DEBOUNCE 10
 
 #undef TAPPING_TERM
-#define TAPPING_TERM 300
+#define TAPPING_TERM 225
 
 #undef ONESHOT_TIMEOUT
 #define ONESHOT_TIMEOUT 2000
 
 #define PERMISSIVE_HOLD
+#define PERMISSIVE_HOLD_PER_KEY
 
 #undef RGB_MATRIX_HUE_STEP
 #define RGB_MATRIX_HUE_STEP 24
@@ -80,16 +81,15 @@
 
 // QMK Config
 // clang-format off
-#undef MOUSEKEY_WHEEL_DELAY
-#define MOUSEKEY_WHEEL_DELAY 0 // Remove delay before scrolling starts (default is 10)
-#undef MOUSEKEY_WHEEL_INTERVAL
-#define MOUSEKEY_WHEEL_INTERVAL 110 // Too Low = Too Fast, Too High = Too Slow (default is 80)
-#undef MOUSEKEY_WHEEL_DELTA
-#define MOUSEKEY_WHEEL_DELTA 1 // Increase the amount of scroll steps (default is 1)
-#undef MOUSEKEY_WHEEL_MAX_SPEED
-#define MOUSEKEY_WHEEL_MAX_SPEED 1 // The maximum scroll speed (default is 8)
-#undef MOUSEKEY_WHEEL_TIME_TO_MAX
-#define MOUSEKEY_WHEEL_TIME_TO_MAX 0 // Make it take longer to reach max speed (default is 40)
+#define MK_3_SPEED
+#define MK_W_OFFSET_0 1     // Scroll steps per scroll action (low speed)
+#define MK_W_INTERVAL_0 360 // Time between scroll steps (low speed)
+
+#define MK_W_OFFSET_1 4     // Scroll steps per scroll action (medium speed)
+#define MK_W_INTERVAL_1 120 // Time between scroll steps (medium speed)
+
+#define MK_W_OFFSET_2 8     // Scroll steps per scroll action (high speed)
+#define MK_W_INTERVAL_2 20  // Time between scroll steps (high speed)
 // clang-format on
 
 #define SELECT_WORD_OS_MAC

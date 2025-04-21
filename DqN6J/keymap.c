@@ -10,7 +10,6 @@
 
 // Function prototypes
 void process_tap_dance_with_mods(tap_dance_state_t *state, uint16_t keycode);
-static void process_optrep(uint16_t keycode, uint8_t mods);
 
 // Define the layers used in the keymap
 enum layers {
@@ -117,7 +116,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______),                                                   // Thumbs
 
     [FUN] = LAYOUT_LR(
-        XXXXXXX, XXXXXXX, XXXXXXX, DT_DOWN, DT_UP, DT_PRNT,              // 1st Row
+        KC_ACL0, KC_ACL1, KC_ACL2, DT_DOWN, DT_UP, DT_PRNT,              // 1st Row
         RGB_VAI, RGB_TOG, RGB_SLD, RGB_MODE_FORWARD, RGB_SPD, RGB_SPI,   // 2nd Row
         RGB_VAD, TOGGLE_LAYER_COLOR, RGB_SAD, RGB_SAI, RGB_HUD, RGB_HUI, // 3rd Row
         TO(BASE), XXXXXXX, XXXXXXX, XXXXXXX, KC_BRID, KC_BRIU,           // 4th Row
@@ -164,39 +163,44 @@ const uint16_t PROGMEM combo3[] = {LCG_EQUAL, KC_3, COMBO_END};
 const uint16_t PROGMEM combo4[] = {LCG_EQUAL, KC_4, COMBO_END};
 const uint16_t PROGMEM combo5[] = {LCG_EQUAL, KC_5, COMBO_END};
 
+// clang-format off
+// Combo keycodes
 combo_t key_combos[COMBO_COUNT] = {
-    COMBO(combo0, TO(BASE)), COMBO(combo1, TO(BASE)), COMBO(combo2, TO(APPS)),
-    COMBO(combo3, TO(SYM)),  COMBO(combo4, TO(FUN)),  COMBO(combo5, TO(WIN)),
+    COMBO(combo0, TO(BASE)),
+    COMBO(combo1, TO(BASE)),
+    COMBO(combo2, TO(APPS)),
+    COMBO(combo3, TO(SYM)),
+    COMBO(combo4, TO(FUN)),
+    COMBO(combo5, TO(WIN)),
 };
+// clang-format on
 
+// Tap-hold configuration
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
+    // 150 Tapping term
+    case TT(NAV):  // Tap-Tap Navigation Layer
+      return g_tapping_term - 75;
+
+    // 175 Tapping term
     case LCG_EQUAL:
-      return g_tapping_term - 125;
     case LCA_T(KC_TAB):
-      return g_tapping_term - 125;
     case LT(SYM, KC_ESCAPE):
-      return g_tapping_term - 125;
-    case LT(NAV, KC_BSPC):
-      return g_tapping_term - 100;
     case LT(MEHF, KC_BSLS):
-      return g_tapping_term - 125;
     case LT(APPS, KC_QUOTE):
-      return g_tapping_term - 125;
     case TD(OPTDEL_CMD):
-      return g_tapping_term - 125;
+    case RCTL_T(KC_ENTER):
+    case RSFT_T(KC_SPACE):
+      return g_tapping_term - 50;
     // case RCALT_BSLS:
     //     return g_tapping_term - 125;
+
+    // 200 Tapping term
+    case LT(NAV, KC_BSPC):
     case ALL_T(KC_Z):
-      return g_tapping_term - 100;
-    case RCTL_T(KC_ENTER):
-      return g_tapping_term - 125;
-    case RSFT_T(KC_SPACE):
-      return g_tapping_term - 125;
     case LT_REP:
-      return g_tapping_term - 100;  // Add faster tapping term for SYM_REP key
-    case TT(NAV):                   // Tap-Tap Navigation Layer
-      return g_tapping_term - 150;
+      return g_tapping_term - 25;  // Add faster tapping term for SYM_REP key
+
     default:
       return g_tapping_term;
   }
@@ -280,7 +284,7 @@ const uint8_t
     },
     [FUN] = {
         // Left Hand Side
-        C_OFF, C_OFF, C_OFF, C_YELLOW, C_YELLOW, C_YELLOW,  // 1st row
+        C_BROWN, C_BROWN, C_BROWN, C_YELLOW, C_YELLOW, C_YELLOW,  // 1st row
         C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC,     // 2nd row
         C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_FUNC, C_RED,      // 3rd row
         C_LAYER, C_OFF, C_OFF, C_OFF, C_MAGENTA, C_MAGENTA, // 4th row
@@ -393,30 +397,48 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record,
   return true;  // Remember all other keys
 }
 
+/**
+ * @brief Define custom alternate key behaviors
+ *
+ * This function is called by QMK to determine if a custom alternate
+ * keycode should be used when the Alt+Repeat key is pressed.
+ *
+ * @param keycode The keycode to find an alternate for
+ * @param mods The modifier state
+ * @return The alternate keycode or KC_TRNS to use default behavior
+ */
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
-  if (mods & MOD_MASK_ALT) {        // If Alt is held
-    process_optrep(keycode, mods);  // Call your suffix function directly
+  // Add any custom key pairs here
+  switch (keycode) {
+    // Tab and Escape are alternates
+    case KC_TAB:
+      return KC_ESC;
+    case KC_ESC:
+      return KC_TAB;
+
+    // For specific application shortcuts
+    case LGUI(KC_Z):         // ⌘+Z (Undo)
+      return LGUI(S(KC_Z));  // ⌘+⇧+Z (Redo)
+    case LGUI(S(KC_Z)):      // ⌘+⇧+Z (Redo)
+      return LGUI(KC_Z);     // ⌘+Z (Undo)
+
+    default:
+      return KC_TRNS;  // Use default QMK alternate pairs
   }
-  return KC_TRNS;  // Otherwise do normal repeat behavior
 }
 
-static void process_optrep(uint16_t keycode, uint8_t mods) {
+// Permissive Hold Per Key
+
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    case KC_A:
-      SEND_STRING(/*a*/ "tion");
-      break;
-    case KC_I:
-      SEND_STRING(/*i*/ "tion");
-      break;
-    case KC_S:
-      SEND_STRING(/*s*/ "sion");
-      break;
-    case KC_T:
-      SEND_STRING(/*t*/ "heir");
-      break;
-    case KC_W:
-      SEND_STRING(/*w*/ "hich");
-      break;
+    // Stay in under the tapping term for these keys
+    case HRM_A:
+    case HRM_D:
+    case HRM_F:
+      return false;  // No early hold
+    default:
+      // defer to the global flag (if still defined)
+      return true;
   }
 }
 
@@ -457,15 +479,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->tap.count) {
         uint8_t mods = get_mods();
         if (mods & MOD_MASK_ALT) {
-          // 1) Alt+tap → your custom suffix
-          process_optrep(get_last_keycode(), get_last_mods());
-          return false;  // <-- IMPORTANT: stop QMK's default tap
-        } else if (mods & MOD_MASK_GUI) {
-          // 2) GUI+tap → QMK's built‑in alt‑repeat
+          // Option+Repeat = alternate repeat key (reverse)
           alt_repeat_key_invoke(&record->event);
-          return false;  // <-- also suppress default
+          return false;
+        } else if (mods & MOD_MASK_GUI) {
+          // GUI+tap = alternate repeat key (reverse)
+          alt_repeat_key_invoke(&record->event);
+          return false;
         }
-        // 3) Plain tap → normal repeat
+        // Normal tap = repeat last key
         repeat_key_invoke(&record->event);
         return false;
       }

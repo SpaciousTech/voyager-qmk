@@ -397,6 +397,7 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record,
   return true;  // Remember all other keys
 }
 
+// clang-format off
 /**
  * @brief Define custom alternate key behaviors
  *
@@ -408,27 +409,11 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record,
  * @return The alternate keycode or KC_TRNS to use default behavior
  */
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
-  // Add any custom key pairs here
-  bool shifted = (mods & MOD_MASK_SHIFT);  // was shift held?
   switch (keycode) {
-    // Tab and Escape are alternates
-    case KC_TAB:
-      if (shifted) {       // if shift + tab
-        return KC_TAB;     // ... the reverse is Tab
-      } else {             // otherwise, the last key was tab
-        return S(KC_TAB);  // .. and the reverse is shift + tab
-      }
-    case KC_ESC:
-      if (shifted) {    // if shift + esc
-        return KC_ESC;  // ... the reverse is Esc
-      } else {          // otherwise, the last key was esc
-        return KC_TAB;  // .. and the reverse is Tab
-      }
-
-    default:
-      return KC_TRNS;  // Use default QMK alternate pairs
   }
+  return KC_TRNS;
 }
+// clang-format on
 
 // Permissive Hold Per Key
 

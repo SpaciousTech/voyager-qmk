@@ -409,22 +409,23 @@ bool remember_last_key_user(uint16_t keycode, keyrecord_t *record,
  */
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
   // Add any custom key pairs here
+  bool shifted = (mods & MOD_MASK_SHIFT);  // was shift held?
+  bool alted = (mods & MOD_MASK_ALT);      // was alt held?
+  bool cmded = (mods & MOD_MASK_GUI);      // was cmd held?
   switch (keycode) {
     // Tab and Escape are alternates
     case KC_TAB:
-      SEND_STRING("Checking Tab");
-      return KC_ESC;
+      if (shifted) {   // if shift + tab
+        return KC_TAB; // ... the reverse is Tab
+      } else {        // otherwise, the last key was tab
+        return S(KC_TAB); // .. and the reverse is shift + tab
+      }
     case KC_ESC:
-      SEND_STRING("Checking Esc");
-      return KC_TAB;
-
-    // For specific application shortcuts
-    case LGUI(KC_Z):         // ⌘+Z (Undo)
-      SEND_STRING("Checking LGUI(KC_Z)");
-      return LGUI(S(KC_Z));  // ⌘+⇧+Z (Redo)
-    case LGUI(S(KC_Z)):      // ⌘+⇧+Z (Redo)
-      SEND_STRING("Checking LGUI(S(KC_Z))");
-      return LGUI(KC_Z);     // ⌘+Z (Undo)
+      if (shifted) {  // if shift + esc
+        return KC_ESC; // ... the reverse is Esc
+      } else {        // otherwise, the last key was esc
+        return KC_TAB; // .. and the reverse is Tab
+      }
 
     default:
       return KC_TRNS;  // Use default QMK alternate pairs

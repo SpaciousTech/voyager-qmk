@@ -412,14 +412,18 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
   switch (keycode) {
     // Tab and Escape are alternates
     case KC_TAB:
+      SEND_STRING("Checking Tab");
       return KC_ESC;
     case KC_ESC:
+      SEND_STRING("Checking Esc");
       return KC_TAB;
 
     // For specific application shortcuts
     case LGUI(KC_Z):         // ⌘+Z (Undo)
+      SEND_STRING("Checking LGUI(KC_Z)");
       return LGUI(S(KC_Z));  // ⌘+⇧+Z (Redo)
     case LGUI(S(KC_Z)):      // ⌘+⇧+Z (Redo)
+      SEND_STRING("Checking LGUI(S(KC_Z))");
       return LGUI(KC_Z);     // ⌘+Z (Undo)
 
     default:

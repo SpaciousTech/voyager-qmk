@@ -82,14 +82,14 @@
 // QMK Config
 // clang-format off
 #define MK_3_SPEED
-#define MK_W_OFFSET_0 1     // Scroll steps per scroll action (low speed)
-#define MK_W_INTERVAL_0 360 // Time between scroll steps (low speed)
+#define MK_W_OFFSET_0 2     // Scroll steps per scroll action (low speed)
+#define MK_W_INTERVAL_0 240 // Time between scroll steps (low speed)
 
 #define MK_W_OFFSET_1 4     // Scroll steps per scroll action (medium speed)
 #define MK_W_INTERVAL_1 120 // Time between scroll steps (medium speed)
 
-#define MK_W_OFFSET_2 8     // Scroll steps per scroll action (high speed)
-#define MK_W_INTERVAL_2 20  // Time between scroll steps (high speed)
+#define MK_W_OFFSET_2 6     // Scroll steps per scroll action (high speed)
+#define MK_W_INTERVAL_2 80  // Time between scroll steps (high speed)
 // clang-format on
 
 #define SELECT_WORD_OS_MAC

@@ -3,7 +3,6 @@
 #pragma once
 #include QMK_KEYBOARD_H
 
-
 // Short aliases for Home row mods and other tap-hold keys
 #define HRM_A LGUI_T(KC_A)
 #define HRM_S LSFT_T(KC_S)

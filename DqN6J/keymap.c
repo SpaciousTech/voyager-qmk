@@ -78,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [NAV] = LAYOUT_LR(
         _______, KC_1, KC_2, KC_3, KC_4, KC_5,                              // 1st Row
-        _______, TO(SYM), S(KC_TAB), VIM_EOL, LSG(KC_Z), SELLINE,           // 2nd Row
+        _______, TO(SYM), G(KC_TAB), VIM_EOL, LSG(KC_Z), SELLINE,           // 2nd Row
         _______, KC_LGUI, KC_LSFT, KC_LALT, KC_LCTL, LGUI(KC_A),            // 3rd Row
         _______, LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), CW_TOGG,   // 4th Row
         _______, _______,                                                   // Thumbs

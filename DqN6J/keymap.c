@@ -30,9 +30,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [1] = LAYOUT_voyager(
     KC_TRANSPARENT, KC_1,           KC_2,           KC_3,           KC_4,           KC_5,                                           KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_MINUS,       
-    KC_TRANSPARENT, TO(2),          CW_TOGG,        KC_NO,          KC_NO,          KC_NO,                                          LALT(KC_LEFT),  KC_MS_WH_UP,    KC_MS_WH_DOWN,  LALT(KC_RIGHT), KC_NO,          KC_TRANSPARENT, 
-    KC_TRANSPARENT, KC_LEFT_GUI,    KC_LEFT_SHIFT,  KC_LEFT_ALT,    KC_LEFT_CTRL,   LGUI(KC_A),                                     KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       KC_NO,          KC_TRANSPARENT, 
-    KC_TRANSPARENT, LGUI(KC_Z),     LGUI(KC_X),     LGUI(KC_C),     LGUI(KC_V),     LGUI(LSFT(KC_Z)),                                KC_NO,          KC_NO,          KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
+    KC_TRANSPARENT, TO(2),          KC_NO,          KC_NO,          LGUI(LSFT(KC_Z)),KC_NO,                                          LALT(KC_LEFT),  KC_NO,          KC_NO,          LALT(KC_RIGHT), KC_NO,          KC_TRANSPARENT, 
+    KC_TRANSPARENT, KC_LEFT_GUI,    KC_LEFT_SHIFT,  KC_LEFT_ALT,    KC_LEFT_CTRL,   LGUI(KC_A),                                     KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       KC_TRANSPARENT, KC_TRANSPARENT, 
+    KC_TRANSPARENT, LGUI(KC_Z),     LGUI(KC_X),     LGUI(KC_C),     LGUI(KC_V),     CW_TOGG,                                        KC_NO,          KC_MS_WH_UP,    KC_MS_WH_DOWN,  KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, 
                                                     KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT
   ),
   [2] = LAYOUT_voyager(
@@ -91,27 +91,27 @@ combo_t key_combos[COMBO_COUNT] = {
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case MT(MOD_LCTL | MOD_LGUI, KC_EQUAL):
-            return g_tapping_term -75;
+            return g_tapping_term -50;
         case MT(MOD_LCTL | MOD_LALT, KC_TAB):
-            return g_tapping_term -75;
+            return g_tapping_term -50;
         case LT(2,KC_ESCAPE):
-            return g_tapping_term -75;
+            return g_tapping_term -50;
         case LT(1,KC_BSPC):
-            return g_tapping_term -50;
+            return g_tapping_term -25;
         case TD(DANCE_0):
-            return g_tapping_term -75;
-        case LT(6,KC_BSLS):
-            return g_tapping_term -75;
-        case LT(3,KC_QUOTE):
-            return g_tapping_term -75;
-        case MEH_T(KC_SLASH):
             return g_tapping_term -50;
+        case LT(6,KC_BSLS):
+            return g_tapping_term -50;
+        case LT(3,KC_QUOTE):
+            return g_tapping_term -50;
+        case MEH_T(KC_SLASH):
+            return g_tapping_term -25;
         case MT(MOD_RCTL, KC_ENTER):
-            return g_tapping_term -75;
+            return g_tapping_term -50;
         case MT(MOD_RSFT, KC_SPACE):
-            return g_tapping_term -75;
+            return g_tapping_term -50;
         case MO(2):
-            return g_tapping_term -75;
+            return g_tapping_term -50;
         default:
             return g_tapping_term;
     }
@@ -126,7 +126,7 @@ void keyboard_post_init_user(void) {
 const uint8_t PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
     [0] = { {86,255,255}, {156,255,255}, {156,255,255}, {156,255,255}, {156,255,255}, {156,255,255}, {87,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {87,255,255}, {0,255,219}, {0,255,219}, {0,255,219}, {0,255,219}, {15,255,255}, {87,255,255}, {151,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {151,255,255}, {0,255,219}, {156,255,255}, {156,255,255}, {156,255,255}, {156,255,255}, {156,255,255}, {156,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {87,255,255}, {15,255,255}, {15,255,255}, {0,255,219}, {0,255,219}, {15,255,255}, {87,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {151,255,255}, {87,255,255}, {0,255,219}, {151,255,255} },
 
-    [1] = { {86,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {87,255,255}, {87,255,255}, {227,255,255}, {34,255,255}, {34,255,255}, {34,255,255}, {87,255,255}, {0,255,219}, {0,255,219}, {0,255,219}, {0,255,219}, {203,255,255}, {87,255,255}, {203,255,255}, {203,255,255}, {203,255,255}, {203,255,255}, {203,255,255}, {151,255,255}, {0,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {36,255,255}, {227,255,255}, {227,255,255}, {36,255,255}, {0,0,0}, {87,255,255}, {89,255,255}, {89,255,255}, {89,255,255}, {89,255,255}, {0,0,0}, {87,255,255}, {0,0,0}, {0,0,0}, {0,0,0}, {0,0,0}, {21,204,182}, {87,255,255}, {0,255,255}, {151,255,255} },
+    [1] = { {86,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {87,255,255}, {87,255,255}, {0,0,0}, {0,0,0}, {203,255,255}, {34,255,255}, {87,255,255}, {0,255,219}, {0,255,219}, {0,255,219}, {0,255,219}, {203,255,255}, {87,255,255}, {203,255,255}, {203,255,255}, {203,255,255}, {203,255,255}, {227,255,255}, {151,255,255}, {0,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {161,255,255}, {36,255,255}, {34,255,255}, {34,255,255}, {36,255,255}, {0,0,0}, {87,255,255}, {89,255,255}, {89,255,255}, {89,255,255}, {89,255,255}, {0,0,0}, {87,255,255}, {0,0,0}, {227,255,255}, {227,255,255}, {0,0,0}, {21,204,182}, {87,255,255}, {0,255,255}, {151,255,255} },
 
     [2] = { {0,255,219}, {40,255,255}, {40,255,255}, {40,255,255}, {40,255,255}, {40,255,255}, {87,255,255}, {86,255,255}, {227,255,255}, {21,204,182}, {21,204,182}, {21,204,182}, {86,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {15,255,255}, {87,255,255}, {0,0,0}, {15,255,255}, {21,204,182}, {21,204,182}, {21,204,182}, {151,255,255}, {0,255,255}, {40,255,255}, {39,255,255}, {39,255,255}, {39,255,255}, {39,255,255}, {39,255,255}, {197,255,255}, {197,255,255}, {227,255,255}, {227,255,255}, {197,255,255}, {36,255,255}, {197,255,255}, {197,255,255}, {227,255,255}, {227,255,255}, {36,255,255}, {36,255,255}, {197,255,255}, {197,255,255}, {36,255,255}, {36,255,255}, {36,255,255}, {87,255,255}, {0,255,255}, {151,255,255} },
 

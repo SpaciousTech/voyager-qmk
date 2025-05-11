@@ -78,15 +78,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [NAV] = LAYOUT_LR(
         _______, KC_1, KC_2, KC_3, KC_4, KC_5,                              // 1st Row
-        _______, TO(SYM), CW_TOGG, SELLINE, SELBWD, SELWORD,                // 2nd Row
+        _______, TO(SYM), S(KC_TAB), VIM_EOL, LSG(KC_Z), SELLINE,           // 2nd Row
         _______, KC_LGUI, KC_LSFT, KC_LALT, KC_LCTL, LGUI(KC_A),            // 3rd Row
-        _______, LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), LSG(KC_Z), // 4th Row
+        _______, LGUI(KC_Z), LGUI(KC_X), LGUI(KC_C), LGUI(KC_V), CW_TOGG,   // 4th Row
         _______, _______,                                                   // Thumbs
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                            // 1st Row
-        LALT(KC_LEFT), KC_WH_U, KC_WH_D, LALT(KC_RIGHT), XXXXXXX, _______, // 2nd Row
-        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, VIM_EOL, _______,               // 3rd Row
-        XXXXXXX, XXXXXXX, _______, _______, _______, _______,              // 4th Row
+        LALT(KC_LEFT), SELBWD, SELWORD, LALT(KC_RIGHT), XXXXXXX, _______,  // 2nd Row
+        KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,               // 3rd Row
+        XXXXXXX, KC_WH_U, KC_WH_D, _______, _______, _______,              // 4th Row
         _______, _______),                                                 // Thumbs
 
     [SYM] = LAYOUT_LR(
@@ -180,6 +180,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
     // 150 Tapping term
     case TT(NAV):  // Tap-Tap Navigation Layer
+    case RSFT_T(KC_SPACE):
       return g_tapping_term - 75;
 
     // 175 Tapping term
@@ -190,7 +191,6 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     case LT(APPS, KC_QUOTE):
     case TD(OPTDEL_CMD):
     case RCTL_T(KC_ENTER):
-    case RSFT_T(KC_SPACE):
       return g_tapping_term - 50;
     // case RCALT_BSLS:
     //     return g_tapping_term - 125;
@@ -241,16 +241,16 @@ const uint8_t
     [NAV] = {
         // Left Hand Side
         C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,                // 1st row
-        C_LAYER, C_LAYER, C_PINK, C_MACRO, C_MACRO, C_MACRO,            // 2nd row
+        C_LAYER, C_LAYER, C_SHIFTED, C_MACRO, C_CMDPLUS, C_MACRO,       // 2nd row
         C_LAYER, C_MODS, C_MODS, C_MODS, C_MODS, C_CMDPLUS,             // 3rd row
-        C_LAYER, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, // 4th row
+        C_LAYER, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, C_PINK,    // 4th row
         C_THUMBS, C_RED,                                                // Thumbs
 
         // Right Hand Side
         C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,         // 1st row
-        C_SHIFTED, C_BROWN, C_BROWN, C_SHIFTED, C_OFF, C_LAYER, // 2nd row
-        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_MACRO, C_LAYER,   // 3rd row
-        C_OFF, C_OFF, C_OFF, C_OFF, C_MODS, C_LAYER,            // 4th row
+        C_SHIFTED, C_MACRO, C_MACRO, C_SHIFTED, C_OFF, C_LAYER, // 2nd row
+        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_OFF, C_LAYER,     // 3rd row
+        C_OFF, C_BROWN, C_BROWN, C_OFF, C_MODS, C_LAYER,        // 4th row
         C_RED, C_THUMBS                                         // Thumbs
     },
     [SYM] = {

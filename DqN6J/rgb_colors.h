@@ -2,7 +2,7 @@
 #pragma once
 #include QMK_KEYBOARD_H  // Include base QMK stuff, likely includes quantum.h, etc.
 
-// --- Color Definitions Start ---
+
 // Define some common colors using HSV format {Hue, Saturation, Value}
 // Standard Colors
 #define C_RED {0, 255, 255}        // Red
@@ -31,4 +31,4 @@
 #define C_MACRO {115, 255, 204}    // Teal for Macros keys (Select, Hyper, MEH)
 #define C_CMDPLUS {170, 255, 255}  // Dark Blue for CMD + keys
 #define C_SHIFTED {40, 255, 255}   // Yellow for Shifted keys (!@#$%^&*)
-// --- Color Definitions End ---
+

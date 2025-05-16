@@ -13,6 +13,7 @@
 #define HRM_L RSFT_T(KC_L)
 // #define HRM_SCLN RGUI_T(KC_SCLN)
 #define LCG_EQUAL MT(MOD_LCTL | MOD_LGUI, KC_EQUAL)
+#define RCLA_T(kc) MT(MOD_RCTL | MOD_LALT, kc)
 // #define RCALT_BSLS MT(MOD_RCTL | MOD_RALT, KC_BSLS)
 #define LT_REP LT(SYM, KC_0)  // Layer-Tap Repeat
 #define KC_EURO LSA(KC_2)     // Euro symbol

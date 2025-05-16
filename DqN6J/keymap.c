@@ -65,7 +65,7 @@ enum tap_dance_codes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [BASE] = LAYOUT_LR(
         LCG_EQUAL, KC_1, KC_2, KC_3, KC_4, KC_5,              // 1st Row
-        LCA_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,          // 2nd Row
+        RCLA_T(KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,          // 2nd Row
         LT(SYM, KC_ESCAPE), HRM_A, HRM_S, HRM_D, HRM_F, KC_G, // 3rd Row
         TT(NAV), ALL_T(KC_Z), KC_X, KC_C, KC_V, KC_B,         // 4th Row
         LT(NAV, KC_BSPC), TD(OPTDEL_CMD),                     // Thumbs
@@ -185,7 +185,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 
     // 175 Tapping term
     case LCG_EQUAL:
-    case LCA_T(KC_TAB):
+    case RCLA_T(KC_TAB):
     case LT(SYM, KC_ESCAPE):
     case LT(MEHF, KC_BSLS):
     case LT(APPS, KC_QUOTE):

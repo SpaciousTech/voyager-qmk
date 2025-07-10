@@ -22,12 +22,12 @@
 #define C_OFF {0, 0, 0}            // LED Off (Black)
 
 // Darker Colors
-#define C_DKCYAN {177, 112, 122}   // Dark Cyan
-#define C_DKGREEN {126, 191, 113}  // Dark Green
-#define C_DKBROWN {5, 155, 110}    // Dark Brown
-#define C_DKBLUE {235, 132, 110}   // Dark Blue
-#define C_DKYELLOW {45, 194, 130}  // Dark Yellow
-#define C_DKPINK {342, 205, 144}   // Dark Pink
+#define C_DKCYAN {125, 113, 122}   // Dark Cyan
+#define C_DKGREEN {90, 192, 113}   // Dark Green
+#define C_DKBROWN {4, 155, 110}    // Dark Brown
+#define C_DKBLUE {167, 132, 110}   // Dark Blue
+#define C_DKYELLOW {32, 194, 130}  // Dark Yellow
+#define C_DKPINK {243, 205, 144}   // Dark Pink
 
 // Special Characters Colors
 #define C_MODS {0, 255, 255}      // Red used for Home Row Mods

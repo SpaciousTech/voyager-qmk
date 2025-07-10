@@ -24,7 +24,7 @@
 // Darker Colors
 #define C_DKCYAN {125, 113, 122}   // Dark Cyan
 #define C_DKGREEN {90, 192, 113}   // Dark Green
-#define C_DKBROWN {4, 155, 110}    // Dark Brown
+#define C_DKBROWN {19, 234, 146}   // Dark Brown
 #define C_DKBLUE {167, 132, 110}   // Dark Blue
 #define C_DKYELLOW {32, 194, 130}  // Dark Yellow
 #define C_DKPINK {243, 205, 144}   // Dark Pink

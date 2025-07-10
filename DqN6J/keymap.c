@@ -72,7 +72,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                          // 1st Row
         KC_Y, KC_U, KC_I, KC_O, KC_P, LT(MEHF, KC_BSLS),                 // 2nd Row
-        KC_H, KC_J, HRM_K, HRM_L, KC_SCLN, LT(APPS, KC_QUOTE),           // 3rd Row
+        KC_H, HRM_J, HRM_K, HRM_L, HRM_SCLN, LT(APPS, KC_QUOTE),           // 3rd Row
         KC_N, KC_M, KC_COMMA, KC_DOT, MEH_T(KC_SLASH), RCTL_T(KC_ENTER), // 4th Row
         RSFT_T(KC_SPACE), LT_REP),                                       // Thumbs
 
@@ -104,9 +104,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [APPS] = LAYOUT_LR(
         QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,                                // 1st Row
-        _______, _______, HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T),     // 2nd Row
-        _______, _______, HYPR(KC_S), HYPR(KC_D), LGUI(KC_SPACE), HYPR(KC_G), // 3rd Row
-        TO(BASE), _______, _______, HYPR(KC_C), HYPR(KC_V), _______,          // 4th Row
+        _______, HYPER(KC_Q), HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T),     // 2nd Row
+        _______, HYPER(KC_A), HYPR(KC_S), HYPR(KC_D), LGUI(KC_SPACE), HYPR(KC_G), // 3rd Row
+        TO(BASE), HYPER(KC_Z), HYPER(KC_X), HYPR(KC_C), HYPR(KC_V), HYPER(KC_B),          // 4th Row
         _______, _______,                                                     // Thumbs
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                              // 1st Row
@@ -178,10 +178,10 @@ combo_t key_combos[COMBO_COUNT] = {
 // Tap-hold configuration
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
-    // 150 Tapping term
+    // 125 Tapping term
     case TT(NAV):  // Tap-Tap Navigation Layer
     case RSFT_T(KC_SPACE):
-      return g_tapping_term - 75;
+      return g_tapping_term - 100;
 
     // 175 Tapping term
     case LCG_EQUAL:
@@ -225,55 +225,55 @@ const uint8_t
     PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
     [BASE] = {
         // Left Hand Side
-        C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,           // 1st row
-        C_LAYER, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, // 2nd row
-        C_LAYER, C_MODS, C_MODS, C_MODS, C_MODS, C_ORANGE,         // 3rd (HRW Mods)
-        C_LAYER, C_TEAL, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,   // 4th row
-        C_THUMBS, C_RED,                                           // Thumbs
+        C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,             // 1st row
+        C_LAYER, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,   // 2nd row
+        C_LAYER, C_MODS, C_MODS, C_MODS, C_MODS, C_ORANGE,           // 3rd (HRW Mods)
+        C_LAYER, C_DKBROWN, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,  // 4th row
+        C_THUMBS, C_RED,                                             // Thumbs
 
         // Right Hand Side
-        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,            // 1st row
-        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_LAYER, // 2nd row
-        C_ORANGE, C_ORANGE, C_MODS, C_MODS, C_ORANGE, C_LAYER,     // 3rd (HRW Mods)
-        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_TEAL, C_LAYER,   // 4th row
-        C_RED, C_THUMBS                                            // Thumbs
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,             // 1st row
+        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_LAYER,  // 2nd row
+        C_ORANGE, C_MODS, C_MODS, C_MODS, C_MODS, C_LAYER,          // 3rd (HRW Mods)
+        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_DKBROWN, C_LAYER, // 4th row
+        C_RED, C_THUMBS                                             // Thumbs
     },
     [NAV] = {
         // Left Hand Side
         C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,                // 1st row
-        C_LAYER, C_LAYER, C_SHIFTED, C_MACRO, C_CMDPLUS, C_MACRO,       // 2nd row
+        C_LAYER, C_LAYER, C_SHFTD, C_MACRO, C_CMDPLUS, C_MACRO,         // 2nd row
         C_LAYER, C_MODS, C_MODS, C_MODS, C_MODS, C_CMDPLUS,             // 3rd row
         C_LAYER, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, C_PINK,    // 4th row
         C_THUMBS, C_RED,                                                // Thumbs
 
         // Right Hand Side
-        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,         // 1st row
-        C_SHIFTED, C_MACRO, C_MACRO, C_SHIFTED, C_OFF, C_LAYER, // 2nd row
-        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_OFF, C_LAYER,     // 3rd row
-        C_OFF, C_BROWN, C_BROWN, C_OFF, C_MODS, C_LAYER,        // 4th row
-        C_RED, C_THUMBS                                         // Thumbs
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,     // 1st row
+        C_SHFTD, C_MACRO, C_MACRO, C_SHFTD, C_OFF, C_LAYER, // 2nd row
+        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_OFF, C_LAYER, // 3rd row
+        C_OFF, C_BROWN, C_BROWN, C_OFF, C_DKBROWN, C_LAYER, // 4th row
+        C_RED, C_THUMBS                                     // Thumbs
     },
     [SYM] = {
         // Left Hand Side
-        C_RED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, // 1st row
-        C_LAYER, C_LAYER, C_PINK, C_BROWN, C_BROWN, C_BROWN,          // 2nd row
-        C_LAYER, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,    // 3rd row
-        C_LAYER, C_OFF, C_ORANGE, C_BROWN, C_BROWN, C_BROWN,          // 4th row
-        C_THUMBS, C_RED,                                              // Thumbs
+        C_RED, C_SHFTD, C_SHFTD, C_SHFTD, C_SHFTD, C_SHFTD,          // 1st row
+        C_LAYER, C_LAYER, C_PINK, C_BROWN, C_BROWN, C_BROWN,         // 2nd row
+        C_LAYER, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,   // 3rd row
+        C_LAYER, C_OFF, C_ORANGE, C_BROWN, C_BROWN, C_BROWN,         // 4th row
+        C_THUMBS, C_RED,                                             // Thumbs
 
-        C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, // 1st row
-        C_PURPLE, C_PURPLE, C_PINK, C_PINK, C_PURPLE, C_SHIFTED,          // 2nd row
-        C_PURPLE, C_PURPLE, C_PINK, C_PINK, C_SHIFTED, C_SHIFTED,         // 3rd row
-        C_PURPLE, C_PURPLE, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_LAYER,     // 4th row
-        C_RED, C_THUMBS                                                   // Thumbs
+        C_SHFTD, C_SHFTD, C_SHFTD, C_SHFTD, C_SHFTD, C_SHFTD,       // 1st row
+        C_PURPLE, C_PURPLE, C_PINK, C_PINK, C_PURPLE, C_SHFTD,      // 2nd row
+        C_PURPLE, C_PURPLE, C_PINK, C_PINK, C_SHFTD, C_SHFTD,       // 3rd row
+        C_PURPLE, C_PURPLE, C_SHFTD, C_SHFTD, C_SHFTD, C_LAYER,     // 4th row
+        C_RED, C_THUMBS                                             // Thumbs
     },
     [APPS] = {
         // Left Hand Side
-        C_RED, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,              // 1st row
-        C_LAYER, C_OFF, C_MAGENTA, C_MAGENTA, C_MAGENTA, C_LTGREEN, // 2nd row
-        C_LAYER, C_OFF, C_YELLOW, C_ORANGE, C_BROWN, C_TEAL,        // 3rd row
-        C_LAYER, C_TEAL, C_OFF, C_TEAL, C_RED, C_OFF,               // 4th row
-        C_THUMBS, C_RED,                                            // Thumbs
+        C_RED, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,                 // 1st row
+        C_LAYER, C_DKPINK, C_MAGENTA, C_MAGENTA, C_MAGENTA, C_LTGREEN, // 2nd row
+        C_LAYER, C_DKBROWN, C_DKBROWN, C_ORANGE, C_DKGREEN, C_TEAL,    // 3rd row
+        C_LAYER, C_TEAL, C_DKPINK, C_TEAL, C_RED, C_DKPINK,            // 4th row
+        C_THUMBS, C_RED,                                               // Thumbs
 
         // Right Hand Side
         C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,             // 1st row
@@ -312,17 +312,17 @@ const uint8_t
     },
     [MEHF] = {
         // Left Hand Side
-        C_RED, C_OFF, C_OFF, C_OFF, C_OFF, C_OFF,                 // 1st row
-        C_OFF, C_TEAL, C_TEAL, C_PINK, C_SHIFTED, C_ORANGE,       // 2nd row
-        C_LAYER, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_CYAN, C_TEAL, // 3rd row
-        C_LAYER, C_OFF, C_OFF, C_ORANGE, C_OFF, C_OFF,            // 4th row
-        C_THUMBS, C_RED,                                          // Thumbs 
+        C_RED, C_OFF, C_OFF, C_OFF, C_OFF, C_OFF,                // 1st row
+        C_OFF, C_TEAL, C_TEAL, C_DKGREEN, C_SHFTD, C_ORANGE,     // 2nd row
+        C_LAYER, C_SHFTD, C_SHFTD, C_SHFTD, C_DKGREEN, C_TEAL,   // 3rd row
+        C_LAYER, C_OFF, C_OFF, C_ORANGE, C_OFF, C_OFF,           // 4th row
+        C_THUMBS, C_RED,                                         // Thumbs 
 
-        C_OFF, C_OFF, C_OFF, C_OFF, C_OFF, C_OFF,                        // 1st row
-        C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_ORANGE, // 2nd row
-        C_TEAL, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_SHIFTED, C_LAYER,     // 3rd row
-        C_OFF, C_OFF, C_OFF, C_OFF, C_OFF, C_OFF,                        // 4th row
-        C_RED, C_THUMBS                                                  // Thumbs
+        C_OFF, C_OFF, C_OFF, C_OFF, C_OFF, C_OFF,              // 1st row
+        C_SHFTD, C_SHFTD, C_SHFTD, C_SHFTD, C_SHFTD, C_ORANGE, // 2nd row
+        C_TEAL, C_SHFTD, C_SHFTD, C_SHFTD, C_SHFTD, C_LAYER,   // 3rd row
+        C_OFF, C_OFF, C_OFF, C_OFF, C_OFF, C_OFF,              // 4th row
+        C_RED, C_THUMBS                                        // Thumbs
     },
 };
 // clang-format on
@@ -423,6 +423,10 @@ bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     case HRM_A:
     case HRM_D:
     case HRM_F:
+    case HRM_J:
+    case HRM_K:
+    case HRM_L:
+    case HRM_SCLN:
       return false;  // No early hold
     default:
       // defer to the global flag (if still defined)

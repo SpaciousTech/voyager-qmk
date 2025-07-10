@@ -2,7 +2,6 @@
 #pragma once
 #include QMK_KEYBOARD_H  // Include base QMK stuff, likely includes quantum.h, etc.
 
-
 // Define some common colors using HSV format {Hue, Saturation, Value}
 // Standard Colors
 #define C_RED {0, 255, 255}        // Red
@@ -15,13 +14,22 @@
 #define C_CYAN {117, 255, 255}     // Cyan
 #define C_LTBLUE {138, 255, 255}   // Light Blue
 #define C_BLUE {153, 255, 255}     // Blue
-#define C_DKBLUE {170, 255, 255}   // Dark Blue
+#define C_LTCYAN {170, 255, 255}   // Light Cyan
 #define C_PURPLE {196, 255, 255}   // Purple
 #define C_MAGENTA {209, 255, 255}  // Magenta
 #define C_PINK {236, 255, 255}     // Pink
 #define C_WHITE {0, 0, 255}        // White
 #define C_OFF {0, 0, 0}            // LED Off (Black)
 
+// Darker Colors
+#define C_DKCYAN {177, 112, 122}   // Dark Cyan
+#define C_DKGREEN {126, 191, 113}  // Dark Green
+#define C_DKBROWN {5, 155, 110}    // Dark Brown
+#define C_DKBLUE {235, 132, 110}   // Dark Blue
+#define C_DKYELLOW {45, 194, 130}  // Dark Yellow
+#define C_DKPINK {342, 205, 144}   // Dark Pink
+
+// Special Characters Colors
 #define C_MODS {0, 255, 255}      // Red used for Home Row Mods
 #define C_LAYER {87, 255, 255}    // Green used for layer keys
 #define C_ARROW {89, 255, 255}    // Green for arrow keys
@@ -30,5 +38,4 @@
 
 #define C_MACRO {115, 255, 204}    // Teal for Macros keys (Select, Hyper, MEH)
 #define C_CMDPLUS {170, 255, 255}  // Dark Blue for CMD + keys
-#define C_SHIFTED {40, 255, 255}   // Yellow for Shifted keys (!@#$%^&*)
-
+#define C_SHFTD {40, 255, 255}     // Yellow for Shifted keys (!@#$%^&*)

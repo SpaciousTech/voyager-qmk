@@ -103,11 +103,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______),                                     // Thumbs
 
     [APPS] = LAYOUT_LR(
-        QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,                                // 1st Row
-        _______, HYPER(KC_Q), HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T),     // 2nd Row
-        _______, HYPER(KC_A), HYPR(KC_S), HYPR(KC_D), LGUI(KC_SPACE), HYPR(KC_G), // 3rd Row
-        TO(BASE), HYPER(KC_Z), HYPER(KC_X), HYPR(KC_C), HYPR(KC_V), HYPER(KC_B),          // 4th Row
-        _______, _______,                                                     // Thumbs
+        QK_LLCK, KC_1, KC_2, KC_3, KC_4, KC_5,                                   // 1st Row
+        _______, HYPR(KC_Q), HYPR(KC_W), HYPR(KC_E), HYPR(KC_R), HYPR(KC_T),     // 2nd Row
+        _______, HYPR(KC_A), HYPR(KC_S), HYPR(KC_D), LGUI(KC_SPACE), HYPR(KC_G), // 3rd Row
+        TO(BASE), HYPR(KC_Z), HYPR(KC_X), HYPR(KC_C), HYPR(KC_V), HYPR(KC_B),    // 4th Row
+        _______, _______,                                                        // Thumbs
 
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                              // 1st Row
         HYPR(KC_Y), HYPR(KC_U), HYPR(KC_I), HYPR(KC_O), HYPR(KC_P), _______, // 2nd Row

@@ -56,6 +56,7 @@ typedef struct {
   uint16_t held;
 } tap_dance_tap_hold_t;
 tap_dance_action_t *action;
+extern tap_dance_action_t tap_dance_actions[];
 
 enum tap_dance_codes {
   OPTDEL_CMD,  // Tap-dance for Option+Delete, Hold for CMD layer
@@ -214,7 +215,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 // const key_override_t delete_key_override = ko_make_basic(MOD_MASK_SHIFT,
 // LT(SYM, KC_BSPC), KC_DEL); This globally defines all key overrides to be
 // used
-const key_override_t **key_overrides = (const key_override_t *[]){
+const key_override_t *key_overrides[] = {
     // &delete_key_override,  // Disabled - now handled in process_record_user
     NULL  // Null terminate the array
 };

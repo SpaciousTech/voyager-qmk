@@ -74,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_Y, KC_U, KC_I, KC_O, KC_P, LT(MEHF, KC_BSLS),                 // 2nd Row
         KC_H, HRM_J, HRM_K, HRM_L, HRM_SCLN, LT(APPS, KC_QUOTE),           // 3rd Row
         KC_N, KC_M, KC_COMMA, KC_DOT, MEH_T(KC_SLASH), RCTL_T(KC_ENTER), // 4th Row
-        RSFT_T(KC_SPACE), LT_REP),                                       // Thumbs
+        RSFT_T(KC_SPACE), LT_ESC),                                       // Thumbs
 
     [NAV] = LAYOUT_LR(
         _______, KC_1, KC_2, KC_3, KC_4, KC_5,                              // 1st Row
@@ -86,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINUS,                            // 1st Row
         LALT(KC_LEFT), SELBWD, SELWORD, LALT(KC_RIGHT), XXXXXXX, _______,  // 2nd Row
         KC_LEFT, KC_DOWN, KC_UP, KC_RIGHT, _______, _______,               // 3rd Row
-        XXXXXXX, KC_WH_U, KC_WH_D, _______, _______, _______,              // 4th Row
+        QK_REP, KC_WH_U, KC_WH_D, _______, _______, _______,               // 4th Row
         _______, _______),                                                 // Thumbs
 
     [SYM] = LAYOUT_LR(
@@ -183,6 +183,10 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     case RSFT_T(KC_SPACE):
       return g_tapping_term - 100;
 
+    // 150 Tapping term
+    case LT_ESC:  // Layer-Tap Escape
+      return g_tapping_term - 75;
+
     // 175 Tapping term
     case LCG_EQUAL:
     case RCLA_T(KC_TAB):
@@ -198,8 +202,8 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     // 200 Tapping term
     case LT(NAV, KC_BSPC):
     case ALL_T(KC_Z):
-    case LT_REP:
-      return g_tapping_term - 25;  // Add faster tapping term for SYM_REP key
+    case LT_REP:                   // Layer-Tap Repeat
+      return g_tapping_term - 25;  // Add faster tapping term for LT_REP key
 
     default:
       return g_tapping_term;
@@ -227,14 +231,14 @@ const uint8_t
         // Left Hand Side
         C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,             // 1st row
         C_LAYER, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,   // 2nd row
-        C_LAYER, C_MODS, C_MODS, C_MODS, C_MODS, C_ORANGE,           // 3rd (HRW Mods)
+        C_LAYER, C_CMD, C_SHIFT, C_OPT, C_CTRL, C_ORANGE,           // 3rd (HRW Mods)
         C_LAYER, C_DKBROWN, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,  // 4th row
         C_THUMBS, C_RED,                                             // Thumbs
 
         // Right Hand Side
         C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,             // 1st row
         C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_LAYER,  // 2nd row
-        C_ORANGE, C_MODS, C_MODS, C_MODS, C_MODS, C_LAYER,          // 3rd (HRW Mods)
+        C_ORANGE, C_CMD, C_SHIFT, C_OPT, C_CTRL, C_LAYER,           // 3rd (HRW Mods)
         C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_DKBROWN, C_LAYER, // 4th row
         C_RED, C_THUMBS                                             // Thumbs
     },
@@ -242,16 +246,16 @@ const uint8_t
         // Left Hand Side
         C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,                // 1st row
         C_LAYER, C_LAYER, C_SHFTD, C_MACRO, C_CMDPLUS, C_MACRO,         // 2nd row
-        C_LAYER, C_MODS, C_MODS, C_MODS, C_MODS, C_CMDPLUS,             // 3rd row
+        C_LAYER, C_CMD, C_SHIFT, C_OPT, C_CTRL, C_CMDPLUS,              // 3rd row
         C_LAYER, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, C_CMDPLUS, C_PINK,    // 4th row
         C_THUMBS, C_RED,                                                // Thumbs
 
         // Right Hand Side
-        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,     // 1st row
-        C_SHFTD, C_MACRO, C_MACRO, C_SHFTD, C_OFF, C_LAYER, // 2nd row
-        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_OFF, C_LAYER, // 3rd row
-        C_OFF, C_BROWN, C_BROWN, C_OFF, C_DKBROWN, C_LAYER, // 4th row
-        C_RED, C_THUMBS                                     // Thumbs
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,          // 1st row
+        C_SHFTD, C_MACRO, C_MACRO, C_SHFTD, C_OFF, C_LAYER,      // 2nd row
+        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_ORANGE, C_LAYER,   // 3rd row
+        C_RED, C_BROWN, C_BROWN, C_ORANGE, C_DKBROWN, C_LAYER,   // 4th row
+        C_RED, C_THUMBS                                          // Thumbs
     },
     [SYM] = {
         // Left Hand Side

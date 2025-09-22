@@ -1,5 +1,6 @@
 // rgb_config.h
 #pragma once
+// clang-format off
 #include QMK_KEYBOARD_H  // Include base QMK stuff, likely includes quantum.h, etc.
 
 // Define some common colors using HSV format {Hue, Saturation, Value}
@@ -30,7 +31,11 @@
 #define C_DKPINK {243, 205, 144}   // Dark Pink
 
 // Special Characters Colors
-#define C_MODS {0, 255, 255}      // Red used for Home Row Mods
+#define C_CMD {116, 255, 216}      // Teal for Command Home Row Keys
+#define C_SHIFT {0, 0, 192}        // Silver/Slate for Shift Home Row Keys
+#define C_OPT {26, 255, 255}       // Orange/Ochre for Option Home Row Keys
+#define C_CTRL {248, 255, 253}     // Light Crimson (Red/Pink) for Control Home Row Keys
+
 #define C_LAYER {87, 255, 255}    // Green used for layer keys
 #define C_ARROW {89, 255, 255}    // Green for arrow keys
 #define C_THUMBS {115, 255, 204}  // Teal used for small thumbs keys
@@ -39,3 +44,4 @@
 #define C_MACRO {115, 255, 204}    // Teal for Macros keys (Select, Hyper, MEH)
 #define C_CMDPLUS {170, 255, 255}  // Dark Blue for CMD + keys
 #define C_SHFTD {40, 255, 255}     // Yellow for Shifted keys (!@#$%^&*)
+// clang-format on

@@ -229,18 +229,18 @@ const uint8_t
     PROGMEM ledmap[][RGB_MATRIX_LED_COUNT][3] = {
     [BASE] = {
         // Left Hand Side
-        C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,             // 1st row
-        C_LAYER, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,   // 2nd row
-        C_LAYER, C_CMD, C_SHIFT, C_OPT, C_CTRL, C_ORANGE,           // 3rd (HRW Mods)
-        C_LAYER, C_DKBROWN, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE,  // 4th row
-        C_THUMBS, C_RED,                                             // Thumbs
+        C_LAYER, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,  // 1st row
+        C_LAYER, C_RED, C_RED, C_RED, C_RED, C_RED,       // 2nd row
+        C_LAYER, C_CMD, C_SHIFT, C_OPT, C_CTRL, C_RED,    // 3rd (HRW Mods)
+        C_LAYER, C_DKBROWN, C_RED, C_RED, C_RED, C_RED,   // 4th row
+        C_THUMBS, C_RED,                                  // Thumbs
 
         // Right Hand Side
-        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,             // 1st row
-        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_LAYER,  // 2nd row
-        C_ORANGE, C_CMD, C_SHIFT, C_OPT, C_CTRL, C_LAYER,           // 3rd (HRW Mods)
-        C_ORANGE, C_ORANGE, C_ORANGE, C_ORANGE, C_DKBROWN, C_LAYER, // 4th row
-        C_RED, C_THUMBS                                             // Thumbs
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,       // 1st row
+        C_RED, C_RED, C_RED, C_RED, C_RED, C_LAYER,           // 2nd row
+        C_RED, C_CMD, C_SHIFT, C_OPT, C_CTRL, C_LAYER,        // 3rd (HRW Mods)
+        C_RED, C_RED, C_RED, C_RED, C_DKBROWN, C_LAYER,       // 4th row
+        C_RED, C_THUMBS                                       // Thumbs
     },
     [NAV] = {
         // Left Hand Side
@@ -251,11 +251,11 @@ const uint8_t
         C_THUMBS, C_RED,                                                // Thumbs
 
         // Right Hand Side
-        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,          // 1st row
-        C_SHFTD, C_MACRO, C_MACRO, C_SHFTD, C_OFF, C_LAYER,      // 2nd row
-        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_ORANGE, C_LAYER,   // 3rd row
-        C_RED, C_BROWN, C_BROWN, C_ORANGE, C_DKBROWN, C_LAYER,   // 4th row
-        C_RED, C_THUMBS                                          // Thumbs
+        C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,           // 1st row
+        C_SHFTD, C_MACRO, C_MACRO, C_SHFTD, C_OFF, C_LAYER,       // 2nd row
+        C_ARROW, C_ARROW, C_ARROW, C_ARROW, C_DKBROWN, C_LAYER,   // 3rd row
+        C_RED, C_BROWN, C_BROWN, C_DKBROWN, C_DKBROWN, C_LAYER,   // 4th row
+        C_RED, C_THUMBS                                           // Thumbs
     },
     [SYM] = {
         // Left Hand Side

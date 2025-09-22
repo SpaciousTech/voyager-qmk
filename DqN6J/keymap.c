@@ -238,7 +238,7 @@ const uint8_t
         // Right Hand Side
         C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE, C_BLUE,       // 1st row
         C_RED, C_RED, C_RED, C_RED, C_RED, C_LAYER,           // 2nd row
-        C_RED, C_CMD, C_SHIFT, C_OPT, C_CTRL, C_LAYER,        // 3rd (HRW Mods)
+        C_RED, C_CTRL, C_OPT, C_SHIFT, C_CMD, C_LAYER,        // 3rd (HRW Mods)
         C_RED, C_RED, C_RED, C_RED, C_DKBROWN, C_LAYER,       // 4th row
         C_RED, C_THUMBS                                       // Thumbs
     },

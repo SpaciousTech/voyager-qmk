@@ -382,6 +382,7 @@ bool rgb_matrix_indicators_user(void) {
         rgb_matrix_set_color_all(0, 0, 0);
       break;
   }
+
   return true;
 }
 
